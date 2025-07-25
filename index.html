@@ -570,10 +570,10 @@
         
         window.toggleAbstract = (id, btn) => {
             const abstract = document.getElementById(id);
-            const isHidden = abstract.hasAttribute('hidden');
-            abstract.hidden = !isHidden;
-            btn.textContent = isHidden ? "Show Abstract" : "Hide Abstract";
-            btn.setAttribute('aria-expanded', !isHidden);
+            const isHidden = abstract.classList.contains('hidden'); 
+            abstract.classList.toggle('hidden'); 
+            btn.textContent = isHidden ? "Hide Abstract" : "Show Abstract"; 
+            btn.setAttribute('aria-expanded', String(isHidden));
         }
     });
     </script>
