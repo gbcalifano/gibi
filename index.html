@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Giovanbattista Califano</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌱</text></svg>">
+
+    <!-- Third-party CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v3.0.0/dist/cookieconsent.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { darkMode: 'class' };
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Theme initialization script -->
+    <script>
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+
+    <!-- Custom Styles -->
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .dark body { background-color: #0f172a; }
+        .nav-link-active { color: #6aa84f; font-weight: 600; }
+        .dark .nav-link-active { color: #34d399; }
+        /* Custom styles for the cookie consent modal to match the site */
+        :root {
+            --cc-bg: #fff; --cc-text: #1e293b; --cc-link-color: #6aa84f;
+            --cc-link-hover-color: #5a9a3f; --cc-btn-primary-bg: #6aa84f;
+            --cc-btn-primary-text: #fff; --cc-btn-primary-hover-bg: #5a9a3f;
+            --cc-btn-secondary-bg: #e2e8f0; --cc-btn-secondary-text: #1e293b;
+            --cc-btn-secondary-hover-bg: #cbd5e1; --cc-border-radius: 0.75rem;
+            --cc-z-index: 100;
+        }
+        .dark .cc-root {
+            --cc-bg: #1e293b; --cc-text: #e2e8f0; --cc-link-color: #34d399;
+            --cc-link-hover-color: #6ee7b7; --cc-btn-primary-bg: #34d399;
+            --cc-btn-primary-text: #1e293b; --cc-btn-primary-hover-bg: #6ee7b7;
+            --cc-btn-secondary-bg: #334155; --cc-btn-secondary-text: #e2e8f0;
+            --cc-btn-secondary-hover-bg: #475569;
+        }
+    </style>
+</head>
+<body class="text-slate-800 dark:text-slate-300 bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
+    
+    <!-- Search Modal (from _includes/search-modal.html) -->
+    <div id="search-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm" aria-labelledby="search-modal-title" role="dialog" aria-modal="true">
+        <div class="fixed inset-0 overflow-y-auto">
+            <div class="flex min-h-full items-start justify-center p-4 text-center sm:p-6">
+                <div id="search-modal-panel" class="relative w-full max-w-xl transform rounded-xl bg-white dark:bg-slate-800 text-left shadow-2xl transition-all">
+                    <div class="relative">
+                        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
+                            <i class="fa-solid fa-magnifying-glass text-slate-400"></i>
+                        </div>
+                        <input type="text" id="search-input" placeholder="Search the site..." class="block w-full bg-transparent border-0 rounded-t-xl py-4 pl-11 pr-4 text-slate-900 dark:text-white placeholder:text-slate-400 focus:ring-0 sm:text-sm sm:leading-6">
+                    </div>
+                    <div id="search-results-container" class="border-t border-slate-200 dark:border-slate-700 max-h-[60vh] overflow-y-auto">
+                        <p id="search-placeholder" class="p-6 text-center text-sm text-slate-500">No results yet. Start typing to search.</p>
+                        <ul id="search-results-list"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header (from _includes/header.html) -->
+    <header class="bg-white/70 dark:bg-slate-900/70 backdrop-blur-lg sticky top-0 z-40 w-full border-b border-slate-200 dark:border-slate-800">
+        <div class="container mx-auto max-w-4xl px-4">
+            <div class="flex items-center justify-between h-16">
+                <a href="index.html" class="text-xl font-bold text-slate-900 dark:text-white hover:text-[#6aa84f] dark:hover:text-[#34d399] transition-colors">
+                    Giovanbattista Califano
+                </a>
+                <nav class="hidden md:flex items-center space-x-6">
+                    <ul class="flex items-center space-x-6 text-sm font-medium text-slate-600 dark:text-slate-400">
+                        <li><a href="index.html" class="hover:text-[#6aa84f] dark:hover:text-[#34d399] transition-colors nav-link-about">About</a></li>
+                        <li><a href="research.html" class="hover:text-[#6aa84f] dark:hover:text-[#34d399] transition-colors nav-link-research">Research</a></li>
+                        <li><a href="teaching.html" class="hover:text-[#6aa84f] dark:hover:text-[#34d399] transition-colors nav-link-teaching">Teaching</a></li>
+                    </ul>
+                    <div class="flex items-center space-x-4">
+                        <button id="search-button" type="button" aria-label="Search site" class="text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg text-sm p-2.5">
+                            <i class="fa-solid fa-magnifying-glass w-5 h-5"></i>
+                        </button>
+                        <button id="theme-toggle" type="button" aria-label="Toggle dark mode" class="text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg text-sm p-2.5">
+                            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 5.05A1 1 0 016.465 3.636l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+                        </button>
+                    </div>
+                </nav>
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-500" aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="sr-only">Open main menu</span>
+                        <svg id="hamburger-icon" class="h-6 w-6 block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>
+                        <svg id="close-icon" class="h-6 w-6 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-slate-200 dark:border-slate-800">
+                <a href="index.html" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 dark:text-slate-300 hover:text-[#6aa84f] dark:hover:text-[#34d399] hover:bg-slate-100 dark:hover:bg-slate-800 nav-link-about">About</a>
+                <a href="research.html" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 dark:text-slate-300 hover:text-[#6aa84f] dark:hover:text-[#34d399] hover:bg-slate-100 dark:hover:bg-slate-800 nav-link-research">Research</a>
+                <a href="teaching.html" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 dark:text-slate-300 hover:text-[#6aa84f] dark:hover:text-[#34d399] hover:bg-slate-100 dark:hover:bg-slate-800 nav-link-teaching">Teaching</a>
+            </div>
+            <div class="pt-4 pb-3 border-t border-slate-200 dark:border-slate-800">
+                <div class="flex items-center justify-center px-5 space-x-4">
+                    <button id="search-button-mobile" aria-label="Search site" class="flex-grow justify-center text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 rounded-lg text-sm p-2.5 flex items-center gap-2">
+                        <i class="fa-solid fa-magnifying-glass w-5 h-5"></i> Search
+                    </button>
+                    <button id="theme-toggle-mobile" aria-label="Toggle dark mode" class="text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 rounded-lg text-sm p-2.5">
+                        <svg id="theme-toggle-dark-icon-mobile" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                        <svg id="theme-toggle-light-icon-mobile" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 5.05A1 1 0 016.465 3.636l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container mx-auto max-w-4xl px-4 py-8 md:py-12">
+        
+        <div class="mb-10 md:mb-16 pt-16">
+             <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="flex flex-col md:flex-row items-center gap-6 w-full">
+                    <img src="img/gb.jpeg" alt="Giovanbattista Califano" class="w-72 h-72 rounded-full shadow-md flex-shrink-0">
+                    <div class="text-center md:text-left w-full">
+                        <h1 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white tracking-tight">Giovanbattista Califano</h1>
+                        <p class="text-slate-600 dark:text-slate-400">Researcher in Consumer & Behavioral Science</p>
+                        <div class="flex items-center justify-center md:justify-start space-x-4 text-2xl text-slate-500 dark:text-slate-400 mt-4">
+                            <a href="https://scholar.google.com/citations?user=9_K3YpQAAAAJ&hl=en" target="_blank" rel="noopener noreferrer" class="hover:text-[#6aa84f] dark:hover:text-[#34d399] transition-colors" aria-label="Google Scholar"><i class="fa-solid fa-graduation-cap"></i></a>
+                            <a href="https://www.scopus.com/authid/detail.uri?authorId=57358445100" target="_blank" rel="noopener noreferrer" class="hover:text-[#6aa84f] dark:hover:text-[#34d399] transition-colors" aria-label="Scopus"><i class="fa-solid fa-file-alt"></i></a>
+                            <a href="https://www.researchgate.net/profile/Giovanbattista-Califano" target="_blank" rel="noopener noreferrer" class="hover:text-[#6aa84f] dark:hover:text-[#34d399] transition-colors" aria-label="ResearchGate"><i class="fab fa-researchgate"></i></a>
+                            <a href="https://orcid.org/0000-0003-2088-2023" target="_blank" rel="noopener noreferrer" class="hover:text-[#6aa84f] dark:hover:text-[#34d399] transition-colors" aria-label="ORCID"><i class="fab fa-orcid"></i></a>
+                            <a href="mailto:giovanbattista.califano@unina.it" class="hover:text-[#6aa84f] dark:hover:text-[#34d399] transition-colors" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <main class="space-y-12">
+            
+            <section>
+                <h2 class="text-2xl font-bold text-slate-800 dark:text-slate-200 border-b-2 border-slate-200 dark:border-slate-800 pb-2 mb-6">About Me</h2>
+                <div class="bg-white dark:bg-slate-800 shadow-md dark:shadow-none rounded-xl p-6 dark:border dark:border-slate-700 space-y-4 text-justify">
+                    <p>As a psychologist and behavioural economist, I am passionate about understanding the intersection of technology and human behavior. Currently a researcher at the <a href="https://www.agraria.unina.it/en_GB/home" target="_blank" rel="noopener noreferrer" class="font-medium text-[#6aa84f] hover:text-[#5a9a3f] dark:text-[#34d399] dark:hover:text-[#6ee7b7]">Department of Agricultural Sciences, University of Naples Federico II</a>, my work centers on how emerging technologies are reshaping consumer food choices.</p>
+                    <p>My research leverages advanced statistical methods to explore consumer perceptions of <strong class="font-semibold text-slate-900 dark:text-white">food technology innovations</strong>, blending insights from both economics and psychology to address real-world challenges.</p>
+                    <div class="text-sm font-mono bg-slate-100 dark:bg-slate-800/50 p-4 rounded-lg text-slate-600 dark:text-slate-400">
+                        <p>Economics and Policy group</p>
+                        <p>Department of Agricultural Sciences</p>
+                        <p>Via Università 96, 80055 Portici, Italy</p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-2xl font-bold text-slate-800 dark:text-slate-200 border-b-2 border-slate-200 dark:border-slate-800 pb-2 mb-6">Research Focus</h2>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="md:col-span-2 bg-white dark:bg-slate-800 shadow-md dark:shadow-none rounded-xl p-6 dark:border dark:border-slate-700 space-y-4">
+                        <p>I investigate how cutting-edge developments in areas such as Artificial Intelligence, sustainable packaging, and alternative proteins influence market dynamics and consumer behaviour. Through interdisciplinary collaboration with leading institutions such as the University of Oxford and Wageningen University, I strive to produce impactful research that informs both academia and industry.</p>
+                         <a href="research.html" class="inline-block bg-[#6aa84f] text-white font-bold py-2 px-4 rounded-lg hover:bg-[#5a9a3f] dark:bg-[#34d399] dark:hover:bg-[#6ee7b7] dark:text-slate-900 transition-colors">View My Publications</a>
+                    </div>
+                    <a id="metrics-card-container" href="https://openalex.org/authors/A5073519625" target="_blank" rel="noopener noreferrer" class="block bg-white dark:bg-slate-800 shadow-md dark:shadow-none rounded-xl p-6 dark:border dark:border-slate-700 text-center flex flex-col justify-center transition-shadow duration-300 hover:shadow-lg">
+                        <div class="animate-pulse space-y-4">
+                            <div class="h-8 w-1/2 bg-slate-300 dark:bg-slate-700 rounded-md mx-auto"></div>
+                            <div class="h-4 w-1/3 bg-slate-300 dark:bg-slate-700 rounded-md mx-auto"></div>
+                            <div class="h-8 w-1/2 bg-slate-300 dark:bg-slate-700 rounded-md mx-auto mt-4"></div>
+                            <div class="h-4 w-1/3 bg-slate-300 dark:bg-slate-700 rounded-md mx-auto"></div>
+                            <div class="h-8 w-1/2 bg-slate-300 dark:bg-slate-700 rounded-md mx-auto mt-4"></div>
+                            <div class="h-4 w-1/3 bg-slate-300 dark:bg-slate-700 rounded-md mx-auto"></div>
+                        </div>
+                    </a>
+                </div>
+            </section>
+
+            <section>
+                 <h2 class="text-2xl font-bold text-slate-800 dark:text-slate-200 border-b-2 border-slate-200 dark:border-slate-800 pb-2 mb-6">Academic Background</h2>
+                 <div class="bg-white dark:bg-slate-800 shadow-md dark:shadow-none rounded-xl p-6 dark:border dark:border-slate-700 space-y-4 text-justify">
+                     <p>My academic journey began with a BA and MA in Psychology, followed by an MRes in Agricultural Economics, all from the University of Naples Federico II. I earned my PhD in Food Science from the same institution, where my work focused on decoding consumer perceptions of food tech innovations.</p>
+                     <p>I have been fortunate to conduct research as an academic visitor at the University of Oxford's renowned <a href="https://www.psy.ox.ac.uk/research/crossmodal-research-laboratory" target="_blank" rel="noopener noreferrer" class="font-medium text-[#6aa84f] hover:text-[#5a9a3f] dark:text-[#34d399] dark:hover:text-[#6ee7b7]">Crossmodal Research Lab</a> and as a <a href="https://comfocus.eu" target="_blank" rel="noopener noreferrer" class="font-medium text-[#6aa84f] hover:text-[#5a9a3f] dark:text-[#34d399] dark:hover:text-[#6ee7b7]">COMFOCUS</a> fellow at Wageningen University’s <a href="https://www.wur.nl/en/research-results/chair-groups/social-sciences/marketing-and-consumer-behaviour-group.htm" target="_blank" rel="noopener noreferrer" class="font-medium text-[#6aa84f] hover:text-[#5a9a3f] dark:text-[#34d399] dark:hover:text-[#6ee7b7]">Marketing and Consumer Behaviour group</a>.</p>
+                     <a href="https://data.califano.xyz/CV_GiovanbattistaCALIFANO.pdf" target="_blank" class="inline-block bg-[#6aa84f] text-white font-bold py-2 px-4 rounded-lg hover:bg-[#5a9a3f] dark:bg-[#34d399] dark:hover:bg-[#6ee7b7] dark:text-slate-900 transition-colors">Download my CV</a>
+                </div>
+            </section>
+
+             <section>
+                <h2 class="text-2xl font-bold text-slate-800 dark:text-slate-200 border-b-2 border-slate-200 dark:border-slate-800 pb-2 mb-6">In the News</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <a href="https://www.bbc.com/future/article/20240823-artificial-intelligence-wants-to-tell-you-what-to-cook-but-are-the-results-edible" target="_blank" rel="noopener noreferrer" class="block bg-white dark:bg-slate-800 shadow-md dark:shadow-none rounded-xl p-4 transition-shadow duration-300 hover:shadow-lg dark:border dark:border-slate-700">
+                        <img src="img/bbc.jpg" alt="AI Generated Food" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
+                        <h3 class="font-bold text-slate-900 dark:text-white leading-tight">'It looks like cat food': The grey goop dreamed up by artificial intelligence</h3>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">bbc.com</p>
+                    </a>
+                    <a href="https://www.rollingstone.com/culture/culture-features/ah-food-pictures-fake-delivery-recipes-1235135386/" target="_blank" rel="noopener noreferrer" class="block bg-white dark:bg-slate-800 shadow-md dark:shadow-none rounded-xl p-4 transition-shadow duration-300 hover:shadow-lg dark:border dark:border-slate-700">
+                        <img src="img/rolling.jpg" alt="AI Food Images" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
+                        <h3 class="font-bold text-slate-900 dark:text-white leading-tight">AI Images May Be Changing the Way We Look at Food</h3>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">rollingstone.com</p>
+                    </a>
+                    <a href="https://www.dailymail.co.uk/sciencetech/article-13183271/Fake-food-created-AI-looks-tastier.html" target="_blank" rel="noopener noreferrer" class="block bg-white dark:bg-slate-800 shadow-md dark:shadow-none rounded-xl p-4 transition-shadow duration-300 hover:shadow-lg dark:border dark:border-slate-700">
+                        <img src="https://i.dailymail.co.uk/1s/2024/03/11/16/82322161-0-image-m-60_1710175258577.jpg" alt="Fake food created by AI" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
+                        <h3 class="font-bold text-slate-900 dark:text-white leading-tight">Fake food created by AI looks tastier than real dishes, scientists say</h3>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">dailymail.co.uk</p>
+                    </a>
+                     <a href="https://petapixel.com/2024/03/15/study-shows-that-ai-images-of-food-look-tastier-than-real-food-photos/" target="_blank" rel="noopener noreferrer" class="block bg-white dark:bg-slate-800 shadow-md dark:shadow-none rounded-xl p-4 transition-shadow duration-300 hover:shadow-lg dark:border dark:border-slate-700">
+                        <img src="img/ppixel.jpg" alt="AI Food Photos" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
+                        <h3 class="font-bold text-slate-900 dark:text-white leading-tight">Study Shows AI Images of Food Look Tastier Than Real Food Photos</h3>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">petapixel.com</p>
+                    </a>
+                    <a href="https://www.foxcomms.com/foxquarterly/a-recipe-for-success/" target="_blank" rel="noopener noreferrer" class="block bg-white dark:bg-slate-800 shadow-md dark:shadow-none rounded-xl p-4 transition-shadow duration-300 hover:shadow-lg dark:border dark:border-slate-700">
+                        <img src="https://www.foxcomms.com/wp-content/uploads/2024/09/Website-Banner-Image-7-1900x855.png" alt="AI in Luxury Gastronomy" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
+                        <h3 class="font-bold text-slate-900 dark:text-white leading-tight">The Role of AI in Shaping the Future of Luxury Gastronomy</h3>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">foxcomms.com</p>
+                    </a>
+                    <a href="https://www.diyphotography.net/ai-food-images-look-yummier-than-photos-says-study/" target="_blank" rel="noopener noreferrer" class="block bg-white dark:bg-slate-800 shadow-md dark:shadow-none rounded-xl p-4 transition-shadow duration-300 hover:shadow-lg dark:border dark:border-slate-700">
+                        <img src="img/diyphoto.jpg" alt="Yummy AI Food" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
+                        <h3 class="font-bold text-slate-900 dark:text-white leading-tight">AI food images look yummier than photos, says study</h3>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">diyphotography.net</p>
+                    </a>
+                    <a href="https://issues.fr/regalez-vous-les-yeux-comment-lia-propose-des-images-culinaires-plus-delicieuses-que-la-realite/" target="_blank" rel="noopener noreferrer" class="block bg-white dark:bg-slate-800 shadow-md dark:shadow-none rounded-xl p-4 transition-shadow duration-300 hover:shadow-lg dark:border dark:border-slate-700">
+                        <img src="img/issuesfr.jpg" alt="AI culinary images" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
+                        <h3 class="font-bold text-slate-900 dark:text-white leading-tight">Régalez-vous les yeux : comment l'IA propose des images culinaires...</h3>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">issues.fr</p>
+                    </a>
+                    <a href="https://www.elobservador.com.uy/nota/imagenes-de-comida-generadas-por-ia-parecen-mas-sabrosas-que-las-reales-202431512275" target="_blank" rel="noopener noreferrer" class="block bg-white dark:bg-slate-800 shadow-md dark:shadow-none rounded-xl p-4 transition-shadow duration-300 hover:shadow-lg dark:border dark:border-slate-700">
+                        <img src="img/observador.jpg" alt="AI generated food images" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
+                        <h3 class="font-bold text-slate-900 dark:text-white leading-tight">Imágenes de comida generadas por IA parecen más sabrosas que las reales</h3>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">elobservador.com.uy</p>
+                    </a>
+                </div>
+            </section>
+
+        </main>
+        
+        <footer class="text-center mt-12 md:mt-16 pt-8 border-t border-slate-200 dark:border-slate-800">
+            <p class="text-sm text-slate-500 dark:text-slate-400">
+                All Rights Reserved © Giovanbattista Califano 2025
+            </p>
+        </footer>
+    </div>
+
+    <!-- Third-party JS libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v3.0.0/dist/cookieconsent.umd.js"></script>
+    
+    <!-- Main site script -->
+    <script src="js/main.js"></script>
+
+    <!-- Page-specific script for OpenAlex Metrics -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('metrics-card-container');
+            if (!container) return;
+            
+            async function fetchOpenAlexAuthorMetrics() {
+                try {
+                    const authorId = 'A5073519625';
+                    const resp = await fetch(`https://api.openalex.org/people/${authorId}`);
+                    if (!resp.ok) throw new Error(`HTTP error! Status: ${resp.status}`);
+                    const author = await resp.json();
+
+                    container.innerHTML = `
+                        <div>
+                            <div class="text-3xl font-bold text-[#6aa84f] dark:text-[#34d399]">${author.works_count ?? '0'}</div>
+                            <div class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider">Works</div>
+                        </div>
+                        <div class="my-4 border-t border-slate-200 dark:border-slate-700 w-1/2 mx-auto"></div>
+                        <div>
+                            <div class="text-3xl font-bold text-[#6aa84f] dark:text-[#34d399]">${author.cited_by_count ?? '0'}</div>
+                            <div class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider">Citations</div>
+                        </div>
+                        <div class="my-4 border-t border-slate-200 dark:border-slate-700 w-1/2 mx-auto"></div>
+                        <div>
+                            <div class="text-3xl font-bold text-[#6aa84f] dark:text-[#34d399]">${author.summary_stats?.h_index ?? '0'}</div>
+                            <div class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider">H-index</div>
+                        </div>
+                    `;
+                } catch (err) {
+                    console.error("Error fetching OpenAlex data:", err);
+                    container.innerHTML = `<p class="text-center text-sm text-red-500">Error loading metrics.</p>`;
+                }
+            }
+
+            fetchOpenAlexAuthorMetrics();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<div id="search-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm" aria-labelledby="search-modal-title" role="dialog" aria-modal="true">
+    <div class="fixed inset-0 overflow-y-auto">
+        <div class="flex min-h-full items-start justify-center p-4 text-center sm:p-6">
+            <div id="search-modal-panel" class="relative w-full max-w-xl transform rounded-xl bg-white dark:bg-slate-800 text-left shadow-2xl transition-all">
+                <div class="relative">
+                    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
+                        <i class="fa-solid fa-magnifying-glass text-slate-400"></i>
+                    </div>
+                    <input type="text" id="search-input" placeholder="Search the site..." class="block w-full bg-transparent border-0 rounded-t-xl py-4 pl-11 pr-4 text-slate-900 dark:text-white placeholder:text-slate-400 focus:ring-0 sm:text-sm sm:leading-6">
+                </div>
+                <div id="search-results-container" class="border-t border-slate-200 dark:border-slate-700 max-h-[60vh] overflow-y-auto">
+                    <p id="search-placeholder" class="p-6 text-center text-sm text-slate-500">No results yet. Start typing to search.</p>
+                    <ul id="search-results-list"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

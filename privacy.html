@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Privacy Policy | Giovanbattista Califano</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌱</text></svg>">
+
+    <!-- Cookie Consent CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v3.0.0/dist/cookieconsent.css">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { darkMode: 'class' };
+    </script>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        if (
+            localStorage.theme === 'dark' ||
+            (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
+        ) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .dark body {
+            background-color: #0f172a;
+        }
+        .privacy-content h2 {
+            font-size: 1.5rem; /* 24px */
+            font-weight: 600;
+            margin-top: 2rem; /* 32px */
+            margin-bottom: 1rem; /* 16px */
+            color: #1e293b; /* slate-800 */
+        }
+        .dark .privacy-content h2 {
+            color: #e2e8f0; /* slate-200 */
+        }
+        .privacy-content p {
+            margin-bottom: 1rem; /* 16px */
+        }
+        .privacy-content ul {
+            list-style-type: disc;
+            padding-left: 2rem; /* 32px */
+            margin-bottom: 1rem; /* 16px */
+        }
+        .privacy-content a {
+            color: #6aa84f;
+            text-decoration: underline;
+        }
+        .dark .privacy-content a {
+            color: #34d399;
+        }
+        .nav-link-active {
+            color: #6aa84f;
+            font-weight: 600;
+        }
+        .dark .nav-link-active {
+            color: #34d399;
+        }
+        /* Custom styles for the cookie consent modal to match the site */
+        :root {
+            --cc-bg: #fff;
+            --cc-text: #1e293b;
+            --cc-link-color: #6aa84f;
+            --cc-link-hover-color: #5a9a3f;
+            --cc-btn-primary-bg: #6aa84f;
+            --cc-btn-primary-text: #fff;
+            --cc-btn-primary-hover-bg: #5a9a3f;
+            --cc-btn-secondary-bg: #e2e8f0;
+            --cc-btn-secondary-text: #1e293b;
+            --cc-btn-secondary-hover-bg: #cbd5e1;
+            --cc-border-radius: 0.75rem;
+            --cc-z-index: 100;
+        }
+        .dark .cc-root {
+            --cc-bg: #1e293b;
+            --cc-text: #e2e8f0;
+            --cc-link-color: #34d399;
+            --cc-link-hover-color: #6ee7b7;
+            --cc-btn-primary-bg: #34d399;
+            --cc-btn-primary-text: #1e293b;
+            --cc-btn-primary-hover-bg: #6ee7b7;
+            --cc-btn-secondary-bg: #334155;
+            --cc-btn-secondary-text: #e2e8f0;
+            --cc-btn-secondary-hover-bg: #475569;
+        }
+    </style>
+</head>
+<body class="text-slate-800 dark:text-slate-300 bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
+
+    <!-- Search Modal -->
+    <div id="search-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm" aria-labelledby="search-modal-title" role="dialog" aria-modal="true">
+        <div class="fixed inset-0 overflow-y-auto">
+            <div class="flex min-h-full items-start justify-center p-4 text-center sm:p-6">
+                <div id="search-modal-panel" class="relative w-full max-w-xl transform rounded-xl bg-white dark:bg-slate-800 text-left shadow-2xl transition-all">
+                    <!-- Search Input -->
+                    <div class="relative">
+                        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
+                            <i class="fa-solid fa-magnifying-glass text-slate-400"></i>
+                        </div>
+                        <input type="text" id="search-input" placeholder="Search the site..." class="block w-full bg-transparent border-0 rounded-t-xl py-4 pl-11 pr-4 text-slate-900 dark:text-white placeholder:text-slate-400 focus:ring-0 sm:text-sm sm:leading-6">
+                    </div>
+                    <!-- Search Results -->
+                    <div id="search-results-container" class="border-t border-slate-200 dark:border-slate-700 max-h-[60vh] overflow-y-auto">
+                        <p id="search-placeholder" class="p-6 text-center text-sm text-slate-500">No results yet. Start typing to search.</p>
+                        <ul id="search-results-list"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <header class="bg-white/70 dark:bg-slate-900/70 backdrop-blur-lg sticky top-0 z-40 w-full border-b border-slate-200 dark:border-slate-800">
+        <div class="container mx-auto max-w-4xl px-4">
+            <div class="flex items-center justify-between h-16">
+                <!-- Site Name / Brand -->
+                <a href="index.html" class="text-xl font-bold text-slate-900 dark:text-white hover:text-[#6aa84f] dark:hover:text-[#34d399] transition-colors">
+                    Giovanbattista Califano
+                </a>
+    
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex items-center space-x-6">
+                    <ul class="flex items-center space-x-6 text-sm font-medium text-slate-600 dark:text-slate-400">
+                        <li><a href="index.html" class="hover:text-[#6aa84f] dark:hover:text-[#34d399] transition-colors nav-link-about">About</a></li>
+                        <li><a href="research.html" class="hover:text-[#6aa84f] dark:hover:text-[#34d399] transition-colors nav-link-research">Research</a></li>
+                        <li><a href="teaching.html" class="hover:text-[#6aa84f] dark:hover:text-[#34d399] transition-colors nav-link-teaching">Teaching</a></li>
+                    </ul>
+                    <div class="flex items-center space-x-4">
+                        <!-- Search Button -->
+                        <button id="search-button" type="button" aria-label="Search site" class="text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg text-sm p-2.5">
+                            <i class="fa-solid fa-magnifying-glass w-5 h-5"></i>
+                        </button>
+                        <!-- Theme Toggle -->
+                        <button id="theme-toggle" type="button" aria-label="Toggle dark mode" class="text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg text-sm p-2.5">
+                            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 5.05A1 1 0 016.465 3.636l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+                        </button>
+                    </div>
+                </nav>
+    
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-500" aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="sr-only">Open main menu</span>
+                        <!-- Hamburger Icon -->
+                        <svg id="hamburger-icon" class="h-6 w-6 block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>
+                        <!-- Close Icon -->
+                        <svg id="close-icon" class="h-6 w-6 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-slate-200 dark:border-slate-800">
+                <a href="index.html" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 dark:text-slate-300 hover:text-[#6aa84f] dark:hover:text-[#34d399] hover:bg-slate-100 dark:hover:bg-slate-800 nav-link-about">About</a>
+                <a href="research.html" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 dark:text-slate-300 hover:text-[#6aa84f] dark:hover:text-[#34d399] hover:bg-slate-100 dark:hover:bg-slate-800 nav-link-research">Research</a>
+                <a href="teaching.html" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 dark:text-slate-300 hover:text-[#6aa84f] dark:hover:text-[#34d399] hover:bg-slate-100 dark:hover:bg-slate-800 nav-link-teaching">Teaching</a>
+            </div>
+            <div class="pt-4 pb-3 border-t border-slate-200 dark:border-slate-800">
+                <div class="flex items-center justify-center px-5 space-x-4">
+                    <button id="search-button-mobile" aria-label="Search site" class="flex-grow justify-center text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 rounded-lg text-sm p-2.5 flex items-center gap-2">
+                        <i class="fa-solid fa-magnifying-glass w-5 h-5"></i> Search
+                    </button>
+                    <button id="theme-toggle-mobile" aria-label="Toggle dark mode" class="text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 rounded-lg text-sm p-2.5">
+                        <svg id="theme-toggle-dark-icon-mobile" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                        <svg id="theme-toggle-light-icon-mobile" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 5.05A1 1 0 016.465 3.636l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container mx-auto max-w-4xl px-4 py-8 md:py-12">
+        <div class="text-center mb-10 md:mb-16 pt-16"> <!-- pt-16 is height of sticky header -->
+            <h1 class="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white tracking-tight">Privacy Policy</h1>
+        </div>
+
+        <main>
+            <div class="bg-white dark:bg-slate-800 shadow-md dark:shadow-none rounded-xl p-6 md:p-8 dark:border dark:border-slate-700 text-justify privacy-content">
+                <p class="text-slate-600 dark:text-slate-400">Last updated: July 10, 2025</p>
+                
+                <p>This Privacy Policy describes how your personal information is handled on this website. Your privacy is important, and this document aims to be transparent about the data that is processed when you visit this site.</p>
+
+                <h2>Information I Collect</h2>
+                <p>This website is a personal academic portfolio and does not have user accounts, comments, or forms that collect personally identifiable information (PII) such as your name, email address, or phone number.</p>
+
+                <h2>Cookies and Local Storage</h2>
+                <p>This site uses technology to enhance your experience, which requires your consent in accordance with the GDPR and ePrivacy Directive.</p>
+                <ul>
+                    <li><strong>Local Storage:</strong> To remember your preference for light or dark mode, a value ('light' or 'dark') is saved in your browser's `localStorage`. This is for functional purposes only and does not track you.</li>
+                    <li><strong>Cookie Consent:</strong> Your choice on the cookie banner ('accepted' or 'declined') is also stored in `localStorage` to remember your preference on subsequent visits.</li>
+                    <li><strong>Third-Party Cookies:</strong> Services like Altmetric (used on the Research page) may place cookies to function correctly. These non-essential services are only loaded after you provide explicit consent by clicking "Accept" on the cookie banner.</li>
+                </ul>
+
+                <h2>Third-Party Services</h2>
+                <p>This website utilizes several third-party services to provide a richer experience. These services may process some of your data, such as your IP address. Below is a list of these services and links to their privacy policies:</p>
+                <ul>
+                    <li><strong>Google Fonts:</strong> To provide the custom fonts used on this site, your browser makes a request to Google's servers, which may log your IP address. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google Privacy Policy</a>.</li>
+                    <li><strong>Font Awesome (via cdnjs):</strong> Icons are loaded from a content delivery network (CDN), which may log your IP address for security and performance reasons. <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener noreferrer">Cloudflare Privacy Policy</a>.</li>
+                    <li><strong>OpenAlex API:</strong> Publication data on the Research page is fetched from the OpenAlex API. This service may log request data, including your IP address. <a href="https://openalex.org/privacy-policy" target="_blank" rel="noopener noreferrer">OpenAlex Privacy Policy</a>.</li>
+                    <li><strong>Altmetric:</strong> The Altmetric badges on the Research page are an embedded service that may use cookies and track usage data to provide its metrics. This script is only loaded if you consent. <a href="https://www.altmetric.com/cookie-policy/" target="_blank" rel="noopener noreferrer">Altmetric Cookie Policy</a>.</li>
+                </ul>
+
+                <h2>Your Rights</h2>
+                <p>Under the GDPR, you have the right to be informed about the collection and use of your personal data. You have the right to withdraw your consent at any time for non-essential services. If you decline cookies, non-essential third-party scripts like Altmetric will not be loaded.</p>
+                
+                <h2>Contact</h2>
+                <p>If you have any questions or concerns about this privacy policy, please feel free to contact me at <a href="mailto:info@califano.xyz">info@califano.xyz</a>.</p>
+            </div>
+        </main>
+
+        <footer class="text-center mt-12 md:mt-16 pt-8 border-t border-slate-200 dark:border-slate-800">
+            <p class="text-sm text-slate-500 dark:text-slate-400">
+                 All Rights Reserved © Giovanbattista Califano 2025
+            </p>
+        </footer>
+    </div>
+
+    <!-- Cookie Consent JS -->
+    <script src="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v3.0.0/dist/cookieconsent.umd.js"></script>
+
+    <script>
+        // --- Mobile Menu Toggle ---
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const hamburgerIcon = document.getElementById('hamburger-icon');
+        const closeIcon = document.getElementById('close-icon');
+
+        mobileMenuButton.addEventListener('click', () => {
+            const isExpanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
+            mobileMenuButton.setAttribute('aria-expanded', !isExpanded);
+            mobileMenu.classList.toggle('hidden');
+            hamburgerIcon.classList.toggle('hidden');
+            closeIcon.classList.toggle('hidden');
+        });
+
+        // --- Active Nav Link Styling ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const pageName = window.location.pathname.split('/').pop().split('.').shift();
+            const activePage = pageName === 'index' || pageName === '' ? 'about' : pageName;
+            const navLinks = document.querySelectorAll(`.nav-link-${activePage}`);
+
+            navLinks.forEach(link => {
+                link.classList.add('nav-link-active');
+            });
+        });
+
+        // --- Sync Theme Toggles ---
+        const themeToggles = document.querySelectorAll('#theme-toggle, #theme-toggle-mobile');
+        const darkIcons = document.querySelectorAll('#theme-toggle-dark-icon, #theme-toggle-dark-icon-mobile');
+        const lightIcons = document.querySelectorAll('#theme-toggle-light-icon, #theme-toggle-light-icon-mobile');
+
+        function updateAllThemeIcons() {
+            const isDark = document.documentElement.classList.contains('dark');
+            darkIcons.forEach(icon => icon.classList.toggle('hidden', isDark));
+            lightIcons.forEach(icon => icon.classList.toggle('hidden', !isDark));
+        }
+
+        themeToggles.forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+                localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+                updateAllThemeIcons();
+            });
+        });
+
+        updateAllThemeIcons(); // Initial check
+
+        // --- Site Search ---
+        (function() {
+            const searchModal = document.getElementById('search-modal');
+            const searchInput = document.getElementById('search-input');
+            const resultsList = document.getElementById('search-results-list');
+            const placeholder = document.getElementById('search-placeholder');
+            const searchButtons = document.querySelectorAll('#search-button, #search-button-mobile');
+
+            const searchIndex = [
+                { title: 'About', url: 'index.html' },
+                { title: 'Research', url: 'research.html' },
+                { title: 'Teaching', url: 'teaching.html' },
+                { title: 'Monday Lab', url: 'monday-lab.html' },
+                { title: 'Privacy Policy', url: 'privacy.html' }
+            ];
+
+            let pageContents = [];
+            let isDataFetched = false;
+
+            async function fetchPageContent() {
+                if (isDataFetched) return;
+
+                pageContents = await Promise.all(
+                    searchIndex.map(async (page) => {
+                        const response = await fetch(page.url);
+                        const html = await response.text();
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+                        const mainContent = doc.querySelector('main')?.textContent || '';
+                        return {
+                            title: page.title,
+                            url: page.url,
+                            content: mainContent.toLowerCase().replace(/\s+/g, ' ').trim()
+                        };
+                    })
+                );
+                isDataFetched = true;
+            }
+
+            function openSearch() {
+                searchModal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+                searchInput.focus();
+                fetchPageContent(); 
+            }
+
+            function closeSearch() {
+                searchModal.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+
+            function performSearch() {
+                const query = searchInput.value.toLowerCase().trim();
+                resultsList.innerHTML = '';
+
+                if (query.length < 3) {
+                    placeholder.textContent = 'Please enter at least 3 characters.';
+                    placeholder.classList.remove('hidden');
+                    return;
+                }
+
+                const matches = pageContents.filter(page => page.content.includes(query));
+
+                if (matches.length > 0) {
+                    placeholder.classList.add('hidden');
+                    matches.forEach(match => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `
+                            <a href="${match.url}" class="block p-4 hover:bg-slate-100 dark:hover:bg-slate-700/50 border-b border-slate-200 dark:border-slate-700">
+                                <div class="font-semibold text-slate-800 dark:text-slate-200">${match.title}</div>
+                                <p class="text-sm text-slate-500 dark:text-slate-400">Content match found on this page.</p>
+                            </a>`;
+                        resultsList.appendChild(li);
+                    });
+                } else {
+                    placeholder.textContent = `No results found for "${query}"`;
+                    placeholder.classList.remove('hidden');
+                }
+            }
+
+            searchButtons.forEach(btn => btn.addEventListener('click', openSearch));
+            searchInput.addEventListener('input', performSearch);
+
+            searchModal.addEventListener('click', (e) => {
+                if (e.target === searchModal) closeSearch();
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && !searchModal.classList.contains('hidden')) {
+                    closeSearch();
+                }
+            });
+
+        })();
+
+        // --- Cookie Consent Logic ---
+        CookieConsent.run({
+            guiOptions: {
+                consentModal: {
+                    layout: "box",
+                    position: "bottom left",
+                    equalWeightButtons: true,
+                    flipButtons: false
+                },
+                preferencesModal: {
+                    layout: "box",
+                    position: "right",
+                    equalWeightButtons: true,
+                    flipButtons: false
+                }
+            },
+            categories: {
+                necessary: {
+                    readOnly: true
+                },
+                analytics: {}
+            },
+
+            language: {
+                default: "en",
+                translations: {
+                    en: {
+                        consentModal: {
+                            title: "Hello there, traveler!",
+                            description: "This website uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only after consent.",
+                            acceptAllBtn: "Accept all",
+                            acceptNecessaryBtn: "Reject all",
+                            showPreferencesBtn: "Manage preferences",
+                            footer: "<a href=\"privacy.html\">Privacy Policy</a>"
+                        },
+                        preferencesModal: {
+                            title: "Cookie preferences",
+                            acceptAllBtn: "Accept all",
+                            acceptNecessaryBtn: "Reject all",
+                            savePreferencesBtn: "Save preferences",
+                            closeIconLabel: "Close modal",
+                            sections: [
+                                {
+                                    title: "Cookie Usage",
+                                    description: "I use cookies to ensure the basic functionalities of the website and to enhance your online experience. You can choose for each category to opt-in/out whenever you want. For more details relative to cookies and other sensitive data, please read the full <a href=\"privacy.html\">privacy policy</a>."
+                                },
+                                {
+                                    title: "Strictly Necessary Cookies",
+                                    description: "These cookies are essential for the proper functioning of my website. Without these cookies, the website would not work properly.",
+                                    linkedCategory: "necessary"
+                                },
+                                {
+                                    title: "Performance and Analytics Cookies",
+                                    description: "These cookies allow the website to remember the choices you have made in the past, like your color preference. They are also used to collect information about how you use the site, such as for the Altmetric badges on the research page.",
+                                    linkedCategory: "analytics"
+                                },
+                                {
+                                    title: "More information",
+                                    description: "For any queries in relation to my policy on cookies and your choices, please <a href=\"mailto:giovanbattista.califano@unina.it\">contact me</a>."
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
