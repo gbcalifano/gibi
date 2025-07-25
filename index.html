@@ -3,25 +3,28 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <meta name="description" content="Giovanbattista Califano is a behavioral scientist exploring food innovation, sustainability, and consumer decision-making.">
+    <meta name="author" content="Giovanbattista Califano">
+    <meta name="keywords" content="Behavioral Science, Consumer Research, Food Innovation, Sustainability, Psychometrics, Giovanbattista Califano, Artificial Intelligence">
+    <meta property="og:title" content="Giovanbattista Califano – Behavioral Science & Food Innovation">
+    <meta property="og:description" content="Explore research, teaching, and media coverage of Giovanbattista Califano, researcher in consumer behavior and sustainable food systems.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://califano.xyz">
+    <meta property="og:image" content="img/gb.jpeg">
+
     <title>Giovanbattista Califano</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌱</text></svg>">
 
-    <!-- Third-party CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v3.0.0/dist/cookieconsent.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = { darkMode: 'class' };
     </script>
-
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Theme initialization script -->
+    
     <script>
         if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
@@ -29,109 +32,170 @@
             document.documentElement.classList.remove('dark');
         }
     </script>
-
-    <!-- Custom Styles -->
+    
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .dark body { background-color: #0f172a; }
-        .nav-link-active { color: #6aa84f; font-weight: 600; }
-        .dark .nav-link-active { color: #34d399; }
-        /* Custom styles for the cookie consent modal to match the site */
         :root {
-            --cc-bg: #fff; --cc-text: #1e293b; --cc-link-color: #6aa84f;
-            --cc-link-hover-color: #5a9a3f; --cc-btn-primary-bg: #6aa84f;
-            --cc-btn-primary-text: #fff; --cc-btn-primary-hover-bg: #5a9a3f;
-            --cc-btn-secondary-bg: #e2e8f0; --cc-btn-secondary-text: #1e293b;
-            --cc-btn-secondary-hover-bg: #cbd5e1; --cc-border-radius: 0.75rem;
-            --cc-z-index: 100;
+            --color-primary: #6aa84f;
+            --color-primary-hover: #5a9a3f;
+            --color-primary-dark: #34d399;
+            --color-primary-dark-hover: #6ee7b7;
+            --bg-light: #f8fafc;
+            --bg-dark: #0f172a;
+            --bg-card-light: #ffffff;
+            --bg-card-dark: #1e293b;
+            --text-light: #1e293b;
+            --text-dark: #e2e8f0;
+            --text-secondary-light: #64748b;
+            --text-secondary-dark: #94a3b8;
+            --border-light: #e2e8f0;
+            --border-dark: #334155;
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
         }
-        .dark .cc-root {
-            --cc-bg: #1e293b; --cc-text: #e2e8f0; --cc-link-color: #34d399;
-            --cc-link-hover-color: #6ee7b7; --cc-btn-primary-bg: #34d399;
-            --cc-btn-primary-text: #1e293b; --cc-btn-primary-hover-bg: #6ee7b7;
-            --cc-btn-secondary-bg: #334155; --cc-btn-secondary-text: #e2e8f0;
-            --cc-btn-secondary-hover-bg: #475569;
+        html {
+            height: 100%;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-light);
+            display: flex;
+            flex-direction: column;
+            min-height: 100%;
+        }
+        main {
+            flex-grow: 1;
+        }
+        html.dark body {
+            background-color: var(--bg-dark);
+            color: var(--text-dark);
+        }
+        .nav-link-active {
+            color: var(--color-primary) !important;
+            font-weight: 600;
+        }
+        html.dark .nav-link-active {
+            color: var(--color-primary-dark) !important;
+        }
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--color-primary);
+            color: white;
+            font-weight: 700;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.2s ease-in-out, transform 0.2s;
+            text-decoration: none;
+        }
+        .btn-primary:hover {
+            background-color: var(--color-primary-hover);
+            transform: translateY(-2px);
+        }
+        html.dark .btn-primary {
+            background-color: var(--color-primary-dark);
+            color: var(--text-light);
+        }
+        html.dark .btn-primary:hover {
+            background-color: var(--color-primary-dark-hover);
+        }
+        .btn-secondary {
+            display: inline-block;
+            background-color: #e2e8f0;
+            color: #1e293b;
+            font-weight: 700;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.2s ease-in-out, transform 0.2s;
+            text-decoration: none;
+        }
+        .btn-secondary:hover {
+            background-color: #cbd5e1;
+            transform: translateY(-2px);
+        }
+        html.dark .btn-secondary {
+            background-color: #334155;
+            color: #e2e8f0;
+        }
+        html.dark .btn-secondary:hover {
+            background-color: #475569;
+        }
+        .card {
+            background-color: var(--bg-card-light);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-md);
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+        .card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-4px);
+        }
+        html.dark .card {
+            background-color: var(--bg-card-dark);
+            border: 1px solid var(--border-dark);
+            box-shadow: none;
+        }
+        .link-primary {
+            font-weight: 500;
+            color: var(--color-primary);
+            transition: color 0.2s ease;
+        }
+        .link-primary:hover {
+            color: var(--color-primary-hover);
+            text-decoration: underline;
+        }
+        html.dark .link-primary {
+            color: var(--color-primary-dark);
+        }
+        html.dark .link-primary:hover {
+            color: var(--color-primary-dark-hover);
+        }
+        :focus-visible {
+            outline: 3px solid var(--color-primary);
+            outline-offset: 2px;
+            border-radius: 0.25rem;
+        }
+        html.dark :focus-visible {
+            outline-color: var(--color-primary-dark);
+        }
+
+        section[id] {
+            padding-top: 6rem;
+            margin-top: -4rem;
         }
     </style>
 </head>
 <body class="text-slate-800 dark:text-slate-300 bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
-    
-    <!-- Search Modal (from _includes/search-modal.html) -->
-    <div id="search-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm" aria-labelledby="search-modal-title" role="dialog" aria-modal="true">
-        <div class="fixed inset-0 overflow-y-auto">
-            <div class="flex min-h-full items-start justify-center p-4 text-center sm:p-6">
-                <div id="search-modal-panel" class="relative w-full max-w-xl transform rounded-xl bg-white dark:bg-slate-800 text-left shadow-2xl transition-all">
-                    <div class="relative">
-                        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
-                            <i class="fa-solid fa-magnifying-glass text-slate-400"></i>
-                        </div>
-                        <input type="text" id="search-input" placeholder="Search the site..." class="block w-full bg-transparent border-0 rounded-t-xl py-4 pl-11 pr-4 text-slate-900 dark:text-white placeholder:text-slate-400 focus:ring-0 sm:text-sm sm:leading-6">
-                    </div>
-                    <div id="search-results-container" class="border-t border-slate-200 dark:border-slate-700 max-h-[60vh] overflow-y-auto">
-                        <p id="search-placeholder" class="p-6 text-center text-sm text-slate-500">No results yet. Start typing to search.</p>
-                        <ul id="search-results-list"></ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- Header (from _includes/header.html) -->
     <header class="bg-white/70 dark:bg-slate-900/70 backdrop-blur-lg sticky top-0 z-40 w-full border-b border-slate-200 dark:border-slate-800">
         <div class="container mx-auto max-w-4xl px-4">
             <div class="flex items-center justify-between h-16">
-                <a href="index.html" class="text-xl font-bold text-slate-900 dark:text-white hover:text-[#6aa84f] dark:hover:text-[#34d399] transition-colors">
+                <a href="#about" class="text-xl font-bold text-slate-900 dark:text-white hover:text-[#6aa84f] dark:hover:text-[#34d399] transition-colors">
                     Giovanbattista Califano
                 </a>
                 <nav class="hidden md:flex items-center space-x-6">
                     <ul class="flex items-center space-x-6 text-sm font-medium text-slate-600 dark:text-slate-400">
-                        <li><a href="index.html" class="hover:text-[#6aa84f] dark:hover:text-[#34d399] transition-colors nav-link-about">About</a></li>
-                        <li><a href="research.html" class="hover:text-[#6aa84f] dark:hover:text-[#34d399] transition-colors nav-link-research">Research</a></li>
-                        <li><a href="teaching.html" class="hover:text-[#6aa84f] dark:hover:text-[#34d399] transition-colors nav-link-teaching">Teaching</a></li>
+                        <li><a href="#about" class="hover:text-[#6aa84f] dark:hover:text-[#34d399] transition-colors nav-link">About</a></li>
+                        <li><a href="#research" class="hover:text-[#6aa84f] dark:hover:text-[#34d399] transition-colors nav-link">Research</a></li>
+                        <li><a href="#teaching" class="hover:text-[#6aa84f] dark:hover:text-[#34d399] transition-colors nav-link">Teaching</a></li>
+                        <li><a href="#media" class="hover:text-[#6aa84f] dark:hover:text-[#34d399] transition-colors nav-link">Media</a></li>
                     </ul>
                     <div class="flex items-center space-x-4">
-                        <button id="search-button" type="button" aria-label="Search site" class="text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg text-sm p-2.5">
-                            <i class="fa-solid fa-magnifying-glass w-5 h-5"></i>
-                        </button>
                         <button id="theme-toggle" type="button" aria-label="Toggle dark mode" class="text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg text-sm p-2.5">
                             <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
                             <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 5.05A1 1 0 016.465 3.636l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
                         </button>
                     </div>
                 </nav>
-                <div class="md:hidden">
-                    <button id="mobile-menu-button" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-500" aria-controls="mobile-menu" aria-expanded="false">
-                        <span class="sr-only">Open main menu</span>
-                        <svg id="hamburger-icon" class="h-6 w-6 block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>
-                        <svg id="close-icon" class="h-6 w-6 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
-                    </button>
-                </div>
-            </div>
-        </div>
-        <div id="mobile-menu" class="hidden md:hidden">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-slate-200 dark:border-slate-800">
-                <a href="index.html" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 dark:text-slate-300 hover:text-[#6aa84f] dark:hover:text-[#34d399] hover:bg-slate-100 dark:hover:bg-slate-800 nav-link-about">About</a>
-                <a href="research.html" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 dark:text-slate-300 hover:text-[#6aa84f] dark:hover:text-[#34d399] hover:bg-slate-100 dark:hover:bg-slate-800 nav-link-research">Research</a>
-                <a href="teaching.html" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 dark:text-slate-300 hover:text-[#6aa84f] dark:hover:text-[#34d399] hover:bg-slate-100 dark:hover:bg-slate-800 nav-link-teaching">Teaching</a>
-            </div>
-            <div class="pt-4 pb-3 border-t border-slate-200 dark:border-slate-800">
-                <div class="flex items-center justify-center px-5 space-x-4">
-                    <button id="search-button-mobile" aria-label="Search site" class="flex-grow justify-center text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 rounded-lg text-sm p-2.5 flex items-center gap-2">
-                        <i class="fa-solid fa-magnifying-glass w-5 h-5"></i> Search
-                    </button>
-                    <button id="theme-toggle-mobile" aria-label="Toggle dark mode" class="text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 rounded-lg text-sm p-2.5">
-                        <svg id="theme-toggle-dark-icon-mobile" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
-                        <svg id="theme-toggle-light-icon-mobile" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 5.05A1 1 0 016.465 3.636l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
-                    </button>
-                </div>
             </div>
         </div>
     </header>
-    
-    <div class="container mx-auto max-w-4xl px-4 py-8 md:py-12">
-        
-        <div class="mb-10 md:mb-16 pt-16">
-             <div class="flex flex-col md:flex-row items-center justify-between">
+
+    <main class="container mx-auto max-w-4xl px-4 py-8 md:py-12">
+        <section id="about">
+            <div class="flex flex-col md:flex-row items-center justify-between">
                 <div class="flex flex-col md:flex-row items-center gap-6 w-full">
                     <img src="img/gb.jpeg" alt="Giovanbattista Califano" class="w-72 h-72 rounded-full shadow-md flex-shrink-0">
                     <div class="text-center md:text-left w-full">
@@ -147,151 +211,393 @@
                     </div>
                 </div>
             </div>
-        </div>
+            <div class="mt-12 space-y-4 text-justify card">
+                <p>As a psychologist and behavioural economist, I am passionate about understanding the intersection of technology and human behavior. Currently a researcher at the <a href="https://www.agraria.unina.it/en_GB/home" target="_blank" rel="noopener noreferrer" class="link-primary">Department of Agricultural Sciences, University of Naples Federico II</a>, my work centers on how emerging technologies are reshaping consumer food choices.</p>
+                <p>My research leverages advanced statistical methods to explore consumer perceptions of <strong class="font-semibold text-slate-900 dark:text-white">food technology innovations</strong>, blending insights from both economics and psychology to address real-world challenges.</p>
+            </div>
+        </section>
 
-        <main class="space-y-12">
+        <section id="research" class="space-y-8">
+            <h2 class="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Research</h2>
+            <div class="grid grid-cols-3 gap-4 text-center text-slate-700 dark:text-slate-300 mt-8 mb-4">
+              <div>
+                <div id="openalex-papers" class="text-2xl font-bold text-[#6aa84f] dark:text-[#34d399]">—</div>
+                <div class="text-sm">PUBLICATIONS</div>
+              </div>
+              <div>
+                <div id="openalex-citations" class="text-2xl font-bold text-[#6aa84f] dark:text-[#34d399]">—</div>
+                <div class="text-sm">CITATIONS</div>
+              </div>
+              <div>
+                <div id="openalex-hindex" class="text-2xl font-bold text-[#6aa84f] dark:text-[#34d399]">—</div>
+                <div class="text-sm">H-INDEX</div>
+              </div>
+            </div>
+
+            <div class="flex justify-center items-center gap-4">
+                <button id="toggle-research-btn" class="btn-primary" aria-expanded="false">
+                    <span>Explore Publications</span>
+                    <i id="toggle-research-icon" class="fa-solid fa-chevron-down ml-2 transition-transform duration-300"></i>
+                </button>
+                <button id="toggle-bibtex-btn" class="btn-secondary" aria-expanded="false">
+                    Show BibTeX
+                </button>
+            </div>
+
+            <div id="bibtex-container" class="hidden transition-all duration-500 ease-in-out">
+                <div class="relative bg-slate-100 dark:bg-slate-800 rounded-lg max-h-96 overflow-y-auto border border-slate-200 dark:border-slate-700">
+                    <button id="copy-bibtex-btn" class="sticky top-2 right-2 float-right bg-slate-600 hover:bg-slate-500 text-white font-bold py-1 px-3 rounded text-xs z-10 mr-2">
+                        <i class="fa-solid fa-copy mr-1"></i> Copy
+                    </button>
+                    <pre class="p-4 pt-10"><code id="bibtex-content" class="language-bibtex text-xs whitespace-pre-wrap">Loading...</code></pre>
+                </div>
+            </div>
             
-            <section>
-                <h2 class="text-2xl font-bold text-slate-800 dark:text-slate-200 border-b-2 border-slate-200 dark:border-slate-800 pb-2 mb-6">About Me</h2>
-                <div class="bg-white dark:bg-slate-800 shadow-md dark:shadow-none rounded-xl p-6 dark:border dark:border-slate-700 space-y-4 text-justify">
-                    <p>As a psychologist and behavioural economist, I am passionate about understanding the intersection of technology and human behavior. Currently a researcher at the <a href="https://www.agraria.unina.it/en_GB/home" target="_blank" rel="noopener noreferrer" class="font-medium text-[#6aa84f] hover:text-[#5a9a3f] dark:text-[#34d399] dark:hover:text-[#6ee7b7]">Department of Agricultural Sciences, University of Naples Federico II</a>, my work centers on how emerging technologies are reshaping consumer food choices.</p>
-                    <p>My research leverages advanced statistical methods to explore consumer perceptions of <strong class="font-semibold text-slate-900 dark:text-white">food technology innovations</strong>, blending insights from both economics and psychology to address real-world challenges.</p>
-                    <div class="text-sm font-mono bg-slate-100 dark:bg-slate-800/50 p-4 rounded-lg text-slate-600 dark:text-slate-400">
-                        <p>Economics and Policy group</p>
-                        <p>Department of Agricultural Sciences</p>
-                        <p>Via Università 96, 80055 Portici, Italy</p>
-                    </div>
-                </div>
-            </section>
-
-            <section>
-                <h2 class="text-2xl font-bold text-slate-800 dark:text-slate-200 border-b-2 border-slate-200 dark:border-slate-800 pb-2 mb-6">Research Focus</h2>
-                <div class="grid md:grid-cols-3 gap-6">
-                    <div class="md:col-span-2 bg-white dark:bg-slate-800 shadow-md dark:shadow-none rounded-xl p-6 dark:border dark:border-slate-700 space-y-4">
-                        <p>I investigate how cutting-edge developments in areas such as Artificial Intelligence, sustainable packaging, and alternative proteins influence market dynamics and consumer behaviour. Through interdisciplinary collaboration with leading institutions such as the University of Oxford and Wageningen University, I strive to produce impactful research that informs both academia and industry.</p>
-                         <a href="research.html" class="inline-block bg-[#6aa84f] text-white font-bold py-2 px-4 rounded-lg hover:bg-[#5a9a3f] dark:bg-[#34d399] dark:hover:bg-[#6ee7b7] dark:text-slate-900 transition-colors">View My Publications</a>
-                    </div>
-                    <a id="metrics-card-container" href="https://openalex.org/authors/A5073519625" target="_blank" rel="noopener noreferrer" class="block bg-white dark:bg-slate-800 shadow-md dark:shadow-none rounded-xl p-6 dark:border dark:border-slate-700 text-center flex flex-col justify-center transition-shadow duration-300 hover:shadow-lg">
-                        <div class="animate-pulse space-y-4">
-                            <div class="h-8 w-1/2 bg-slate-300 dark:bg-slate-700 rounded-md mx-auto"></div>
-                            <div class="h-4 w-1/3 bg-slate-300 dark:bg-slate-700 rounded-md mx-auto"></div>
-                            <div class="h-8 w-1/2 bg-slate-300 dark:bg-slate-700 rounded-md mx-auto mt-4"></div>
-                            <div class="h-4 w-1/3 bg-slate-300 dark:bg-slate-700 rounded-md mx-auto"></div>
-                            <div class="h-8 w-1/2 bg-slate-300 dark:bg-slate-700 rounded-md mx-auto mt-4"></div>
-                            <div class="h-4 w-1/3 bg-slate-300 dark:bg-slate-700 rounded-md mx-auto"></div>
+            <div id="publications-container" class="hidden">
+                <div id="publications-list">
+                    <!-- Skeleton Loader -->
+                    <div class="space-y-10 pt-4 animate-pulse">
+                        <div class="h-8 w-32 bg-slate-300 dark:bg-slate-700 rounded-md mb-6"></div>
+                        <div class="p-6 rounded-xl border border-slate-200 dark:border-slate-700 space-y-4">
+                            <div class="h-6 w-3/4 bg-slate-300 dark:bg-slate-700 rounded"></div>
+                            <div class="h-4 w-full bg-slate-300 dark:bg-slate-700 rounded"></div>
+                            <div class="h-4 w-5/6 bg-slate-300 dark:bg-slate-700 rounded"></div>
                         </div>
-                    </a>
+                    </div>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <section>
-                 <h2 class="text-2xl font-bold text-slate-800 dark:text-slate-200 border-b-2 border-slate-200 dark:border-slate-800 pb-2 mb-6">Academic Background</h2>
-                 <div class="bg-white dark:bg-slate-800 shadow-md dark:shadow-none rounded-xl p-6 dark:border dark:border-slate-700 space-y-4 text-justify">
-                     <p>My academic journey began with a BA and MA in Psychology, followed by an MRes in Agricultural Economics, all from the University of Naples Federico II. I earned my PhD in Food Science from the same institution, where my work focused on decoding consumer perceptions of food tech innovations.</p>
-                     <p>I have been fortunate to conduct research as an academic visitor at the University of Oxford's renowned <a href="https://www.psy.ox.ac.uk/research/crossmodal-research-laboratory" target="_blank" rel="noopener noreferrer" class="font-medium text-[#6aa84f] hover:text-[#5a9a3f] dark:text-[#34d399] dark:hover:text-[#6ee7b7]">Crossmodal Research Lab</a> and as a <a href="https://comfocus.eu" target="_blank" rel="noopener noreferrer" class="font-medium text-[#6aa84f] hover:text-[#5a9a3f] dark:text-[#34d399] dark:hover:text-[#6ee7b7]">COMFOCUS</a> fellow at Wageningen University’s <a href="https://www.wur.nl/en/research-results/chair-groups/social-sciences/marketing-and-consumer-behaviour-group.htm" target="_blank" rel="noopener noreferrer" class="font-medium text-[#6aa84f] hover:text-[#5a9a3f] dark:text-[#34d399] dark:hover:text-[#6ee7b7]">Marketing and Consumer Behaviour group</a>.</p>
-                     <a href="https://data.califano.xyz/CV_GiovanbattistaCALIFANO.pdf" target="_blank" class="inline-block bg-[#6aa84f] text-white font-bold py-2 px-4 rounded-lg hover:bg-[#5a9a3f] dark:bg-[#34d399] dark:hover:bg-[#6ee7b7] dark:text-slate-900 transition-colors">Download my CV</a>
-                </div>
-            </section>
+        <section id="teaching" class="space-y-8">
+            <h2 class="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Teaching</h2>
+            <div class="space-y-12">
+                <article class="card">
+                    <div class="flex flex-col md:flex-row gap-8">
+                        <div class="md:w-1/3 flex-shrink-0">
+                            <img src="img/mlab.png" class="rounded-lg w-full h-full object-cover" alt="Monday Lab">
+                        </div>
+                        <div class="flex-grow">
+                            <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-3">Monday Lab (MSc)</h3>
+                            <p class="text-slate-600 dark:text-slate-400 mb-6 text-justify">
+                                The laboratory offers a practical extension of the Marketing & Consumer Science course, combining theory with real-world applications. Through teamwork and RPGs, students apply concepts such as market research, consumer analysis, strategy development, and communication planning to real-world scenarios. The activities are designed to build operational skills essential for careers in agribusiness marketing and innovation management.
+                            </p>
+                            <a href="monday-lab.html" class="btn-primary">Course Page</a>
+                        </div>
+                    </div>
+                </article>
+                <article class="card">
+                    <div class="flex flex-col md:flex-row gap-8">
+                        <div class="md:w-1/3 flex-shrink-0">
+                           <img src="img/psyconsci.png" class="rounded-lg w-full h-full object-cover" alt="Psychometrics for Consumer Science">
+                        </div>
+                        <div class="flex-grow">
+                            <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-3">Psychometrics for Consumer Science (PhD)</h3>
+                            <p class="text-slate-600 dark:text-slate-400 mb-6 text-justify">
+                                This course equips PhD students with methodological and applied skills to measure latent constructs shaping consumer preferences, with a special focus on the agrifood sector. Topics include the design, validation, and implementation of attitudinal scales, grounded in psychometric theory and scaling techniques. The course introduces measurement models and basic SEM, with practical exercises conducted in Stata.
+                            </p>
+                            <a href="https://data.califano.xyz/" target="_blank" rel="noopener noreferrer" class="btn-primary">Course Page</a>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
 
-             <section>
-                <h2 class="text-2xl font-bold text-slate-800 dark:text-slate-200 border-b-2 border-slate-200 dark:border-slate-800 pb-2 mb-6">In the News</h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <a href="https://www.bbc.com/future/article/20240823-artificial-intelligence-wants-to-tell-you-what-to-cook-but-are-the-results-edible" target="_blank" rel="noopener noreferrer" class="block bg-white dark:bg-slate-800 shadow-md dark:shadow-none rounded-xl p-4 transition-shadow duration-300 hover:shadow-lg dark:border dark:border-slate-700">
-                        <img src="img/bbc.jpg" alt="AI Generated Food" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
-                        <h3 class="font-bold text-slate-900 dark:text-white leading-tight">'It looks like cat food': The grey goop dreamed up by artificial intelligence</h3>
-                        <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">bbc.com</p>
-                    </a>
-                    <a href="https://www.rollingstone.com/culture/culture-features/ah-food-pictures-fake-delivery-recipes-1235135386/" target="_blank" rel="noopener noreferrer" class="block bg-white dark:bg-slate-800 shadow-md dark:shadow-none rounded-xl p-4 transition-shadow duration-300 hover:shadow-lg dark:border dark:border-slate-700">
-                        <img src="img/rolling.jpg" alt="AI Food Images" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
-                        <h3 class="font-bold text-slate-900 dark:text-white leading-tight">AI Images May Be Changing the Way We Look at Food</h3>
-                        <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">rollingstone.com</p>
-                    </a>
-                    <a href="https://www.dailymail.co.uk/sciencetech/article-13183271/Fake-food-created-AI-looks-tastier.html" target="_blank" rel="noopener noreferrer" class="block bg-white dark:bg-slate-800 shadow-md dark:shadow-none rounded-xl p-4 transition-shadow duration-300 hover:shadow-lg dark:border dark:border-slate-700">
-                        <img src="https://i.dailymail.co.uk/1s/2024/03/11/16/82322161-0-image-m-60_1710175258577.jpg" alt="Fake food created by AI" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
-                        <h3 class="font-bold text-slate-900 dark:text-white leading-tight">Fake food created by AI looks tastier than real dishes, scientists say</h3>
-                        <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">dailymail.co.uk</p>
-                    </a>
-                     <a href="https://petapixel.com/2024/03/15/study-shows-that-ai-images-of-food-look-tastier-than-real-food-photos/" target="_blank" rel="noopener noreferrer" class="block bg-white dark:bg-slate-800 shadow-md dark:shadow-none rounded-xl p-4 transition-shadow duration-300 hover:shadow-lg dark:border dark:border-slate-700">
-                        <img src="img/ppixel.jpg" alt="AI Food Photos" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
-                        <h3 class="font-bold text-slate-900 dark:text-white leading-tight">Study Shows AI Images of Food Look Tastier Than Real Food Photos</h3>
-                        <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">petapixel.com</p>
-                    </a>
-                    <a href="https://www.foxcomms.com/foxquarterly/a-recipe-for-success/" target="_blank" rel="noopener noreferrer" class="block bg-white dark:bg-slate-800 shadow-md dark:shadow-none rounded-xl p-4 transition-shadow duration-300 hover:shadow-lg dark:border dark:border-slate-700">
-                        <img src="https://www.foxcomms.com/wp-content/uploads/2024/09/Website-Banner-Image-7-1900x855.png" alt="AI in Luxury Gastronomy" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
-                        <h3 class="font-bold text-slate-900 dark:text-white leading-tight">The Role of AI in Shaping the Future of Luxury Gastronomy</h3>
-                        <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">foxcomms.com</p>
-                    </a>
-                    <a href="https://www.diyphotography.net/ai-food-images-look-yummier-than-photos-says-study/" target="_blank" rel="noopener noreferrer" class="block bg-white dark:bg-slate-800 shadow-md dark:shadow-none rounded-xl p-4 transition-shadow duration-300 hover:shadow-lg dark:border dark:border-slate-700">
-                        <img src="img/diyphoto.jpg" alt="Yummy AI Food" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
-                        <h3 class="font-bold text-slate-900 dark:text-white leading-tight">AI food images look yummier than photos, says study</h3>
-                        <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">diyphotography.net</p>
-                    </a>
-                    <a href="https://issues.fr/regalez-vous-les-yeux-comment-lia-propose-des-images-culinaires-plus-delicieuses-que-la-realite/" target="_blank" rel="noopener noreferrer" class="block bg-white dark:bg-slate-800 shadow-md dark:shadow-none rounded-xl p-4 transition-shadow duration-300 hover:shadow-lg dark:border dark:border-slate-700">
-                        <img src="img/issuesfr.jpg" alt="AI culinary images" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
-                        <h3 class="font-bold text-slate-900 dark:text-white leading-tight">Régalez-vous les yeux : comment l'IA propose des images culinaires...</h3>
-                        <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">issues.fr</p>
-                    </a>
-                    <a href="https://www.elobservador.com.uy/nota/imagenes-de-comida-generadas-por-ia-parecen-mas-sabrosas-que-las-reales-202431512275" target="_blank" rel="noopener noreferrer" class="block bg-white dark:bg-slate-800 shadow-md dark:shadow-none rounded-xl p-4 transition-shadow duration-300 hover:shadow-lg dark:border dark:border-slate-700">
-                        <img src="img/observador.jpg" alt="AI generated food images" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
-                        <h3 class="font-bold text-slate-900 dark:text-white leading-tight">Imágenes de comida generadas por IA parecen más sabrosas que las reales</h3>
-                        <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">elobservador.com.uy</p>
-                    </a>
-                </div>
-            </section>
-
-        </main>
-        
-        <footer class="text-center mt-12 md:mt-16 pt-8 border-t border-slate-200 dark:border-slate-800">
-            <p class="text-sm text-slate-500 dark:text-slate-400">
-                All Rights Reserved © Giovanbattista Califano 2025
-            </p>
-        </footer>
-    </div>
-
-    <!-- Third-party JS libraries -->
-    <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v3.0.0/dist/cookieconsent.umd.js"></script>
+        <section id="media" class="space-y-8">
+            <h2 class="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">In the News</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <a href="https://www.bbc.com/future/article/20240823-artificial-intelligence-wants-to-tell-you-what-to-cook-but-are-the-results-edible" target="_blank" rel="noopener noreferrer" class="block card p-4">
+                    <img src="img/bbc.jpg" alt="AI Generated Food" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
+                    <h3 class="font-bold text-slate-900 dark:text-white leading-tight">'It looks like cat food': The grey goop dreamed up by AI</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">bbc.com</p>
+                </a>
+                <a href="https://www.rollingstone.com/culture/culture-features/ah-food-pictures-fake-delivery-recipes-1235135386/" target="_blank" rel="noopener noreferrer" class="block card p-4">
+                    <img src="img/rolling.jpg" alt="AI Food Images" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
+                    <h3 class="font-bold text-slate-900 dark:text-white leading-tight">AI Images May Be Changing the Way We Look at Food</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">rollingstone.com</p>
+                </a>
+                <a href="https://www.dailymail.co.uk/sciencetech/article-13183271/Fake-food-created-AI-looks-tastier.html" target="_blank" rel="noopener noreferrer" class="block card p-4">
+                    <img src="https://i.dailymail.co.uk/1s/2024/03/11/16/82322161-0-image-m-60_1710175258577.jpg" alt="Fake food created by AI" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
+                    <h3 class="font-bold text-slate-900 dark:text-white leading-tight">Fake food created by AI looks tastier than real dishes</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">dailymail.co.uk</p>
+                </a>
+                 <a href="https://petapixel.com/2024/03/15/study-shows-that-ai-images-of-food-look-tastier-than-real-food-photos/" target="_blank" rel="noopener noreferrer" class="block card p-4">
+                    <img src="img/ppixel.jpg" alt="AI Food Photos" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
+                    <h3 class="font-bold text-slate-900 dark:text-white leading-tight">AI Images of Food Look Tastier Than Real Photos</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">petapixel.com</p>
+                </a>
+                <a href="https://www.foxcomms.com/foxquarterly/a-recipe-for-success/" target="_blank" rel="noopener noreferrer" class="block card p-4">
+                    <img src="https://www.foxcomms.com/wp-content/uploads/2024/09/Website-Banner-Image-7-1900x855.png" alt="AI in Luxury Gastronomy" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
+                    <h3 class="font-bold text-slate-900 dark:text-white leading-tight">The Role of AI in Shaping the Future of Luxury Gastronomy</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">foxcomms.com</p>
+                </a>
+                <a href="https://www.diyphotography.net/ai-food-images-look-yummier-than-photos-says-study/" target="_blank" rel="noopener noreferrer" class="block card p-4">
+                    <img src="img/diyphoto.jpg" alt="Yummy AI Food" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
+                    <h3 class="font-bold text-slate-900 dark:text-white leading-tight">AI food images look yummier than photos, says study</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">diyphotography.net</p>
+                </a>
+                <a href="https://issues.fr/regalez-vous-les-yeux-comment-lia-propose-des-images-culinaires-plus-delicieuses-que-la-realite/" target="_blank" rel="noopener noreferrer" class="block card p-4">
+                    <img src="img/issuesfr.jpg" alt="AI culinary images" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
+                    <h3 class="font-bold text-slate-900 dark:text-white leading-tight">Régalez-vous les yeux : comment l'IA propose des images culinaires...</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">issues.fr</p>
+                </a>
+                <a href="https://www.elobservador.com.uy/nota/imagenes-de-comida-generadas-por-ia-parecen-mas-sabrosas-que-las-reales-202431512275" target="_blank" rel="noopener noreferrer" class="block card p-4">
+                    <img src="img/observador.jpg" alt="AI generated food images" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
+                    <h3 class="font-bold text-slate-900 dark:text-white leading-tight">Imágenes de comida generadas por IA parecen más sabrosas que las reales</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">elobservador.com.uy</p>
+                </a>
+            </div>
+        </section>
+    </main>
     
-    <!-- Main site script -->
-    <script src="js/main.js"></script>
+    <footer class="text-center mt-auto py-8 border-t border-slate-200 dark:border-slate-800">
+        <p class="text-sm text-slate-500 dark:text-slate-400">
+            All Rights Reserved © Giovanbattista Califano 2025
+        </p>
+    </footer>
 
-    <!-- Page-specific script for OpenAlex Metrics -->
+    <script src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script>
+
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const container = document.getElementById('metrics-card-container');
-            if (!container) return;
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // --- Theme Toggle ---
+        const themeToggle = document.getElementById('theme-toggle');
+        const darkIcon = document.getElementById('theme-toggle-dark-icon');
+        const lightIcon = document.getElementById('theme-toggle-light-icon');
+        
+        function updateThemeIcons() {
+            const isDark = document.documentElement.classList.contains('dark');
+            if(darkIcon) darkIcon.classList.toggle('hidden', isDark);
+            if(lightIcon) lightIcon.classList.toggle('hidden', !isDark);
+        }
+        if(themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+                localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+                updateThemeIcons();
+            });
+            updateThemeIcons();
+        }
+
+        // --- Publications Toggle ---
+        const toggleBtn = document.getElementById('toggle-research-btn');
+        const publicationsContainer = document.getElementById('publications-container');
+        const toggleIcon = document.getElementById('toggle-research-icon');
+        let publicationsLoaded = false;
+
+        toggleBtn.addEventListener('click', () => {
+            const isHidden = publicationsContainer.classList.toggle('hidden');
+            toggleBtn.setAttribute('aria-expanded', !isHidden);
             
-            async function fetchOpenAlexAuthorMetrics() {
-                try {
-                    const authorId = 'A5073519625';
-                    const resp = await fetch(`https://api.openalex.org/people/${authorId}`);
-                    if (!resp.ok) throw new Error(`HTTP error! Status: ${resp.status}`);
-                    const author = await resp.json();
-
-                    container.innerHTML = `
-                        <div>
-                            <div class="text-3xl font-bold text-[#6aa84f] dark:text-[#34d399]">${author.works_count ?? '0'}</div>
-                            <div class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider">Works</div>
-                        </div>
-                        <div class="my-4 border-t border-slate-200 dark:border-slate-700 w-1/2 mx-auto"></div>
-                        <div>
-                            <div class="text-3xl font-bold text-[#6aa84f] dark:text-[#34d399]">${author.cited_by_count ?? '0'}</div>
-                            <div class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider">Citations</div>
-                        </div>
-                        <div class="my-4 border-t border-slate-200 dark:border-slate-700 w-1/2 mx-auto"></div>
-                        <div>
-                            <div class="text-3xl font-bold text-[#6aa84f] dark:text-[#34d399]">${author.summary_stats?.h_index ?? '0'}</div>
-                            <div class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider">H-index</div>
-                        </div>
-                    `;
-                } catch (err) {
-                    console.error("Error fetching OpenAlex data:", err);
-                    container.innerHTML = `<p class="text-center text-sm text-red-500">Error loading metrics.</p>`;
+            if (!isHidden) {
+                toggleBtn.querySelector('span').textContent = 'Hide Publications';
+                toggleIcon.classList.add('rotate-180');
+                if (!publicationsLoaded) {
+                    fetchPublications();
+                    publicationsLoaded = true;
                 }
+            } else {
+                toggleBtn.querySelector('span').textContent = 'Explore Publications';
+                toggleIcon.classList.remove('rotate-180');
             }
-
-            fetchOpenAlexAuthorMetrics();
         });
+        
+        // --- BibTeX Section ---
+        const toggleBibtexBtn = document.getElementById('toggle-bibtex-btn');
+        const bibtexContainer = document.getElementById('bibtex-container');
+        const bibtexContentEl = document.getElementById('bibtex-content');
+        const copyBibtexBtn = document.getElementById('copy-bibtex-btn');
+
+        async function loadBibtex() {
+            try {
+                const response = await fetch('biblio.bib');
+                if (!response.ok) throw new Error(`BibTeX file not found. Status: ${response.status}`);
+                const bibtexData = await response.text();
+                bibtexContentEl.textContent = bibtexData.trim();
+            } catch (error) {
+                console.error('Error loading BibTeX:', error);
+                bibtexContentEl.textContent = 'Error: Could not load BibTeX file. This may be due to preview environment restrictions. It should work on a live server.';
+            }
+        }
+
+        if (toggleBibtexBtn) {
+            let bibtexLoaded = false;
+            toggleBibtexBtn.addEventListener('click', () => {
+                const isHidden = bibtexContainer.classList.toggle('hidden');
+                toggleBibtexBtn.setAttribute('aria-expanded', String(!isHidden));
+                if (!isHidden && !bibtexLoaded) {
+                    loadBibtex();
+                    bibtexLoaded = true;
+                }
+            });
+        }
+
+        if (copyBibtexBtn) {
+            copyBibtexBtn.addEventListener('click', () => {
+                const textToCopy = bibtexContentEl.textContent;
+                if (textToCopy.startsWith('Loading...') || textToCopy.startsWith('Error:')) return;
+                
+                const textArea = document.createElement('textarea');
+                textArea.value = textToCopy;
+                textArea.style.position = 'fixed';
+                textArea.style.left = '-9999px';
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    copyBibtexBtn.innerHTML = '<i class="fa-solid fa-check mr-1"></i> Copied!';
+                    setTimeout(() => {
+                        copyBibtexBtn.innerHTML = '<i class="fa-solid fa-copy mr-1"></i> Copy';
+                    }, 2000);
+                } catch (err) {
+                    console.error('Failed to copy text: ', err);
+                    copyBibtexBtn.textContent = 'Error';
+                }
+                document.body.removeChild(textArea);
+            });
+        }
+
+        // --- Active Nav on Scroll ---
+        const sections = document.querySelectorAll('main section[id]');
+        const navLinks = document.querySelectorAll('header .nav-link');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.id;
+                    navLinks.forEach(link => {
+                        link.classList.remove('nav-link-active');
+                        if (link.getAttribute('href') === `#${id}`) {
+                            link.classList.add('nav-link-active');
+                        }
+                    });
+                }
+            });
+        }, { rootMargin: '-40% 0px -60% 0px' });
+
+        sections.forEach(section => observer.observe(section));
+        
+        // --- Publication Fetching Logic ---
+        const publicationsListEl = document.getElementById("publications-list");
+        const AUTHOR_ID = "A5073519625"; 
+        const AUTHOR_NAME = "Giovanbattista Califano";
+
+        function decodeAbstract(invertedIndex) {
+            if (!invertedIndex) return '';
+            const wordMap = new Map(Object.entries(invertedIndex).flatMap(([word, indices]) => indices.map(i => [i, word])));
+            const maxIndex = Math.max(...Array.from(wordMap.keys()));
+            const words = Array.from({ length: maxIndex + 1 }, (_, i) => wordMap.get(i) || '');
+            return words.join(' ');
+        }
+
+        async function fetchPublications() {
+            try {
+                // Corrected API URL to fetch the full object, ensuring abstract is included
+                const url = `https://api.openalex.org/works?filter=authorships.author.id:${AUTHOR_ID}&sort=publication_year:desc&per_page=100`;
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                const data = await response.json();
+                renderPublications(data?.results || []);
+            } catch (error) {
+                console.error("Error fetching publications:", error);
+                publicationsListEl.innerHTML = `<p class="text-center text-red-500 bg-red-100 dark:bg-red-900/20 dark:text-red-400 p-4 rounded-lg">Error fetching data.</p>`;
+            }
+        }
+        
+        function renderPublications(works) {
+            if (!works.length) {
+                publicationsListEl.innerHTML = `<p class="text-center text-slate-500 dark:text-slate-400">No publications found.</p>`;
+                return;
+            }
+            const groupedByYear = works.reduce((acc, work) => {
+                const year = work.publication_year || "In Press";
+                (acc[year] = acc[year] || []).push(work);
+                return acc;
+            }, {});
+            const sortedYears = Object.keys(groupedByYear).sort((a, b) => b - a);
+            const html = sortedYears.map(year => {
+                const papersHtml = groupedByYear[year]
+                    .sort((a, b) => (b.cited_by_count || 0) - (a.cited_by_count || 0))
+                    .map(createPublicationCard)
+                    .join("");
+                return `<div class="year-section mb-10 pt-4">
+                            <h3 class="sticky top-16 z-10 text-2xl font-bold text-slate-800 dark:text-slate-200 border-b-2 border-slate-200 dark:border-slate-800 pb-2 mb-6 bg-slate-50/95 dark:bg-slate-900/95 backdrop-blur-sm py-3">${year}</h3>
+                            <div class="space-y-6">${papersHtml}</div>
+                        </div>`;
+            }).join("");
+            publicationsListEl.innerHTML = html;
+            if (window._altmetric_embed_init) window._altmetric_embed_init();
+        }
+
+        function createPublicationCard(work) {
+            const authors = work.authorships?.map(a => a.author.display_name === AUTHOR_NAME ? `<strong class="font-semibold text-slate-900 dark:text-white">${a.author.display_name}</strong>` : a.author.display_name).join(", ") || "N/A";
+            const journalName = work.host_venue?.display_name || work.primary_location?.source?.display_name;
+            const journalHtml = journalName 
+                ? `<div class="text-sm text-slate-600 dark:text-slate-400 italic">${journalName}</div>` 
+                : `<div class="text-sm text-slate-600 dark:text-slate-400"><span class="inline-block bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-300 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">PREPRINT</span></div>`;
+            const doi = work.doi?.replace('https://doi.org/', '');
+            const titleLink = work.doi ? `<a href="${work.doi}" target="_blank" rel="noopener noreferrer" class="link-primary">${work.title}</a>` : work.title;
+            const abstractText = decodeAbstract(work.abstract_inverted_index) || "No abstract available.";
+            const abstractId = `abstract-${work.id.replace(/[^a-zA-Z0-9]/g, '-')}`;
+            const altmetricBadge = doi ? `<div class="altmetric-embed" data-badge-type="medium-bar" data-doi="${doi}" data-badge-popover="bottom"></div>` : '';
+
+            return `<article class="card">
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <div class="flex-grow">
+                                <h4 class="text-lg font-bold text-slate-900 dark:text-white mb-2 leading-snug">${titleLink}</h4>
+                                <p class="text-sm text-slate-500 dark:text-slate-400 mb-2">${authors}</p>
+                                ${journalHtml}
+                            </div>
+                            <div class="flex-shrink-0 text-center sm:text-right">
+                                <a href="${work.id}" target="_blank" rel="noopener noreferrer" class="block hover:opacity-80 transition-opacity">
+                                    <div class="text-3xl font-bold text-[#6aa84f] dark:text-[#34d399]">${work.cited_by_count ?? 0}</div>
+                                    <div class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider">Citations</div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-700">
+                            <div class="flex items-center justify-between">
+                                <button class="toggle-abstract text-sm font-medium text-[#6aa84f] hover:text-[#5a9a3f] dark:text-[#34d399] dark:hover:text-[#6ee7b7]"
+                                    onclick="toggleAbstract('${abstractId}', this)" aria-expanded="false" aria-controls="${abstractId}">
+                                    Show Abstract
+                                </button>
+                                ${altmetricBadge}
+                            </div>
+                            <div id="${abstractId}" class="abstract-text text-slate-600 dark:text-slate-400 text-sm mt-4 leading-relaxed text-justify hidden">${abstractText}</div>
+                        </div>
+                    </article>`;
+        }
+        
+        window.toggleAbstract = (id, btn) => {
+            const abstract = document.getElementById(id);
+            const isHidden = abstract.hasAttribute('hidden');
+            abstract.hidden = !isHidden;
+            btn.textContent = isHidden ? "Show Abstract" : "Hide Abstract";
+            btn.setAttribute('aria-expanded', !isHidden);
+        }
+    });
     </script>
+
+<script>
+  async function fetchOpenAlexAuthorMetrics() {
+    try {
+      const authorId = 'A5073519625';
+      const resp     = await fetch(`https://api.openalex.org/people/${authorId}`);
+      const author   = await resp.json();
+
+      document.getElementById("openalex-papers").innerText    = author.works_count ?? '0';
+      document.getElementById("openalex-citations").innerText = author.cited_by_count ?? '0';
+      document.getElementById("openalex-hindex").innerText    = author.summary_stats?.h_index ?? '0';
+    } catch (err) {
+      console.error("Error fetching OpenAlex data:", err);
+      ["papers", "citations", "hindex"].forEach(m =>
+        document.getElementById(`openalex-${m}`).innerText = "—"
+      );
+    }
+  }
+
+  fetchOpenAlexAuthorMetrics();
+</script>
+
 </body>
 </html>

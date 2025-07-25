@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Survey</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    button {
+      padding: 20px 40px;
+      font-size: 50px;
+      cursor: pointer;
+      background-color: #6aa84f;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+    }
+    button:active {
+      transform: scale(0.95);
+    }
+  </style>
+</head>
+<body>
+  <button id="startButton">Start</button>
+
+  <script>
+    const urls = [
+      'https://docs.google.com/forms/d/1IZDv5N6npk0Z-YOtSf_MHioObxQzzqaHGY6b4DsFdJw/viewform',
+      'https://docs.google.com/forms/d/1_Qj8oBihNng0qaUICm-JqHmfKgUdnNsCHzBuJg9A-Z8/viewform',
+      'https://docs.google.com/forms/d/1P_cuzsEf0e8Ha7D_OD5t9bR9vA1pngUFmCo7Y_dos3M/viewform',
+      'https://docs.google.com/forms/d/1A9VB-N_dST-xMF6zCagvbXgIpajzSNL4W6yC6C3joP8/viewform',
+      'https://docs.google.com/forms/d/1u0IuhlLnWuJndRzWLwXvk5DDDGt0DOltPWqqUHPyq8A/viewform',
+      'https://docs.google.com/forms/d/13STD-rSf7fcZTO1oUIL3cXLJfv9vHGt65D64xo37_Bw/viewform',
+      'https://docs.google.com/forms/d/1AC9AW8ZKdFXakOfpZHNoTZfOX0GdIG6YjKni4fvuHj8/viewform',
+      'https://docs.google.com/forms/d/1TzwZaabukCcWM4l5pwsdUbT5-WTTdhaUUVojy8HmKvM/viewform'
+    ];
+
+    document.getElementById('startButton').addEventListener('click', () => {
+      const randomIndex = Math.floor(Math.random() * urls.length);
+      window.open(urls[randomIndex], '_blank');
+    });
+  </script>
+</body>
+</html>
