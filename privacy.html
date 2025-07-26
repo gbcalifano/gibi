@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <title>Privacy Policy | Giovanbattista Califano</title>
+    <meta name="description" content="Privacy and cookie policy for the official website of Giovanbattista Califano.">
+    <meta name="author" content="Giovanbattista Califano">
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌱</text></svg>">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { darkMode: 'class' };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        // Set theme on initial load
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+    
+    <style>
+        /* Reusing the same styles from index.html for consistency */
+        :root {
+            --color-primary: #6aa84f;
+            --color-primary-hover: #5a9a3f;
+            --color-primary-dark: #34d399;
+            --color-primary-dark-hover: #6ee7b7;
+            --bg-light: #f8fafc;
+            --bg-dark: #0f172a;
+            --text-light: #1e293b;
+            --text-dark: #e2e8f0;
+            --text-secondary-light: #64748b;
+            --text-secondary-dark: #94a3b8;
+            --border-light: #e2e8f0;
+            --border-dark: #334155;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-light);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        main {
+            flex-grow: 1;
+        }
+        html.dark body {
+            background-color: var(--bg-dark);
+            color: var(--text-dark);
+        }
+        :focus-visible {
+            outline: 3px solid var(--color-primary);
+            outline-offset: 2px;
+            border-radius: 0.25rem;
+        }
+        html.dark :focus-visible {
+            outline-color: var(--color-primary-dark);
+        }
+        .prose h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 2em;
+            margin-bottom: 1em;
+            padding-bottom: 0.5em;
+            border-bottom: 1px solid var(--border-light);
+        }
+        html.dark .prose h2 {
+            border-bottom-color: var(--border-dark);
+        }
+        .prose h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 1.5em;
+            margin-bottom: 0.75em;
+        }
+        .prose p, .prose ul {
+            color: var(--text-secondary-light);
+            line-height: 1.75;
+        }
+        html.dark .prose p, html.dark .prose ul {
+            color: var(--text-secondary-dark);
+        }
+        .prose ul {
+            list-style-position: outside;
+            padding-left: 1.25rem;
+        }
+        .prose li {
+            margin-bottom: 0.5rem;
+        }
+        .prose a {
+            color: var(--color-primary);
+            font-weight: 500;
+            text-decoration: none;
+        }
+        .prose a:hover {
+            text-decoration: underline;
+        }
+        html.dark .prose a {
+            color: var(--color-primary-dark);
+        }
+    </style>
+</head>
+<body class="text-slate-800 dark:text-slate-300 bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
+
+    <header class="bg-white/70 dark:bg-slate-900/70 backdrop-blur-lg sticky top-0 z-40 w-full border-b border-slate-200 dark:border-slate-800">
+        <div class="container mx-auto max-w-4xl px-4">
+            <div class="flex items-center justify-between h-16">
+                <a href="index.html" class="text-xl font-bold text-slate-900 dark:text-white hover:text-[#6aa84f] dark:hover:text-[#34d399] transition-colors">
+                    Giovanbattista Califano
+                </a>
+                <div class="flex items-center space-x-4">
+                    <a href="index.html" class="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-[#6aa84f] dark:hover:text-[#34d399] transition-colors">
+                        <i class="fa-solid fa-arrow-left-long mr-2"></i>Back to Home
+                    </a>
+                    <button id="theme-toggle" type="button" aria-label="Toggle dark mode" class="text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg text-sm p-2.5">
+                        <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                        <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 5.05A1 1 0 016.465 3.636l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto max-w-4xl px-4 py-8 md:py-12">
+        <div class="bg-white dark:bg-slate-800/50 p-8 sm:p-12 rounded-lg prose max-w-none">
+            <h1 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white tracking-tight">Privacy & Cookie Policy</h1>
+            <p class="text-slate-500 dark:text-slate-400">Last updated: July 26, 2025</p>
+
+            <h2>Introduction</h2>
+            <p>This website, califano.xyz, is a personal academic portfolio. My goal is to share my research and professional activities. Your privacy is important to me. This policy explains what information is processed and why.</p>
+
+            <h2>Information We Collect</h2>
+            <p>This website does not use analytics software and does not collect any personal data that directly identifies you, such as your name or email address. The only data processed is technical and functional, as described below.</p>
+
+            <h3>LocalStorage and Functionality Cookies</h3>
+            <p>To enhance your user experience, this site uses `localStorage` in your browser. This is a small storage file that is strictly necessary for certain features to work.</p>
+            <ul>
+                <li><strong>Theme Preference:</strong> When you toggle between light and dark mode, your choice is saved in `localStorage`. This ensures that the website remembers your preferred theme on your next visit. This is a functional setting and does not track you.</li>
+            </ul>
+            <p>Under the ePrivacy Directive, items stored in `localStorage` that are "strictly necessary" for a service explicitly requested by the user do not require prior consent. This theme-switcher falls into that category.</p>
+
+            <h2>Third-Party Services</h2>
+            <p>This website integrates content and functionalities from third-party services. These services may process your IP address to deliver content to your browser but are not used for tracking or advertising purposes on this site. These services include:</p>
+            <ul>
+                <li><strong>Google Fonts:</strong> To provide the custom typography used on the site.</li>
+                <li><strong>Font Awesome:</strong> To display icons.</li>
+                <li><strong>OpenAlex API:</strong> To fetch and display publication and citation data in the "Research" section.</li>
+                <li><strong>Altmetric:</strong> To display the Altmetric attention score for publications.</li>
+            </ul>
+            <p>These services operate under their own privacy policies. This website does not share any personal data with them.</p>
+
+            <h2>Your Rights</h2>
+            <p>As this website does not collect personal data, the rights of access, rectification, or erasure under GDPR are not applicable in this context. You can clear your browser's `localStorage` at any time to remove the stored theme preference.</p>
+
+            <h2>Changes to This Policy</h2>
+            <p>This policy may be updated from time to time. Any changes will be posted on this page, and the "Last updated" date will be revised.</p>
+
+            <h2>Contact</h2>
+            <p>If you have any questions about this privacy policy, please feel free to <a href="mailto:info@califano.xyz?subject=Privacy%20Policy%20Inquiry">contact me via email</a>.</p>
+        </div>
+    </main>
+    
+    <footer class="text-center mt-auto py-8 border-t border-slate-200 dark:border-slate-800">
+        <p class="text-sm text-slate-500 dark:text-slate-400">
+            All Rights Reserved © Giovanbattista Califano 2025
+        </p>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mt-2">
+            <a href="privacy.html" class="hover:underline">Privacy & Cookie Policy</a>
+        </p>
+    </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- Theme Toggle ---
+        const themeToggle = document.getElementById('theme-toggle');
+        const darkIcon = document.getElementById('theme-toggle-dark-icon');
+        const lightIcon = document.getElementById('theme-toggle-light-icon');
+        
+        function updateThemeIcons() {
+            const isDark = document.documentElement.classList.contains('dark');
+            if(darkIcon) darkIcon.classList.toggle('hidden', isDark);
+            if(lightIcon) lightIcon.classList.toggle('hidden', !isDark);
+        }
+
+        if(themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+                localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+                updateThemeIcons();
+            });
+            updateThemeIcons();
+        }
+    });
+    </script>
+</body>
+</html>
