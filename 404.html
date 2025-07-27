@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <title>404 - Result Not Found | Giovanbattista Califano</title>
+    <meta name="description" content="The page you were looking for was statistically insignificant.">
+    <meta name="author" content="Giovanbattista Califano">
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌱</text></svg>">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { darkMode: 'class' };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <script>
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+    
+    <style>
+        :root {
+            --color-primary-light: #6aa84f;
+            --color-primary-dark: #34d399;
+            --shadow-lg: 0 10px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #111827;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f3f4f6;
+            background-image: url('Apple-WWDC25-Liquid-Glass-hero-250609.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            overflow: hidden;
+        }
+
+        html.dark body {
+            color: #e5e7eb;
+            background-color: #030712;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(125deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            z-index: -1;
+        }
+
+        html.dark body::before {
+             background: linear-gradient(125deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2));
+        }
+
+        main {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        #animation-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.5);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            transition: background 0.3s ease, border 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        html.dark .glass-effect {
+            background: rgba(20, 20, 30, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        header {
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            background-color: rgba(255, 255, 255, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            z-index: 20;
+        }
+        
+        html.dark header {
+            background-color: rgba(15, 23, 42, 0.3);
+            border-bottom-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            padding: 0.6rem 1.2rem;
+            border-radius: 0.75rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            box-shadow: var(--shadow-md);
+            background: linear-gradient(135deg, var(--color-primary-light), #5a9a3f);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: var(--shadow-lg);
+        }
+        html.dark .btn-primary {
+            background: linear-gradient(135deg, var(--color-primary-dark), #10b981);
+            color: #111827;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        :focus-visible {
+            outline: 3px solid var(--color-primary-light);
+            outline-offset: 3px;
+            border-radius: 0.5rem;
+        }
+        html.dark :focus-visible {
+            outline-color: var(--color-primary-dark);
+        }
+
+        .font-space-mono {
+            font-family: 'Space Mono', monospace;
+        }
+
+        #p-value {
+            transition: color 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="animation-canvas"></canvas>
+
+    <header class="absolute top-0 z-40 w-full">
+        <div class="container mx-auto max-w-5xl px-4">
+            <div class="flex items-center justify-between h-16">
+                <a href="index.html" class="text-xl font-bold text-slate-900 dark:text-white hover:text-[var(--color-primary-light)] dark:hover:text-[var(--color-primary-dark)] transition-colors">
+                    Giovanbattista Califano <small><small><i>PhD</i></small></small>
+                </a>
+                <button id="theme-toggle" type="button" aria-label="Toggle dark mode" class="text-slate-500 dark:text-slate-400 hover:bg-slate-100/50 dark:hover:bg-slate-700/50 rounded-lg text-sm p-2.5 glass-effect">
+                    <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                    <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 5.05A1 1 0 016.465 3.636l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto max-w-4xl px-4 text-center">
+        <div class="glass-effect p-8 md:p-12 rounded-2xl max-w-2xl">
+            <h1 class="text-5xl md:text-6xl font-bold tracking-tight text-slate-900 dark:text-white">404</h1>
+            <h2 class="mt-2 text-2xl md:text-3xl font-bold text-slate-800 dark:text-slate-100">Null Result</h2>
+            <p class="mt-6 font-space-mono text-lg text-slate-700 dark:text-slate-300">
+                <i>P</i> = <span id="p-value">0.78</span>
+            </p>
+            <p class="mt-6 text-base leading-7 text-slate-600 dark:text-slate-400">
+                We tried p-hacking and optional stopping... perhaps HARKing?
+            </p>
+            <div class="mt-10 flex items-center justify-center gap-x-6">
+                <a href="index.html" class="btn-primary">
+                    <i class="fa-solid fa-flask-vial mr-2"></i>
+                    Try a new hypothesis
+                </a>
+            </div>
+        </div>
+    </main>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- Theme Toggle ---
+        const themeToggle = document.getElementById('theme-toggle');
+        const darkIcon = document.getElementById('theme-toggle-dark-icon');
+        const lightIcon = document.getElementById('theme-toggle-light-icon');
+        
+        function updateThemeIcons() {
+            const isDark = document.documentElement.classList.contains('dark');
+            if(darkIcon) darkIcon.classList.toggle('hidden', isDark);
+            if(lightIcon) lightIcon.classList.toggle('hidden', !isDark);
+        }
+
+        if(themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+                localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+                updateThemeIcons();
+                // Update animation colors on theme change
+                updateParticleColors();
+            });
+            updateThemeIcons();
+        }
+
+        // --- P-Value Animation ---
+        const pValueEl = document.getElementById('p-value');
+        setInterval(() => {
+            const p = Math.random() * (0.99 - 0.1) + 0.1;
+            pValueEl.textContent = p.toFixed(2);
+            if (p < 0.05) {
+                pValueEl.classList.add('text-green-500', 'dark:text-green-400');
+                pValueEl.classList.remove('text-red-500', 'dark:text-red-400');
+            } else {
+                pValueEl.classList.add('text-red-500', 'dark:text-red-400');
+                pValueEl.classList.remove('text-green-500', 'dark:text-green-400');
+            }
+        }, 1500);
+
+        // --- Three.js Animation ---
+        let scene, camera, renderer, particles, particleSystem;
+        let mouseX = 0, mouseY = 0;
+        const windowHalfX = window.innerWidth / 2;
+        const windowHalfY = window.innerHeight / 2;
+
+        function init() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
+            camera.position.z = 1000;
+
+            const particleCount = 2000;
+            particles = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+            const colors = new Float32Array(particleCount * 3);
+
+            for (let i = 0; i < particleCount; i++) {
+                const x = Math.random() * 2000 - 1000;
+                const y = Math.random() * 2000 - 1000;
+                const z = Math.random() * 2000 - 1000;
+                positions[i * 3] = x;
+                positions[i * 3 + 1] = y;
+                positions[i * 3 + 2] = z;
+            }
+            particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            particles.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+            const particleMaterial = new THREE.PointsMaterial({
+                size: 3,
+                vertexColors: true,
+                sizeAttenuation: true,
+                transparent: true,
+                opacity: 0.8
+            });
+
+            particleSystem = new THREE.Points(particles, particleMaterial);
+            scene.add(particleSystem);
+            
+            updateParticleColors();
+
+            renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('animation-canvas'), alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setClearColor(0x000000, 0);
+
+            document.addEventListener('mousemove', onDocumentMouseMove, false);
+            window.addEventListener('resize', onWindowResize, false);
+        }
+
+        function updateParticleColors() {
+            const isDark = document.documentElement.classList.contains('dark');
+            const color = new THREE.Color();
+            const colors = particles.attributes.color.array;
+            
+            const significantColor = isDark ? new THREE.Color(getComputedStyle(document.documentElement).getPropertyValue('--color-primary-dark')) : new THREE.Color(getComputedStyle(document.documentElement).getPropertyValue('--color-primary-light'));
+            const nonSignificantColor = isDark ? new THREE.Color(0x475569) : new THREE.Color(0x94a3b8);
+
+            for (let i = 0; i < colors.length; i += 3) {
+                // Randomly make some points "significant"
+                if (Math.random() < 0.05) {
+                    color.set(significantColor);
+                } else {
+                    color.set(nonSignificantColor);
+                }
+                colors[i] = color.r;
+                colors[i + 1] = color.g;
+                colors[i + 2] = color.b;
+            }
+            particles.attributes.color.needsUpdate = true;
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function onDocumentMouseMove(event) {
+            mouseX = event.clientX - windowHalfX;
+            mouseY = event.clientY - windowHalfY;
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            render();
+        }
+
+        function render() {
+            const time = Date.now() * 0.00005;
+            
+            camera.position.x += (mouseX - camera.position.x) * 0.05;
+            camera.position.y += (-mouseY - camera.position.y) * 0.05;
+            camera.lookAt(scene.position);
+
+            particleSystem.rotation.y = time * 0.5;
+            
+            renderer.render(scene, camera);
+        }
+
+        init();
+        animate();
+    });
+    </script>
+</body>
+</html>
