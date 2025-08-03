@@ -247,7 +247,7 @@
                 <div className="min-h-screen flex items-center justify-center p-4">
                     <div className="w-full max-w-md glass-effect p-8 rounded-2xl shadow-2xl">
                         <div className="text-center mb-8">
-                             <div className="w-16 h-16 bg-gradient-to-r from-[var(--color-primary-light)] to-emerald-500 dark:from-[var(--color-primary-dark)] dark:to-emerald-400 rounded-full mx-auto mb-4 flex items-center justify-center shadow-lg">
+                            <div className="w-16 h-16 bg-gradient-to-r from-[var(--color-primary-light)] to-emerald-500 dark:from-[var(--color-primary-dark)] dark:to-emerald-400 rounded-full mx-auto mb-4 flex items-center justify-center shadow-lg">
                                 <i className="fa-solid fa-lock text-white text-2xl"></i>
                             </div>
                             <h1 className="text-3xl font-bold text-slate-800 dark:text-white mb-2">Authentication Required</h1>
@@ -286,7 +286,7 @@
             const [editingPaper, setEditingPaper] = useState(null);
             const [showDeleteConfirm, setShowDeleteConfirm] = useState(null);
             const [groupBy, setGroupBy] = useState('none');
-            const [sortBy, setSortBy] = useState('createdAt');
+            const [sortBy, setSortBy] = useState('latestAction');
             const [searchTerm, setSearchTerm] = useState('');
             const [selectedStatus, setSelectedStatus] = useState('all');
             const [showStats, setShowStats] = useState(false);
@@ -294,14 +294,6 @@
 
             const githubApiUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_DATA_PATH}`;
             const token = sessionStorage.getItem(GITHUB_TOKEN_KEY);
-
-            const useDebouncedEffect = (effect, deps, delay) => {
-                const callback = useCallback(effect, deps);
-                useEffect(() => {
-                    const handler = setTimeout(() => { callback(); }, delay);
-                    return () => clearTimeout(handler);
-                }, [callback, delay]);
-            };
 
             const loadPapersFromGithub = useCallback(async () => {
                 setIsLoading(true);
@@ -329,10 +321,10 @@
                 }
             }, [githubApiUrl, token]);
 
-            const savePapersToGithub = useCallback(async () => {
+            const savePapersToGithub = useCallback(async (papersToSave) => {
                 if (isLoading) return;
                 setIsSaving(true);
-                const content = btoa(JSON.stringify(papers, null, 2));
+                const content = btoa(JSON.stringify(papersToSave, null, 2));
                 try {
                     const response = await fetch(githubApiUrl, {
                         method: 'PUT',
@@ -346,29 +338,73 @@
                         const errorData = await response.json();
                         console.error("Error saving papers:", errorData.message);
                         alert(`Error saving data: ${errorData.message}`);
+                        loadPapersFromGithub();
                     }
                 } catch (error) {
                     console.error("Failed to save to GitHub:", error);
                     alert("A network error occurred while saving data.");
+                    loadPapersFromGithub();
                 } finally {
                     setIsSaving(false);
                 }
-            }, [papers, fileSha, githubApiUrl, token, isLoading]);
+            }, [fileSha, githubApiUrl, token, isLoading, loadPapersFromGithub]);
             
             useEffect(() => { loadPapersFromGithub(); }, [loadPapersFromGithub]);
-            useDebouncedEffect(() => { if (!isLoading) { savePapersToGithub(); } }, [papers, isLoading], 1500);
 
             const allJournals = useMemo(() => Array.from(new Set(papers.flatMap(p => p.submissions?.map(s => s.journal).filter(Boolean) || []))), [papers]);
             const allTags = useMemo(() => Array.from(new Set(papers.flatMap(p => p.tags?.filter(Boolean) || []))), [papers]);
 
-            const stats = useMemo(() => ({
-                total: papers.length,
-                accepted: papers.filter(p => p.submissions?.[p.submissions.length - 1]?.status === 'Accepted').length,
-                underReview: papers.filter(p => ['Submitted', 'Under Revision'].includes(p.submissions?.[p.submissions.length - 1]?.status)).length,
-                notSubmitted: papers.filter(p => !p.submissions || p.submissions.length === 0).length,
-            }), [papers]);
+            const stats = useMemo(() => {
+                const acceptedPapers = papers.filter(p => p.submissions?.[p.submissions.length - 1]?.status === 'Accepted');
+                
+                const acceptanceTimes = acceptedPapers.map(p => {
+                    const firstSub = p.submissions[0];
+                    const lastSub = p.submissions[p.submissions.length - 1];
+                    if (!firstSub || lastSub.status !== 'Accepted') return null;
+                    const startDate = new Date(firstSub.date || firstSub.createdAt);
+                    const endDate = new Date(lastSub.date || lastSub.updatedAt);
+                    const diffTime = Math.abs(endDate - startDate);
+                    return Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+                }).filter(t => t !== null);
+
+                const avgTimeToAcceptanceInDays = acceptanceTimes.length > 0
+                    ? Math.round(acceptanceTimes.reduce((a, b) => a + b, 0) / acceptanceTimes.length)
+                    : 0;
+
+                const acceptanceYears = {};
+                acceptedPapers.forEach(p => {
+                    const lastSub = p.submissions[p.submissions.length - 1];
+                    const year = new Date(lastSub.date || lastSub.updatedAt).getFullYear();
+                    acceptanceYears[year] = (acceptanceYears[year] || 0) + 1;
+                });
+                const yearsWithAcceptances = Object.keys(acceptanceYears).length;
+                const avgAcceptedPerYear = yearsWithAcceptances > 0 
+                    ? (acceptedPapers.length / yearsWithAcceptances).toFixed(1) 
+                    : 0;
+
+                return {
+                    total: papers.length,
+                    accepted: acceptedPapers.length,
+                    underReview: papers.filter(p => ['Submitted', 'Under Revision'].includes(p.submissions?.[p.submissions.length - 1]?.status)).length,
+                    notSubmitted: papers.filter(p => !p.submissions || p.submissions.length === 0).length,
+                    avgTimeToAcceptanceInDays,
+                    avgAcceptedPerYear
+                };
+            }, [papers]);
 
             const processedPapers = useMemo(() => {
+                const getTimeToAcceptance = (paper) => {
+                    const lastSub = paper.submissions?.[paper.submissions.length - 1];
+                    if (!lastSub || lastSub.status !== 'Accepted' || !paper.submissions[0]) {
+                        return Infinity;
+                    }
+                    const firstSub = paper.submissions[0];
+                    const startDate = new Date(firstSub.date || firstSub.createdAt);
+                    const endDate = new Date(lastSub.date || lastSub.updatedAt);
+                    const diffTime = Math.abs(endDate - startDate);
+                    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                };
+
                 let filtered = [...papers];
                 if (searchTerm) {
                     filtered = filtered.filter(p =>
@@ -380,11 +416,35 @@
                 if (selectedStatus !== 'all') {
                     filtered = filtered.filter(p => (p.submissions?.[p.submissions.length - 1]?.status || 'Not Submitted') === selectedStatus);
                 }
+                
                 filtered.sort((a, b) => {
-                    if (sortBy === 'title') return a.title.localeCompare(b.title);
+                    if (sortBy === 'title') {
+                        return a.title.localeCompare(b.title);
+                    }
+                    
+                    if (sortBy === 'timeToAcceptance') {
+                        return getTimeToAcceptance(a) - getTimeToAcceptance(b);
+                    }
+
+                    const aIsSubmitted = a.submissions && a.submissions.length > 0;
+                    const bIsSubmitted = b.submissions && b.submissions.length > 0;
+
+                    if (!aIsSubmitted && bIsSubmitted) return -1;
+                    if (aIsSubmitted && !bIsSubmitted) return 1;
+
+                    if (aIsSubmitted && bIsSubmitted) {
+                        const aLastSub = a.submissions[a.submissions.length - 1];
+                        const bLastSub = b.submissions[b.submissions.length - 1];
+                        const aDate = new Date(aLastSub.date || aLastSub.updatedAt || aLastSub.createdAt);
+                        const bDate = new Date(bLastSub.date || bLastSub.updatedAt || bLastSub.createdAt);
+                        return bDate - aDate;
+                    }
+
                     return new Date(b.createdAt) - new Date(a.createdAt);
                 });
+
                 if (groupBy === 'none') return filtered;
+                
                 return filtered.reduce((acc, paper) => {
                     let keys = [];
                     if (groupBy === 'status') keys.push(paper.submissions?.[paper.submissions.length - 1]?.status || 'Not Submitted');
@@ -396,13 +456,24 @@
             }, [papers, sortBy, groupBy, searchTerm, selectedStatus]);
 
             const handleSavePaper = (paperData) => {
-                setPapers(prev => editingPaper
-                    ? prev.map(p => p.id === editingPaper.id ? { ...p, ...paperData, updatedAt: new Date().toISOString() } : p)
-                    : [{ ...paperData, id: crypto.randomUUID(), createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }, ...prev]
-                );
+                let updatedPapers;
+                if (editingPaper) {
+                    updatedPapers = papers.map(p => p.id === editingPaper.id ? { ...p, ...paperData, updatedAt: new Date().toISOString() } : p);
+                } else {
+                    updatedPapers = [{ ...paperData, id: crypto.randomUUID(), createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }, ...papers];
+                }
+                setPapers(updatedPapers);
+                savePapersToGithub(updatedPapers);
                 closeForm();
             };
             
+            const handleDeletePaper = (paperId) => {
+                const updatedPapers = papers.filter(p => p.id !== paperId);
+                setPapers(updatedPapers);
+                savePapersToGithub(updatedPapers);
+                setShowDeleteConfirm(null);
+            };
+
             const handleDownload = () => {
                 const dataStr = JSON.stringify(papers, null, 2);
                 const url = URL.createObjectURL(new Blob([dataStr], { type: "application/json" }));
@@ -422,6 +493,7 @@
                         const uploadedPapers = JSON.parse(e.target.result);
                         if (Array.isArray(uploadedPapers) && confirm("This will overwrite your current data. Are you sure?")) {
                             setPapers(uploadedPapers);
+                            savePapersToGithub(uploadedPapers);
                         } else alert("Invalid file format.");
                     } catch (error) { alert("Could not parse file."); }
                 };
@@ -432,12 +504,6 @@
             const openForm = (paper = null) => { setEditingPaper(paper); setIsFormOpen(true); };
             const closeForm = () => { setEditingPaper(null); setIsFormOpen(false); };
             const handleDeleteRequest = (paperId) => setShowDeleteConfirm(paperId);
-            const confirmDelete = () => {
-                if (showDeleteConfirm) {
-                    setPapers(papers.filter(p => p.id !== showDeleteConfirm));
-                    setShowDeleteConfirm(null);
-                }
-            };
 
             if (isLoading) return (
                 <div className="min-h-screen flex flex-col items-center justify-center text-slate-500 dark:text-slate-400">
@@ -472,11 +538,13 @@
                                 </div>
                             </div>
                             {showStats && (
-                                <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+                                <div className="mt-6 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
                                     <div className="glass-effect rounded-xl p-4 shadow-sm"><div className="text-2xl font-bold text-slate-800 dark:text-white">{stats.total}</div><div className="text-sm text-slate-600 dark:text-slate-400">Total Papers</div></div>
                                     <div className="glass-effect rounded-xl p-4 shadow-sm"><div className="text-2xl font-bold text-emerald-700 dark:text-emerald-400">{stats.accepted}</div><div className="text-sm text-emerald-600 dark:text-emerald-500">Accepted</div></div>
                                     <div className="glass-effect rounded-xl p-4 shadow-sm"><div className="text-2xl font-bold text-amber-700 dark:text-amber-400">{stats.underReview}</div><div className="text-sm text-amber-600 dark:text-amber-500">Under Review</div></div>
                                     <div className="glass-effect rounded-xl p-4 shadow-sm"><div className="text-2xl font-bold text-slate-700 dark:text-slate-300">{stats.notSubmitted}</div><div className="text-sm text-slate-600 dark:text-slate-400">Not Submitted</div></div>
+                                    <div className="glass-effect rounded-xl p-4 shadow-sm"><div className="text-2xl font-bold text-slate-800 dark:text-white">{stats.avgTimeToAcceptanceInDays}<span className="text-base font-medium"> days</span></div><div className="text-sm text-slate-600 dark:text-slate-400">Avg. Time to Acceptance</div></div>
+                                    <div className="glass-effect rounded-xl p-4 shadow-sm"><div className="text-2xl font-bold text-slate-800 dark:text-white">{stats.avgAcceptedPerYear}<span className="text-base font-medium"> /yr</span></div><div className="text-sm text-slate-600 dark:text-slate-400">Avg. Accepted</div></div>
                                 </div>
                             )}
                         </header>
@@ -488,11 +556,11 @@
                                 </div>
                                 <div className="flex items-center gap-2"><label htmlFor="status-filter" className="text-sm font-medium text-slate-700 dark:text-slate-300">Status:</label><select id="status-filter" value={selectedStatus} onChange={e => setSelectedStatus(e.target.value)} className="rounded-lg border-slate-300 dark:border-slate-600 shadow-sm text-sm bg-white/80 dark:bg-slate-700/80 dark:text-white"><option value="all">All</option><option value="Accepted">Accepted</option><option value="Under Revision">Under Revision</option><option value="Submitted">Submitted</option><option value="Rejected">Rejected</option><option value="Not Submitted">Not Submitted</option></select></div>
                                 <div className="flex items-center gap-2"><label htmlFor="group-by" className="text-sm font-medium text-slate-700 dark:text-slate-300">Group:</label><select id="group-by" value={groupBy} onChange={e => setGroupBy(e.target.value)} className="rounded-lg border-slate-300 dark:border-slate-600 shadow-sm text-sm bg-white/80 dark:bg-slate-700/80 dark:text-white"><option value="none">None</option><option value="status">Status</option><option value="collaborator">Collaborator</option><option value="tag">Tag</option></select></div>
-                                <div className="flex items-center gap-2"><label htmlFor="sort-by" className="text-sm font-medium text-slate-700 dark:text-slate-300">Sort:</label><select id="sort-by" value={sortBy} onChange={e => setSortBy(e.target.value)} className="rounded-lg border-slate-300 dark:border-slate-600 shadow-sm text-sm bg-white/80 dark:bg-slate-700/80 dark:text-white"><option value="createdAt">Date Created</option><option value="title">Title</option></select></div>
+                                <div className="flex items-center gap-2"><label htmlFor="sort-by" className="text-sm font-medium text-slate-700 dark:text-slate-300">Sort:</label><select id="sort-by" value={sortBy} onChange={e => setSortBy(e.target.value)} className="rounded-lg border-slate-300 dark:border-slate-600 shadow-sm text-sm bg-white/80 dark:bg-slate-700/80 dark:text-white"><option value="latestAction">Latest Action</option><option value="title">Title</option><option value="timeToAcceptance">Time to Acceptance</option></select></div>
                             </div>
                         </div>
                         {isFormOpen && <PaperForm onSave={handleSavePaper} onClose={closeForm} paper={editingPaper} journalSuggestions={allJournals} tagSuggestions={allTags} />}
-                        {showDeleteConfirm && <ConfirmationModal title="Delete Paper" message="Are you sure? This action cannot be undone." onConfirm={confirmDelete} onCancel={() => setShowDeleteConfirm(null)} />}
+                        {showDeleteConfirm && <ConfirmationModal title="Delete Paper" message="Are you sure? This action cannot be undone." onConfirm={() => handleDeletePaper(showDeleteConfirm)} onCancel={() => setShowDeleteConfirm(null)} />}
                         <PaperList papers={processedPapers} isGrouped={groupBy !== 'none'} onEdit={openForm} onDelete={handleDeleteRequest} searchTerm={searchTerm} />
                         {papers.length === 0 && !isLoading && (
                             <div className="text-center py-20 px-4 glass-effect rounded-2xl shadow-sm">
@@ -559,7 +627,7 @@
             };
 
             return (
-                <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex justify-center items-start p-4 z-40 overflow-y-auto">
+                <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex justify-center items-start p-4 z-40 overflow-y-auto custom-scrollbar">
                     <div className="glass-effect rounded-2xl shadow-2xl mt-8 mb-8 p-6 w-full max-w-3xl">
                         <h2 className="text-3xl font-bold text-slate-800 dark:text-white mb-6">{paper ? 'Edit Paper' : 'Add New Paper'}</h2>
                         {error && <div className="bg-red-100 dark:bg-red-900/30 border border-red-200 dark:border-red-500/30 text-red-800 dark:text-red-300 px-4 py-3 rounded-xl mb-6 flex items-center gap-2"><i className="fa-solid fa-circle-exclamation"></i>{error}</div>}
@@ -572,9 +640,14 @@
                                 <div><label htmlFor="collaborators" className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Collaborators</label><input type="text" id="collaborators" value={collaborators} onChange={e => setCollaborators(e.target.value)} className="w-full px-4 py-3 bg-white/50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-600 rounded-xl shadow-sm focus:ring-2 focus:ring-[var(--color-primary-light)] dark:focus:ring-[var(--color-primary-dark)] focus:border-transparent transition" placeholder="UNINA, Oxford..." /></div>
                                 <div><label htmlFor="tags" className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Tags</label><input type="text" id="tags" value={tags} onChange={e => setTags(e.target.value)} list="tag-list" className="w-full px-4 py-3 bg-white/50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-600 rounded-xl shadow-sm focus:ring-2 focus:ring-[var(--color-primary-light)] dark:focus:ring-[var(--color-primary-dark)] focus:border-transparent transition" placeholder="fmm, economics..." /><datalist id="tag-list">{tagSuggestions.map(t => <option key={t} value={t} />)}</datalist></div>
                             </div>
-                            <div><label htmlFor="notes" className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Notes</label><textarea id="notes" value={notes} onChange={e => setNotes(e.target.value)} rows="3" className="w-full px-4 py-3 bg-white/50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-600 rounded-xl shadow-sm focus:ring-2 focus:ring-[var(--color-primary-light)] dark:focus:ring-[var(--color-primary-dark)] focus:border-transparent transition resize-none" placeholder="Additional notes..."></textarea></div>
+                            <div><label htmlFor="notes" className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Notes</label><textarea id="notes" value={notes} onChange={e => setNotes(e.target.value)} rows="3" className="w-full px-4 py-3 bg-white/50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-600 rounded-xl shadow-sm focus:ring-2 focus:ring-[var(--color-primary-light)] dark:focus:ring-[var(--color-primary-dark)] focus:border-transparent resize-none" placeholder="Additional notes..."></textarea></div>
                             <div>
-                                <div className="flex items-center justify-between mb-4"><h3 className="text-lg font-semibold text-slate-800 dark:text-white">Submission History</h3><button type="button" onClick={addSubmission} className="flex items-center gap-2 text-sm font-semibold text-[var(--color-primary-light)] dark:text-[var(--color-primary-dark)] hover:opacity-80 transition"><PlusIcon /> Add</button></div>
+                                <div className="flex items-center justify-between mb-4">
+                                    <h3 className="text-lg font-semibold text-slate-800 dark:text-white">Submission History</h3>
+                                    <button type="button" onClick={addSubmission} className="px-3 py-1.5 bg-green-100 dark:bg-green-800/40 text-green-800 dark:text-green-200 rounded-lg text-sm font-semibold hover:bg-green-200 dark:hover:bg-green-800/60 transition-colors flex items-center gap-1.5">
+                                        <PlusIcon className="w-4 h-4" /> Add
+                                    </button>
+                                </div>
                                 <div className="space-y-4 max-h-80 overflow-y-auto custom-scrollbar p-1"><datalist id="journal-list">{journalSuggestions.map(j => <option key={j} value={j} />)}</datalist>{submissions.length > 0 ? submissions.map((sub, index) => (<div key={index} className="grid grid-cols-1 md:grid-cols-12 gap-4 p-4 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50/50 dark:bg-slate-800/30"><div className="md:col-span-5"><label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">Journal</label><input type="text" placeholder="Journal Name" value={sub.journal} list="journal-list" onChange={e => handleSubmissionChange(index, 'journal', e.target.value)} className="w-full px-3 py-2 bg-white/80 dark:bg-slate-700/80 border border-slate-300 dark:border-slate-600 rounded-lg text-sm focus:ring-1 focus:ring-[var(--color-primary-light)] dark:focus:ring-[var(--color-primary-dark)] focus:border-transparent" required /></div><div className="md:col-span-3"><label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">Status</label><select value={sub.status} onChange={e => handleSubmissionChange(index, 'status', e.target.value)} className="w-full px-3 py-2 bg-white/80 dark:bg-slate-700/80 border border-slate-300 dark:border-slate-600 rounded-lg text-sm focus:ring-1 focus:ring-[var(--color-primary-light)] dark:focus:ring-[var(--color-primary-dark)] focus:border-transparent"><option>Submitted</option><option>Under Revision</option><option>Rejected</option><option>Accepted</option></select></div><div className="md:col-span-3"><label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">Date</label><input type="date" value={sub.date || ''} onChange={e => handleSubmissionChange(index, 'date', e.target.value)} className="w-full px-3 py-2 bg-white/80 dark:bg-slate-700/80 border border-slate-300 dark:border-slate-600 rounded-lg text-sm focus:ring-1 focus:ring-[var(--color-primary-light)] dark:focus:ring-[var(--color-primary-dark)] focus:border-transparent" /></div><div className="md:col-span-1 flex items-end"><button type="button" onClick={() => removeSubmission(index)} className="p-2 text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-500 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg transition" title="Remove"><TrashIcon /></button></div></div>)) : (<div className="text-center py-8 text-slate-500 dark:text-slate-400 bg-slate-50/50 dark:bg-slate-800/30 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-700"><CalendarIcon className="mx-auto mb-2" /><p className="text-sm">No submissions yet.</p></div>)}</div>
                             </div>
                             <div className="flex justify-end gap-4 pt-6 border-t border-slate-200 dark:border-slate-700"><button type="button" onClick={onClose} className="px-6 py-3 bg-slate-200/50 dark:bg-slate-700/50 text-slate-800 dark:text-slate-200 rounded-xl border border-slate-300 dark:border-slate-600 hover:bg-slate-300/50 dark:hover:bg-slate-600/50 font-semibold transition">Cancel</button><button type="submit" className="btn-primary px-6 py-3">{paper ? 'Update Paper' : 'Save Paper'}</button></div>
@@ -620,14 +693,67 @@
             const currentStatus = latestSubmission?.status || 'Not Submitted';
             const formatDate = (d) => new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 
+            const timeToAcceptance = useMemo(() => {
+                if (currentStatus !== 'Accepted' || !paper.submissions || paper.submissions.length === 0) {
+                    return null;
+                }
+                const firstSub = paper.submissions[0];
+                const lastSub = latestSubmission;
+                const startDate = new Date(firstSub.date || firstSub.createdAt);
+                const endDate = new Date(lastSub.date || lastSub.updatedAt);
+                const diffTime = Math.abs(endDate - startDate);
+                const days = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                return `${days} days`;
+            }, [paper, currentStatus, latestSubmission]);
+
             return (
-                <div className="glass-effect rounded-2xl p-6 transition duration-300 hover:shadow-lg hover:bg-white/70 dark:hover:bg-slate-800/70 group">
-                    <div className="flex items-start justify-between mb-4"><div className={getStatusChip(currentStatus)}>{currentStatus}</div><div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition"><button onClick={() => onEdit(paper)} className="p-2 text-slate-400 dark:text-slate-500 hover:text-[var(--color-primary-light)] dark:hover:text-[var(--color-primary-dark)] hover:bg-green-50 dark:hover:bg-green-900/30 rounded-lg" title="Edit"><EditIcon /></button><button onClick={() => onDelete(paper.id)} className="p-2 text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg" title="Delete"><TrashIcon /></button></div></div>
-                    <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-2 line-clamp-2">{highlightText(paper.title, searchTerm)}</h3>
-                    {paper.collaborators?.length > 0 && <p className="text-sm text-slate-600 dark:text-slate-400 mb-3 flex items-center gap-1.5"><i className="fa-solid fa-users text-xs"></i>{paper.collaborators.map(c => highlightText(c, searchTerm)).reduce((p, c) => [p, ', ', c])}</p>}
-                    {paper.tags?.length > 0 && <div className="flex flex-wrap gap-2 mb-4">{paper.tags.slice(0, 3).map(tag => <span key={tag} className="text-xs font-medium bg-green-100/80 dark:bg-green-900/50 text-green-800 dark:text-green-300 px-2 py-1 rounded-full">{highlightText(tag, searchTerm)}</span>)}{paper.tags.length > 3 && <span className="text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">+{paper.tags.length - 3}</span>}</div>}
-                    <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 mb-4"><div className="flex items-center gap-1"><ClockIcon className="w-3 h-3" /><span>{formatDate(paper.createdAt)}</span></div>{paper.updatedAt && paper.updatedAt !== paper.createdAt && <span>Updated {formatDate(paper.updatedAt)}</span>}</div>
-                    {paper.submissions?.length > 0 && <div className="pt-4 border-t border-slate-200/80 dark:border-slate-700/80"><h4 className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-3 uppercase tracking-wider flex items-center gap-2"><CalendarIcon className="w-3 h-3"/>Timeline</h4><div className="space-y-3 max-h-32 overflow-y-auto custom-scrollbar pr-2">{paper.submissions.slice(-3).reverse().map((sub, i) => (<div key={i} className="relative pl-6 timeline-item"><div className="absolute left-[9px] top-1 w-3 h-3 bg-white dark:bg-slate-600 border-2 border-green-400 dark:border-green-500 rounded-full"></div><div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1"><div><div className="font-semibold text-slate-700 dark:text-slate-300 text-sm">{highlightText(sub.journal, searchTerm)}</div>{sub.date && <div className="text-xs text-slate-500 dark:text-slate-400">{formatDate(sub.date)}</div>}</div><span className={`${getStatusChip(sub.status)} text-[10px]`}>{sub.status}</span></div></div>))}{paper.submissions.length > 3 && <div className="text-xs text-slate-400 dark:text-slate-500 text-center pt-2">+{paper.submissions.length - 3} more</div>}</div></div>}
+                <div className="glass-effect rounded-2xl p-6 transition duration-300 hover:shadow-lg hover:bg-white/70 dark:hover:bg-slate-800/70 group flex flex-col h-full">
+                    <div className="flex items-start justify-between mb-4">
+                        <div className="flex flex-col gap-2">
+                            <div className={getStatusChip(currentStatus)}>{currentStatus}</div>
+                             {timeToAcceptance && (
+                                <div className="text-xs font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+                                    <i className="fa-solid fa-trophy text-amber-500"></i>
+                                    <span>{timeToAcceptance}</span>
+                                </div>
+                            )}
+                        </div>
+                        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition">
+                            <button onClick={() => onEdit(paper)} className="p-2 text-slate-400 dark:text-slate-500 hover:text-[var(--color-primary-light)] dark:hover:text-[var(--color-primary-dark)] hover:bg-green-50 dark:hover:bg-green-900/30 rounded-lg" title="Edit"><EditIcon /></button>
+                            <button onClick={() => onDelete(paper.id)} className="p-2 text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg" title="Delete"><TrashIcon /></button>
+                        </div>
+                    </div>
+                    <div className="flex-grow mb-4">
+                        <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-2 line-clamp-2">{highlightText(paper.title, searchTerm)}</h3>
+                        {paper.collaborators?.length > 0 && <p className="text-sm text-slate-600 dark:text-slate-400 mb-3 flex items-center gap-1.5"><i className="fa-solid fa-users text-xs"></i>{paper.collaborators.map(c => highlightText(c, searchTerm)).reduce((p, c) => [p, ', ', c])}</p>}
+                        {paper.tags?.length > 0 && <div className="flex flex-wrap gap-2 mb-4">{paper.tags.slice(0, 3).map(tag => <span key={tag} className="text-xs font-medium bg-green-100/80 dark:bg-green-900/50 text-green-800 dark:text-green-300 px-2 py-1 rounded-full">{highlightText(tag, searchTerm)}</span>)}{paper.tags.length > 3 && <span className="text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">+{paper.tags.length - 3}</span>}</div>}
+                    </div>
+                    <div className="mt-auto">
+                        <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 mb-4">
+                            <div className="flex items-center gap-1"><ClockIcon className="w-3 h-3" /><span>{formatDate(paper.createdAt)}</span></div>
+                            {paper.updatedAt && paper.updatedAt !== paper.createdAt && <span>Updated {formatDate(paper.updatedAt)}</span>}
+                        </div>
+                        {paper.submissions?.length > 0 && 
+                            <div className="pt-4 border-t border-slate-200/80 dark:border-slate-700/80">
+                                <h4 className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-3 uppercase tracking-wider flex items-center gap-2"><CalendarIcon className="w-3 h-3"/>Timeline</h4>
+                                <div className="space-y-3 max-h-32 overflow-y-auto custom-scrollbar pr-2">
+                                    {paper.submissions.slice(-3).reverse().map((sub, i) => (
+                                        <div key={i} className="relative pl-6 timeline-item">
+                                            <div className="absolute left-[9px] top-1 w-3 h-3 bg-white dark:bg-slate-600 border-2 border-green-400 dark:border-green-500 rounded-full"></div>
+                                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                                                <div>
+                                                    <div className="font-semibold text-slate-700 dark:text-slate-300 text-sm">{highlightText(sub.journal, searchTerm)}</div>
+                                                    {sub.date && <div className="text-xs text-slate-500 dark:text-slate-400">{formatDate(sub.date)}</div>}
+                                                </div>
+                                                <span className={`${getStatusChip(sub.status)} text-[10px]`}>{sub.status}</span>
+                                            </div>
+                                        </div>
+                                    ))}
+                                    {paper.submissions.length > 3 && <div className="text-xs text-slate-400 dark:text-slate-500 text-center pt-2">+{paper.submissions.length - 3} more</div>}
+                                </div>
+                            </div>
+                        }
+                    </div>
                 </div>
             );
         }
