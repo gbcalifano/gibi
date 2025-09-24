@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Download Files</title>
+  <style>
+    body {
+      font-family: Lato, sans-serif;
+      padding: 20px;
+    }
+    table {
+      table-layout: auto;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+    }
+    th:first-child,
+    td:first-child {
+      text-align: left;
+    }
+    th {
+      background-color: #f4f4f4;
+      cursor: pointer;
+      user-select: none;
+      position: relative;
+      text-align: center;
+    }
+    th .arrow {
+      font-size: 0.8em;
+      margin-left: 5px;
+    }
+    a {
+      text-decoration: none;
+      color: #007BFF;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Downloads</h1>
+
+  <table id="downloadTable">
+    <thead>
+      <tr>
+        <th onclick="sortTable(0)">Name<span class="arrow"></span></th>
+        <th onclick="sortTable(1)">Type<span class="arrow"></span></th>
+        <th>Info</th>
+        <th> </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>ES3</td>
+        <td>do</td>
+        <td>Esercitazione su PSY4</td>
+        <td><a href="file/es3.do" download>Download</a></td>
+      </tr>
+      <tr>
+        <td>PSY4</td>
+        <td>pdf</td>
+        <td>"Modelli ad Equazioni Strutturali"</td>
+        <td><a href="file/PSY4.pdf" download>Download</a></td>
+      </tr>
+      <tr>
+        <td>ES2</td>
+        <td>do</td>
+        <td>Esercitazione su PSY3</td>
+        <td><a href="file/es2.do" download>Download</a></td>
+      </tr>
+      <tr>
+        <td>PSY3</td>
+        <td>pdf</td>
+        <td>"Variabili Latenti: Riflessive o Formative?"</td>
+        <td><a href="file/PSY3.pdf" download>Download</a></td>
+      </tr>
+      <tr>
+        <td>ES1</td>
+        <td>do</td>
+        <td>Esercitazione su PSY2</td>
+        <td><a href="file/es1.do" download>Download</a></td>
+      </tr>
+      <tr>
+        <td>PSY2</td>
+        <td>pdf</td>
+        <td>"Affidabilità e Validità di una Misura"</td>
+        <td><a href="file/PSY2.pdf" download>Download</a></td>
+      </tr>
+      <tr>
+        <td>PSY1</td>
+        <td>pdf</td>
+        <td>"Hello, Psychometrics!"</td>
+        <td><a href="file/PSY1.pdf" download>Download</a></td>
+      </tr>
+      <tr>
+        <td>Mamme</td>
+        <td>dta</td>
+        <td>Stata dataset on mothers' use of food labels</td>
+        <td><a href="file/mamme.dta" download>Download</a></td>
+      </tr>
+      <tr>
+        <td>Masteristi</td>
+        <td>dta</td>
+        <td>Stata dataset on fictional students</td>
+        <td><a href="file/masteristi.dta" download>Download</a></td>
+      </tr>
+      <tr>
+        <td>Height</td>
+        <td>dta</td>
+        <td>Stata dataset on fictional students</td>
+        <td><a href="file/height.dta" download>Download</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <script>
+    let lastCol = -1, lastDir = 'asc';
+
+    function sortTable(colIndex) {
+      const table = document.getElementById("downloadTable");
+      const tbody = table.tBodies[0];
+      const rows = Array.from(tbody.rows);
+      
+      let dir = (colIndex === lastCol && lastDir === 'asc') ? 'desc' : 'asc';
+
+      rows.sort((a, b) => {
+        const aText = a.cells[colIndex].textContent.trim().toLowerCase();
+        const bText = b.cells[colIndex].textContent.trim().toLowerCase();
+        if (aText < bText) return dir === 'asc' ? -1 : 1;
+        if (aText > bText) return dir === 'asc' ? 1 : -1;
+        return 0;
+      });
+
+      rows.forEach(row => tbody.appendChild(row));
+
+      const ths = table.tHead.rows[0].cells;
+      for (let i = 0; i < ths.length; i++) {
+        const arrowSpan = ths[i].querySelector('.arrow');
+        if (!arrowSpan) continue;
+        arrowSpan.textContent = (i === colIndex) ? (dir === 'asc' ? '▲' : '▼') : '';
+      }
+
+      lastCol = colIndex;
+      lastDir = dir;
+    }
+  </script>
+
+</body>
+</html>
