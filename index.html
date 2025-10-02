@@ -356,12 +356,12 @@
                     <div class="w-full card glass-effect p-4">
                         <button id="toggle-bibtex-btn" class="btn-secondary w-full glass-effect" aria-expanded="false">
                             <i class="fa-solid fa-quote-right mr-2"></i>
-                            <span>Show BibTeX</span>
+                            <span>Show All BibTeX</span>
                         </button>
                         <div id="bibtex-container" class="hidden transition-all duration-500 ease-in-out mt-4">
                             <div class="relative bg-slate-100/50 dark:bg-slate-800/50 rounded-lg max-h-96 overflow-y-auto border border-slate-200/50 dark:border-slate-700/50">
                                 <button id="copy-bibtex-btn" class="sticky top-2 right-2 float-right bg-slate-600 hover:bg-slate-500 text-white font-bold py-1 px-3 rounded text-xs z-10 mr-2">
-                                    <i class="fa-solid fa-copy mr-1"></i> Copy
+                                    <i class="fa-solid fa-copy mr-1"></i> Copy All
                                 </button>
                                 <pre class="p-4 pt-10"><code id="bibtex-content" class="language-bibtex text-xs whitespace-pre-wrap">Loading...</code></pre>
                             </div>
@@ -548,7 +548,7 @@
                 toggleBibtexBtn.setAttribute('aria-expanded', String(!isHidden));
                 const buttonText = toggleBibtexBtn.querySelector('span');
                 if (buttonText) {
-                    buttonText.textContent = isHidden ? 'Show BibTeX' : 'Hide BibTeX';
+                    buttonText.textContent = isHidden ? 'Show All BibTeX' : 'Hide All BibTeX';
                 }
             });
         }
@@ -568,7 +568,7 @@
                     document.execCommand('copy');
                     copyBibtexBtn.innerHTML = '<i class="fa-solid fa-check mr-1"></i> Copied!';
                     setTimeout(() => {
-                        copyBibtexBtn.innerHTML = '<i class="fa-solid fa-copy mr-1"></i> Copy';
+                        copyBibtexBtn.innerHTML = '<i class="fa-solid fa-copy mr-1"></i> Copy All';
                     }, 2000);
                 } catch (err) {
                     console.error('Failed to copy text: ', err);
@@ -614,7 +614,7 @@
         
         function generateBibtex(work) {
             const authors = work.authorships.map(a => a.author.display_name).join(' and ');
-            const journal = work.host_venue?.display_name || 'Preprint';
+            const journal = work.host_venue?.display_name || work.primary_location?.source?.display_name || 'Preprint';
             const pages = (work.biblio.first_page && work.biblio.last_page) ? `${work.biblio.first_page}--${work.biblio.last_page}` : '';
             const authorLastName = work.authorships[0]?.author.display_name.split(' ').pop() || 'author';
             const key = `${authorLastName}${work.publication_year}${work.title.split(' ')[0]}`.replace(/[^a-zA-Z0-9]/g, '');
@@ -629,6 +629,44 @@
     pages   = {${pages}},
     doi     = {${work.doi?.replace('https://doi.org/', '') || ''}}
 }`;
+        }
+
+        function generateAPA(work) {
+            const authorList = work.authorships.map(a => {
+                const nameParts = a.author.display_name.split(' ');
+                const lastName = nameParts.pop() || '';
+                const initials = nameParts.map(p => `${p.charAt(0)}.`).join(' ');
+                return `${lastName}, ${initials}`;
+            });
+
+            let authorsStr;
+            if (authorList.length > 20) {
+                authorsStr = `${authorList.slice(0, 19).join(', ')}, ..., ${authorList.slice(-1)}`;
+            } else if (authorList.length > 1) {
+                authorsStr = `${authorList.slice(0, -1).join(', ')}, & ${authorList.slice(-1)}`;
+            } else {
+                authorsStr = authorList[0] || 'N/A';
+            }
+
+            const year = work.publication_year || 'n.d.';
+            const title = work.title || 'No title provided';
+            const journal = work.host_venue?.display_name || work.primary_location?.source?.display_name || '[Preprint]';
+            
+            let publicationDetails = journal;
+            if (work.biblio.volume) {
+                publicationDetails += `, ${work.biblio.volume}`;
+            }
+            if (work.biblio.issue) {
+                publicationDetails += `(${work.biblio.issue})`;
+            }
+            if (work.biblio.first_page && work.biblio.last_page) {
+                publicationDetails += `, ${work.biblio.first_page}–${work.biblio.last_page}`;
+            }
+            
+            const doi = work.doi ? ` ${work.doi}` : '';
+
+            // Note: The journal and volume should be italicized by the user after pasting.
+            return `${authorsStr} (${year}). ${title}. ${publicationDetails}.${doi}`;
         }
 
         async function fetchPublications() {
@@ -689,6 +727,10 @@
             const abstractText = decodeAbstract(work.abstract_inverted_index) || "No abstract available.";
             const abstractId = `abstract-${work.id.replace(/[^a-zA-Z0-9]/g, '-')}`;
             const altmetricBadge = doi ? `<div class="altmetric-embed" data-badge-type="medium-bar" data-doi="${doi}" data-badge-popover="bottom"></div>` : '';
+            const singleBibtex = generateBibtex(work);
+            const encodedBibtex = btoa(unescape(encodeURIComponent(singleBibtex)));
+            const singleAPA = generateAPA(work);
+            const encodedAPA = btoa(unescape(encodeURIComponent(singleAPA)));
 
             return `<article class="card glass-effect">
                         <div class="flex flex-col sm:flex-row gap-4">
@@ -705,11 +747,21 @@
                             </div>
                         </div>
                         <div class="mt-4 pt-4 border-t border-white/20 dark:border-white/10">
-                            <div class="flex items-center justify-between">
-                                <button class="toggle-abstract text-sm font-medium text-[var(--color-primary-light)] hover:text-[#5a9a3f] dark:text-[var(--color-primary-dark)] dark:hover:text-[#6ee7b7]"
-                                    onclick="toggleAbstract('${abstractId}', this)" aria-expanded="false" aria-controls="${abstractId}">
-                                    Show Abstract
-                                </button>
+                            <div class="flex items-center justify-between gap-4">
+                                <div class="flex items-center flex-wrap gap-x-4 gap-y-2">
+                                    <button class="toggle-abstract text-sm font-medium text-[var(--color-primary-light)] hover:text-[#5a9a3f] dark:text-[var(--color-primary-dark)] dark:hover:text-[#6ee7b7]"
+                                        onclick="toggleAbstract('${abstractId}', this)" aria-expanded="false" aria-controls="${abstractId}">
+                                        Show Abstract
+                                    </button>
+                                    <button class="text-sm font-medium text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors"
+                                        onclick="copySingleCitation('${encodedBibtex}', this, 'BibTeX')">
+                                        <i class="fa-solid fa-quote-right mr-1"></i> BibTeX
+                                    </button>
+                                    <button class="text-sm font-medium text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors"
+                                        onclick="copySingleCitation('${encodedAPA}', this, 'APA')">
+                                        <i class="fa-solid fa-file-lines mr-1"></i> APA
+                                    </button>
+                                </div>
                                 ${altmetricBadge}
                             </div>
                             <div id="${abstractId}" class="abstract-text text-slate-700 dark:text-slate-300 text-sm mt-4 leading-relaxed text-justify hidden">${abstractText}</div>
@@ -723,6 +775,28 @@
             abstract.classList.toggle('hidden'); 
             btn.textContent = isHidden ? "Hide Abstract" : "Show Abstract"; 
             btn.setAttribute('aria-expanded', String(isHidden));
+        };
+        
+        window.copySingleCitation = (encodedText, btn, typeName) => {
+            const textToCopy = decodeURIComponent(escape(atob(encodedText)));
+            const textArea = document.createElement('textarea');
+            textArea.value = textToCopy;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-9999px';
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                const originalHtml = btn.innerHTML;
+                btn.innerHTML = `<i class="fa-solid fa-check mr-1"></i> Copied!`;
+                setTimeout(() => {
+                    btn.innerHTML = originalHtml;
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy text: ', err);
+                btn.textContent = 'Error';
+            }
+            document.body.removeChild(textArea);
         };
 
         // --- Animated Stats Counter ---
