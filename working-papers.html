@@ -1,766 +1,759 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Working Papers Tracker</title>
-    <!-- Tailwind CSS for styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- React Libraries -->
-    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    <!-- Babel to translate JSX in the browser -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script>
-        // Set up Tailwind for dark mode
-        tailwind.config = { darkMode: 'class' };
-    </script>
-    <style>
-        :root {
-            --color-primary-light: #6aa84f;
-            --color-primary-dark: #34d399;
-            --shadow-lg: 0 10px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            color: #111827;
-            background-color: #f3f4f6;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        html.dark body {
-            color: #e5e7eb;
-            background-color: #030712;
-        }
-
-        .glass-effect {
-            background: rgba(255, 255, 255, 0.5);
-            -webkit-backdrop-filter: blur(20px);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            transition: background 0.3s ease, border 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        html.dark .glass-effect {
-            background: rgba(20, 20, 30, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .btn-primary {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            padding: 0.6rem 1.2rem;
-            border-radius: 0.75rem;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            box-shadow: var(--shadow-md);
-            background: linear-gradient(135deg, var(--color-primary-light), #5a9a3f);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-        .btn-primary:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: var(--shadow-lg);
-        }
-        html.dark .btn-primary {
-            background: linear-gradient(135deg, var(--color-primary-dark), #10b981);
-            color: #111827;
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-        
-        :focus-visible {
-            outline: 3px solid var(--color-primary-light);
-            outline-offset: 3px;
-            border-radius: 0.5rem;
-        }
-        html.dark :focus-visible {
-            outline-color: var(--color-primary-dark);
-        }
-
-        .spinner {
-            border: 3px solid rgba(0, 0, 0, 0.1);
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            border-left-color: var(--color-primary-light);
-            animation: spin 1s ease infinite;
-        }
-        html.dark .spinner {
-             border-left-color: var(--color-primary-dark);
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 3px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-        html.dark .custom-scrollbar::-webkit-scrollbar-track { background: #1e293b; }
-        html.dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #475569; }
-        html.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #64748b; }
-        
-        .timeline-item::before {
-            content: ''; position: absolute; left: 15px; top: 0; height: 100%; width: 2px;
-            background: #e2e8f0;
-        }
-        html.dark .timeline-item::before { background: #334155; }
-        .timeline-item:last-child::before { height: 30px; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Working Papers Tracker — v2.0</title>
+  <!-- Tailwind CSS for styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <!-- React Libraries (production) -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" defer></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" defer></script>
+  <!-- Chart.js for analytics -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+  <!-- Babel to translate JSX in the browser (keep for single-file convenience) -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js" defer></script>
+  <script>
+    // Tailwind dark mode
+    tailwind.config = { darkMode: 'class' };
+  </script>
+  <style>
+    :root {
+      --color-primary-light: #6aa84f;
+      --color-primary-dark: #34d399;
+      --shadow-lg: 0 10px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    }
+    body { font-family: 'Inter', sans-serif; color: #111827; background: #f3f4f6; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    html.dark body { color: #e5e7eb; background: #030712; }
+    .glass-effect { background: rgba(255, 255, 255, 0.5); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.25); transition: background 0.3s ease, border 0.3s ease, box-shadow 0.3s ease; }
+    html.dark .glass-effect { background: rgba(20,20,30,0.5); border: 1px solid rgba(255,255,255,0.1); }
+    .btn-primary { display: inline-flex; align-items: center; justify-content: center; font-weight: 700; padding: 0.6rem 1.2rem; border-radius: 0.75rem; transition: all 0.3s ease; text-decoration: none; box-shadow: var(--shadow-md); background: linear-gradient(135deg, var(--color-primary-light), #5a9a3f); color: white; border: 1px solid rgba(255,255,255,0.3); }
+    .btn-primary:hover { transform: translateY(-3px) scale(1.05); box-shadow: var(--shadow-lg); }
+    html.dark .btn-primary { background: linear-gradient(135deg, var(--color-primary-dark), #10b981); color: #111827; border-color: rgba(255,255,255,0.2); }
+    :focus-visible { outline: 3px solid var(--color-primary-light); outline-offset: 3px; border-radius: 0.5rem; }
+    html.dark :focus-visible { outline-color: var(--color-primary-dark); }
+    .spinner { border: 3px solid rgba(0,0,0,0.1); width: 24px; height: 24px; border-radius: 50%; border-left-color: var(--color-primary-light); animation: spin 1s ease infinite; }
+    html.dark .spinner { border-left-color: var(--color-primary-dark); }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg);} }
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 3px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    html.dark .custom-scrollbar::-webkit-scrollbar-track { background: #1e293b; }
+    html.dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #475569; }
+    html.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #64748b; }
+    .drag-over { outline: 2px dashed #34d399; outline-offset: 6px; }
+  </style>
 </head>
 <body>
-    <div id="root"></div>
+<div id="root"></div>
+<script type="text/babel">
+  const { useState, useEffect, useMemo, useCallback, useRef } = React;
 
-    <script type="text/babel">
-        // --- React Code Starts Here ---
+  // --- GitHub Configuration ---
+  const GITHUB_OWNER = 'gbcalifano';
+  const GITHUB_REPO = 'private';
+  const GITHUB_DATA_PATH = 'papers.json';
+  const GITHUB_TOKEN_KEY = 'githubToken';
 
-        const { useState, useEffect, useMemo, useCallback } = React;
+  // --- Theme Management ---
+  const ThemeManager = {
+    init() {
+      if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    },
+    toggle() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.theme = isDark ? 'dark' : 'light';
+    },
+    isDark() { return document.documentElement.classList.contains('dark'); }
+  };
+  ThemeManager.init();
 
-        // --- GitHub Configuration ---
-        const GITHUB_OWNER = 'gbcalifano';
-        const GITHUB_REPO = 'private';
-        const GITHUB_DATA_PATH = 'papers.json';
-        const GITHUB_TOKEN_KEY = 'githubToken';
+  // --- Utilities ---
+  const uid = () => (crypto?.randomUUID ? crypto.randomUUID() : `id_${Math.random().toString(36).slice(2)}`);
+  const todayISO = () => new Date().toISOString().split('T')[0];
+  const fmtDate = (d) => new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 
-        // --- Theme Management ---
-        const ThemeManager = {
-            init() {
-                if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                    document.documentElement.classList.add('dark');
-                } else {
-                    document.documentElement.classList.remove('dark');
-                }
-            },
-            toggle() {
-                const isDark = document.documentElement.classList.toggle('dark');
-                localStorage.theme = isDark ? 'dark' : 'light';
-            },
-            isDark() {
-                return document.documentElement.classList.contains('dark');
-            }
-        };
-        ThemeManager.init();
+  // --- Icons ---
+  const Icon = ({ path, className = 'w-6 h-6', fillRule = 'evenodd', clipRule = 'evenodd' }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}>
+      <path fillRule={fillRule} d={path} clipRule={clipRule} />
+    </svg>
+  );
+  const PlusIcon = () => <Icon path="M12 5a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H6a1 1 0 110-2h5V6a1 1 0 011-1z" className="w-5 h-5"/>;
+  const EditIcon = () => <Icon path="M13.49 2.24a2.121 2.121 0 013.01 0l4.25 4.25a2.121 2.121 0 010 3.01L9.25 21H3v-6.25L13.49 2.24zM15.25 7.5l-9 9H5v-1.25l9-9L15.25 7.5z" fillRule="nonzero" className="w-4 h-4"/>;
+  const TrashIcon = () => <Icon path="M10 2a.75.75 0 01.75.75v.5h4.5v-.5a.75.75 0 011.5 0v.5h.75a.75.75 0 010 1.5h-.75v12.5a3 3 0 01-3 3h-6a3 3 0 01-3-3V4.75H4.5a.75.75 0 010-1.5h.75v-.5A.75.75 0 016 2h4zm-2.25 4.5a.75.75 0 00-1.5 0v10.5a.75.75 0 001.5 0V6.5zm3.75 0a.75.75 0 00-1.5 0v10.5a.75.75 0 001.5 0V6.5z" className="w-4 h-4"/>;
+  const DownloadIcon = () => <Icon path="M12 1.75a.75.75 0 01.75.75v9.34l3.97-3.97a.75.75 0 111.06 1.06l-5.25 5.25a.75.75 0 01-1.06 0L5.22 8.84a.75.75 0 111.06-1.06l3.97 3.97V2.5A.75.75 0 0112 1.75zM3.5 14a.75.75 0 01.75.75v3.5c0 .414.336.75.75.75h13.5a.75.75 0 00.75-.75v-3.5a.75.75 0 011.5 0v3.5A2.25 2.25 0 0118.75 21H5.25A2.25 2.25 0 013 18.75v-3.5a.75.75 0 01.5-.75z" className="w-4 h-4"/>;
+  const UploadIcon = () => <Icon path="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 7.5m0 0L7.5 12m4.5-4.5v11.25" className="w-4 h-4"/>;
+  const SearchIcon = () => <Icon path="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" className="w-5 h-5"/>;
+  const CalendarIcon = () => <Icon path="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5a2.25 2.25 0 002.25-2.25m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5a2.25 2.25 0 012.25 2.25v7.5" className="w-4 h-4"/>;
+  const StatsIcon = () => <Icon path="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" className="w-4 h-4"/>;
+  const ClockIcon = () => <Icon path="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" className="w-4 h-4"/>;
+  const LinkIcon = () => <i className="fa-solid fa-arrow-up-right-from-square"></i>;
 
-        // --- Icon Components ---
-        const Icon = ({ path, className = "w-6 h-6", fillRule = "evenodd", clipRule = "evenodd" }) => (
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}>
-                <path fillRule={fillRule} d={path} clipRule={clipRule} />
-            </svg>
+  // --- Theme Toggle Button ---
+  function ThemeToggleButton() {
+    const [isDark, setIsDark] = useState(ThemeManager.isDark());
+    return (
+      <button onClick={() => { ThemeManager.toggle(); setIsDark(ThemeManager.isDark()); }} type="button" aria-label="Toggle dark mode" className="text-slate-500 dark:text-slate-400 hover:bg-slate-100/50 dark:hover:bg-slate-700/50 rounded-lg text-sm p-2.5 glass-effect">
+        {isDark ? (
+          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+        ) : (
+          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 5.05A1 1 0 016.465 3.636l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fillRule="evenodd" clipRule="evenodd"></path></svg>
+        )}
+      </button>
+    );
+  }
+
+  // --- App ---
+  function App(){
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+    useEffect(() => { if (sessionStorage.getItem(GITHUB_TOKEN_KEY)) setIsAuthenticated(true); }, []);
+    const handleLoginSuccess = (token) => { sessionStorage.setItem(GITHUB_TOKEN_KEY, token); setIsAuthenticated(true); };
+
+    if (!isAuthenticated) return <AuthScreen onLoginSuccess={handleLoginSuccess} />;
+    return <PaperTrackerApp/>;
+  }
+
+  // --- Auth ---
+  function AuthScreen({ onLoginSuccess }){
+    const [token, setToken] = useState('');
+    const [error, setError] = useState('');
+    const [isVerifying, setIsVerifying] = useState(false);
+
+    const verify = async (e) => {
+      e.preventDefault(); setError(''); if(!token.trim()){ setError('Please enter a token.'); return; }
+      setIsVerifying(true);
+      try {
+        const r = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}`, { headers: { 'Authorization': `token ${token}` } });
+        if (r.ok) onLoginSuccess(token); else { const j = await r.json(); setError(`Verification failed: ${j.message}.`); }
+      } catch { setError('Network error. Could not verify token.'); }
+      finally { setIsVerifying(false); }
+    };
+
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <div className="w-full max-w-md glass-effect p-8 rounded-2xl shadow-2xl">
+          <div className="text-center mb-8">
+            <div className="w-16 h-16 bg-gradient-to-r from-[var(--color-primary-light)] to-emerald-500 dark:from-[var(--color-primary-dark)] dark:to-emerald-400 rounded-full mx-auto mb-4 flex items-center justify-center shadow-lg">
+              <i className="fa-solid fa-lock text-white text-2xl"></i>
+            </div>
+            <h1 className="text-3xl font-bold text-slate-800 dark:text-white mb-2">Authentication Required</h1>
+            <p className="text-slate-600 dark:text-slate-300">Enter a GitHub token with <code>repo</code> scope.</p>
+          </div>
+          <form onSubmit={verify} className="space-y-6">
+            <input type="password" value={token} onChange={(e)=>setToken(e.target.value)} className="w-full px-4 py-3 text-lg bg-white/50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-600 rounded-xl shadow-sm focus:ring-2 focus:ring-[var(--color-primary-light)] dark:focus:ring-[var(--color-primary-dark)] focus:border-transparent" placeholder="github_pat_..." disabled={isVerifying} />
+            {error && <p className="text-red-500 text-sm mt-2 flex items-center gap-2"><i className="fa-solid fa-circle-exclamation"></i>{error}</p>}
+            <button type="submit" className="w-full btn-primary py-3" disabled={isVerifying}>{isVerifying ? <div className="spinner border-white dark:border-black border-l-transparent"></div> : 'Authorize & Continue'}</button>
+          </form>
+        </div>
+      </div>
+    );
+  }
+
+  // --- Main App ---
+  function PaperTrackerApp(){
+    const [papers, setPapers] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isSaving, setIsSaving] = useState(false);
+    const [isFormOpen, setIsFormOpen] = useState(false);
+    const [editingPaper, setEditingPaper] = useState(null);
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(null);
+
+    const [groupBy, setGroupBy] = useState('none');
+    const [sortBy, setSortBy] = useState('latestAction');
+    const [searchTerm, setSearchTerm] = useState('');
+    const [selectedStatus, setSelectedStatus] = useState('all');
+    const [showStats, setShowStats] = useState(false);
+    const [view, setView] = useState('list'); // 'list' | 'kanban'
+
+    const [fileSha, setFileSha] = useState(null);
+
+    const githubApiUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_DATA_PATH}`;
+    const token = sessionStorage.getItem(GITHUB_TOKEN_KEY);
+
+    const loadPapersFromGithub = useCallback(async () => {
+      setIsLoading(true);
+      try {
+        const response = await fetch(githubApiUrl, { headers: { 'Authorization': `token ${token}` } });
+        if (response.status === 404) { setPapers([]); setFileSha(null); }
+        else if (response.ok) {
+          const data = await response.json();
+          setFileSha(data.sha);
+          const content = atob(data.content);
+          const parsedPapers = JSON.parse(content);
+          const updatedPapers = parsedPapers.map(p => ({ ...p, createdAt: p.createdAt || new Date().toISOString(), id: p.id || uid() }));
+          setPapers(updatedPapers);
+        } else { const e = await response.json(); alert(`Error loading data: ${e.message}`); }
+      } catch (err) { console.error(err); alert('Network error while loading data.'); }
+      finally { setIsLoading(false); }
+    }, [githubApiUrl, token]);
+
+    const savePapersToGithub = useCallback(async (papersToSave) => {
+      if (isLoading) return;
+      setIsSaving(true);
+      const content = btoa(JSON.stringify(papersToSave, null, 2));
+      try {
+        const response = await fetch(githubApiUrl, { method: 'PUT', headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ message: `Update papers data: ${new Date().toISOString()}`, content, sha: fileSha }) });
+        if (response.ok) { const d = await response.json(); setFileSha(d.content.sha); }
+        else { const e = await response.json(); alert(`Error saving data: ${e.message}`); loadPapersFromGithub(); }
+      } catch (err) { console.error(err); alert('Network error while saving data.'); loadPapersFromGithub(); }
+      finally { setIsSaving(false); }
+    }, [fileSha, githubApiUrl, token, isLoading, loadPapersFromGithub]);
+
+    useEffect(() => { loadPapersFromGithub(); }, [loadPapersFromGithub]);
+
+    // Suggestions
+    const allJournals = useMemo(() => Array.from(new Set(papers.flatMap(p => p.submissions?.map(s => s.journal).filter(Boolean) || []))).sort(), [papers]);
+    const allTags = useMemo(() => Array.from(new Set(papers.flatMap(p => p.tags?.filter(Boolean) || []))).sort(), [papers]);
+
+    // Stats
+    const stats = useMemo(() => {
+      const lastStatus = (p) => p.submissions?.[p.submissions.length - 1]?.status || 'Not Submitted';
+      const accepted = papers.filter(p => lastStatus(p) === 'Accepted');
+
+      const acceptanceTimes = accepted.map(p => {
+        if (!p.submissions?.length) return null;
+        const first = p.submissions[0];
+        const last = p.submissions[p.submissions.length - 1];
+        const start = new Date(first.date || first.createdAt);
+        const end = new Date(last.date || last.updatedAt);
+        return Math.ceil((end - start) / (1000*60*60*24));
+      }).filter(x => x !== null);
+
+      const median = (arr) => arr.length ? [...arr].sort((a,b)=>a-b)[Math.floor(arr.length/2)] : 0;
+
+      const journals = {};
+      papers.forEach(p => p.submissions?.forEach(s => { if(!s.journal) return; journals[s.journal] = (journals[s.journal]||0)+1; }));
+      const topJournals = Object.entries(journals).sort((a,b)=>b[1]-a[1]).slice(0,5);
+
+      return {
+        total: papers.length,
+        accepted: accepted.length,
+        underReview: papers.filter(p => ['Submitted','Under Revision'].includes(lastStatus(p))).length,
+        notSubmitted: papers.filter(p => lastStatus(p) === 'Not Submitted').length,
+        acceptanceRate: papers.length ? Math.round( (accepted.length / papers.length) * 100) : 0,
+        medianDaysToAcceptance: acceptanceTimes.length ? median(acceptanceTimes) : 0,
+        topJournals
+      };
+    }, [papers]);
+
+    // Charts
+    const chartRef = useRef(null);
+    const chartObj = useRef(null);
+    useEffect(()=>{
+      if(!showStats) return;
+      const ctx = chartRef.current?.getContext('2d');
+      if(!ctx) return;
+      if(chartObj.current) chartObj.current.destroy();
+      const labels = stats.topJournals.map(([j])=>j);
+      const values = stats.topJournals.map(([,n])=>n);
+      chartObj.current = new Chart(ctx, {
+        type: 'bar',
+        data: { labels, datasets: [{ label: 'Submissions by Journal', data: values }] },
+        options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+      });
+    }, [showStats, stats.topJournals]);
+
+    // Process filters/sorts
+    const processedPapers = useMemo(() => {
+      const getTimeToAcceptance = (paper) => {
+        const lastSub = paper.submissions?.[paper.submissions.length - 1];
+        if (!lastSub || lastSub.status !== 'Accepted' || !paper.submissions?.[0]) return Infinity;
+        const start = new Date(paper.submissions[0].date || paper.submissions[0].createdAt);
+        const end = new Date(lastSub.date || lastSub.updatedAt);
+        return Math.ceil((end - start) / (1000*60*60*24));
+      };
+
+      let filtered = [...papers];
+      if (searchTerm) {
+        const t = searchTerm.toLowerCase();
+        filtered = filtered.filter(p =>
+          p.title.toLowerCase().includes(t) ||
+          p.abstract?.toLowerCase().includes(t) ||
+          p.collaborators?.some(c => c.toLowerCase().includes(t)) ||
+          p.tags?.some(tag => tag.toLowerCase().includes(t)) ||
+          p.links?.some(link => (link.label||'').toLowerCase().includes(t) || (link.url||'').toLowerCase().includes(t))
         );
+      }
+      if (selectedStatus !== 'all') {
+        filtered = filtered.filter(p => (p.submissions?.[p.submissions.length - 1]?.status || 'Not Submitted') === selectedStatus);
+      }
+      filtered.sort((a,b)=>{
+        if (sortBy==='title') return a.title.localeCompare(b.title);
+        if (sortBy==='timeToAcceptance') return getTimeToAcceptance(a) - getTimeToAcceptance(b);
+        // latestAction
+        const aSub = a.submissions?.[a.submissions.length-1];
+        const bSub = b.submissions?.[b.submissions.length-1];
+        const aDate = aSub ? new Date(aSub.date || aSub.updatedAt || aSub.createdAt) : new Date(a.updatedAt || a.createdAt);
+        const bDate = bSub ? new Date(bSub.date || bSub.updatedAt || bSub.createdAt) : new Date(b.updatedAt || b.createdAt);
+        return bDate - aDate;
+      });
 
-        const PlusIcon = () => <Icon path="M12 5a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H6a1 1 0 110-2h5V6a1 1 0 011-1z" className="w-5 h-5" />;
-        const EditIcon = () => <Icon path="M13.49 2.24a2.121 2.121 0 013.01 0l4.25 4.25a2.121 2.121 0 010 3.01L9.25 21H3v-6.25L13.49 2.24zM15.25 7.5l-9 9H5v-1.25l9-9L15.25 7.5z" fillRule="nonzero" className="w-4 h-4" />;
-        const TrashIcon = () => <Icon path="M10 2a.75.75 0 01.75.75v.5h4.5v-.5a.75.75 0 011.5 0v.5h.75a.75.75 0 010 1.5h-.75v12.5a3 3 0 01-3 3h-6a3 3 0 01-3-3V4.75H4.5a.75.75 0 010-1.5h.75v-.5A.75.75 0 016 2h4zm-2.25 4.5a.75.75 0 00-1.5 0v10.5a.75.75 0 001.5 0V6.5zm3.75 0a.75.75 0 00-1.5 0v10.5a.75.75 0 001.5 0V6.5z" className="w-4 h-4" />;
-        const DownloadIcon = () => <Icon path="M12 1.75a.75.75 0 01.75.75v9.34l3.97-3.97a.75.75 0 111.06 1.06l-5.25 5.25a.75.75 0 01-1.06 0L5.22 8.84a.75.75 0 111.06-1.06l3.97 3.97V2.5A.75.75 0 0112 1.75zM3.5 14a.75.75 0 01.75.75v3.5c0 .414.336.75.75.75h13.5a.75.75 0 00.75-.75v-3.5a.75.75 0 011.5 0v3.5A2.25 2.25 0 0118.75 21H5.25A2.25 2.25 0 013 18.75v-3.5a.75.75 0 01.5-.75z" className="w-4 h-4"/>;
-        const UploadIcon = () => <Icon path="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 7.5m0 0L7.5 12m4.5-4.5v11.25" className="w-4 h-4"/>;
-        const SearchIcon = () => <Icon path="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" className="w-5 h-5" />;
-        const FilterIcon = () => <Icon path="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z" className="w-4 h-4" />;
-        const CalendarIcon = () => <Icon path="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5a2.25 2.25 0 002.25-2.25m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5a2.25 2.25 0 012.25 2.25v7.5" className="w-4 h-4" />;
-        const StatsIcon = () => <Icon path="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" className="w-4 h-4" />;
-        const ClockIcon = () => <Icon path="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" className="w-4 h-4" />;
+      if (groupBy==='none') return filtered;
+      return filtered.reduce((acc, p) => {
+        let keys = [];
+        if (groupBy==='status') keys.push(p.submissions?.[p.submissions.length-1]?.status || 'Not Submitted');
+        else if (groupBy==='collaborator') keys = p.collaborators?.length ? p.collaborators : ['(No Collaborators)'];
+        else if (groupBy==='tag') keys = p.tags?.length ? p.tags : ['(No Tags)'];
+        keys.forEach(k => { (acc[k] = acc[k] || []).push(p); });
+        return acc;
+      }, {});
+    }, [papers, sortBy, groupBy, searchTerm, selectedStatus]);
 
-        // --- Theme Toggle Button ---
-        function ThemeToggleButton() {
-            const [isDark, setIsDark] = useState(ThemeManager.isDark());
+    // CRUD
+    const openForm = (paper=null) => { setEditingPaper(paper); setIsFormOpen(true); };
+    const closeForm = () => { setEditingPaper(null); setIsFormOpen(false); };
 
-            const handleToggle = () => {
-                ThemeManager.toggle();
-                setIsDark(ThemeManager.isDark());
-            };
+    const handleSavePaper = (paperData) => {
+      let updated;
+      if (editingPaper) updated = papers.map(p => p.id === editingPaper.id ? { ...p, ...paperData, updatedAt: new Date().toISOString() } : p);
+      else updated = [{ ...paperData, id: uid(), createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }, ...papers];
+      setPapers(updated); savePapersToGithub(updated); closeForm();
+    };
 
-            return (
-                <button onClick={handleToggle} type="button" aria-label="Toggle dark mode" className="text-slate-500 dark:text-slate-400 hover:bg-slate-100/50 dark:hover:bg-slate-700/50 rounded-lg text-sm p-2.5 glass-effect">
-                    {isDark ? (
-                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
-                    ) : (
-                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 5.05A1 1 0 016.465 3.636l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fillRule="evenodd" clipRule="evenodd"></path></svg>
-                    )}
-                </button>
-            );
-        }
+    const handleDeletePaper = (paperId) => { const updated = papers.filter(p => p.id !== paperId); setPapers(updated); savePapersToGithub(updated); setShowDeleteConfirm(null); };
 
-        // --- App Container with Authentication ---
-        function App() {
-            const [isAuthenticated, setIsAuthenticated] = useState(false);
+    // Backup / Restore / CSV
+    const backupJSON = () => {
+      const dataStr = JSON.stringify(papers, null, 2);
+      const url = URL.createObjectURL(new Blob([dataStr], { type: 'application/json' }));
+      const link = document.createElement('a');
+      link.href = url; link.download = `working-papers-backup-${new Date().toISOString().slice(0,10)}.json`; link.click();
+      URL.revokeObjectURL(url);
+    };
+    const restoreJSON = (event) => {
+      const file = event.target.files[0]; if (!file) return; const reader = new FileReader();
+      reader.onload = (e) => { try { const arr = JSON.parse(e.target.result); if (Array.isArray(arr) && confirm('Overwrite current data?')) { setPapers(arr); savePapersToGithub(arr); } else alert('Invalid file format.'); } catch { alert('Could not parse file.'); } };
+      reader.readAsText(file); event.target.value = null;
+    };
+    const exportCSV = () => {
+      const rows = [['id','title','collaborators','tags','status','lastJournal','lastDate']];
+      papers.forEach(p=>{
+        const last = p.submissions?.[p.submissions.length-1]||{};
+        rows.push([p.id, p.title, (p.collaborators||[]).join('; '), (p.tags||[]).join('; '), last.status||'Not Submitted', last.journal||'', last.date||'']);
+      });
+      const csv = rows.map(r=>r.map(x=>`"${String(x||'').replace(/"/g,'""')}"`).join(',')).join('\n');
+      const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+      const a = document.createElement('a'); a.href = url; a.download = 'working-papers.csv'; a.click(); URL.revokeObjectURL(url);
+    };
 
-            useEffect(() => {
-                if (sessionStorage.getItem(GITHUB_TOKEN_KEY)) {
-                    setIsAuthenticated(true);
-                }
-            }, []);
+    // Kanban DnD helpers
+    const updatePaperStatus = (paperId, newStatus) => {
+      const updated = papers.map(p => {
+        if (p.id !== paperId) return p;
+        const subs = p.submissions ? [...p.submissions] : [];
+        const last = subs[subs.length-1];
+        if (last && last.journal && last.status === newStatus) return p; // no-op
+        subs.push({ journal: last?.journal || '—', status: newStatus, date: todayISO(), createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
+        return { ...p, submissions: subs, updatedAt: new Date().toISOString() };
+      });
+      setPapers(updated); savePapersToGithub(updated);
+    };
 
-            const handleLoginSuccess = (token) => {
-                sessionStorage.setItem(GITHUB_TOKEN_KEY, token);
-                setIsAuthenticated(true);
-            };
+    if (isLoading) return (
+      <div className="min-h-screen flex flex-col items-center justify-center text-slate-500 dark:text-slate-400">
+        <div className="w-16 h-16 spinner border-4 border-slate-200 dark:border-slate-700"></div>
+        <p className="mt-4 text-lg">Loading your papers...</p>
+      </div>
+    );
 
-            if (!isAuthenticated) {
-                return <AuthScreen onLoginSuccess={handleLoginSuccess} />;
-            }
+    const all = Array.isArray(processedPapers) ? processedPapers : Object.values(processedPapers).flat();
 
-            return <PaperTrackerApp />;
-        }
-
-        // --- Authentication Screen Component ---
-        function AuthScreen({ onLoginSuccess }) {
-            const [token, setToken] = useState('');
-            const [error, setError] = useState('');
-            const [isVerifying, setIsVerifying] = useState(false);
-
-            const handleSubmit = async (e) => {
-                e.preventDefault();
-                setError('');
-                if (!token.trim()) {
-                    setError('Please enter a token.'); return;
-                }
-                setIsVerifying(true);
-                try {
-                    const response = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}`, {
-                        headers: { 'Authorization': `token ${token}` }
-                    });
-                    if (response.ok) {
-                        onLoginSuccess(token);
-                    } else {
-                        const errorData = await response.json();
-                        setError(`Verification failed: ${errorData.message}. Check your token and permissions.`);
-                    }
-                } catch (err) {
-                    setError('Network error. Could not verify token.');
-                } finally {
-                    setIsVerifying(false);
-                }
-            };
-
-            return (
-                <div className="min-h-screen flex items-center justify-center p-4">
-                    <div className="w-full max-w-md glass-effect p-8 rounded-2xl shadow-2xl">
-                        <div className="text-center mb-8">
-                            <div className="w-16 h-16 bg-gradient-to-r from-[var(--color-primary-light)] to-emerald-500 dark:from-[var(--color-primary-dark)] dark:to-emerald-400 rounded-full mx-auto mb-4 flex items-center justify-center shadow-lg">
-                                <i className="fa-solid fa-lock text-white text-2xl"></i>
-                            </div>
-                            <h1 className="text-3xl font-bold text-slate-800 dark:text-white mb-2">Authentication Required</h1>
-                            <p className="text-slate-600 dark:text-slate-300">Enter your GitHub token to access your papers.</p>
-                        </div>
-                        <form onSubmit={handleSubmit} className="space-y-6">
-                            <div>
-                                <input
-                                    type="password"
-                                    value={token}
-                                    onChange={(e) => setToken(e.target.value)}
-                                    className="w-full px-4 py-3 text-lg bg-white/50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-600 rounded-xl shadow-sm focus:ring-2 focus:ring-[var(--color-primary-light)] dark:focus:ring-[var(--color-primary-dark)] focus:border-transparent transition-all duration-200"
-                                    placeholder="github_pat_..."
-                                    disabled={isVerifying}
-                                />
-                                {error && <p className="text-red-500 text-sm mt-2 flex items-center gap-2">
-                                    <i className="fa-solid fa-circle-exclamation"></i>
-                                    {error}
-                                </p>}
-                            </div>
-                            <button type="submit" className="w-full btn-primary py-3" disabled={isVerifying}>
-                                {isVerifying ? <div className="spinner border-white dark:border-black border-l-transparent"></div> : 'Authorize & Continue'}
-                            </button>
-                        </form>
-                    </div>
+    return (
+      <div className="min-h-screen">
+        <div className="container mx-auto p-4 sm:p-6 lg:p-8 max-w-7xl">
+          <header className="mb-8">
+            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+              <div>
+                <h1 className="text-4xl font-bold bg-gradient-to-r from-[var(--color-primary-light)] to-emerald-600 dark:from-[var(--color-primary-dark)] dark:to-emerald-400 bg-clip-text text-transparent">Working Papers</h1>
+                <p className="text-slate-600 dark:text-slate-300 mt-2">Track research, submissions, links, and analytics</p>
+                <div className={`text-sm mt-2 transition-all duration-500 ${isSaving ? 'opacity-100' : 'opacity-0'}`}>
+                  <span className="flex items-center gap-2 text-[var(--color-primary-light)] dark:text-[var(--color-primary-dark)] font-semibold">
+                    <div className="w-3 h-3 spinner border-2 border-slate-200 dark:border-slate-700"></div>
+                    Syncing to GitHub...
+                  </span>
                 </div>
-            );
-        }
+              </div>
+              <div className="flex flex-wrap items-center gap-3">
+                <button onClick={()=>setShowStats(s=>!s)} className="flex items-center gap-2 glass-effect text-slate-700 dark:text-slate-200 font-semibold py-2.5 px-4 rounded-xl shadow-sm hover:shadow-md"><StatsIcon/><span className="hidden sm:inline">Stats</span></button>
+                <button onClick={exportCSV} className="flex items-center gap-2 glass-effect text-slate-700 dark:text-slate-200 font-semibold py-2.5 px-4 rounded-xl shadow-sm hover:shadow-md"><i className="fa-solid fa-file-csv"></i><span className="hidden sm:inline">CSV</span></button>
+                <button onClick={backupJSON} className="flex items-center gap-2 glass-effect text-slate-700 dark:text-slate-200 font-semibold py-2.5 px-4 rounded-xl shadow-sm hover:shadow-md"><DownloadIcon/><span className="hidden sm:inline">Backup</span></button>
+                <label className="flex items-center gap-2 glass-effect text-slate-700 dark:text-slate-200 font-semibold py-2.5 px-4 rounded-xl shadow-sm hover:shadow-md cursor-pointer"><UploadIcon/><span className="hidden sm:inline">Restore</span><input type="file" accept=".json" className="hidden" onChange={restoreJSON} /></label>
+                <ThemeToggleButton/>
+                <button onClick={()=>openForm()} className="btn-primary py-2.5 px-4"><PlusIcon/><span className="hidden sm:inline ml-2">Add Paper</span></button>
+              </div>
+            </div>
 
-        // --- Main Application Component ---
-        function PaperTrackerApp() {
-            const [papers, setPapers] = useState([]);
-            const [isLoading, setIsLoading] = useState(true);
-            const [isSaving, setIsSaving] = useState(false);
-            const [isFormOpen, setIsFormOpen] = useState(false);
-            const [editingPaper, setEditingPaper] = useState(null);
-            const [showDeleteConfirm, setShowDeleteConfirm] = useState(null);
-            const [groupBy, setGroupBy] = useState('none');
-            const [sortBy, setSortBy] = useState('latestAction');
-            const [searchTerm, setSearchTerm] = useState('');
-            const [selectedStatus, setSelectedStatus] = useState('all');
-            const [showStats, setShowStats] = useState(false);
-            const [fileSha, setFileSha] = useState(null);
-
-            const githubApiUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_DATA_PATH}`;
-            const token = sessionStorage.getItem(GITHUB_TOKEN_KEY);
-
-            const loadPapersFromGithub = useCallback(async () => {
-                setIsLoading(true);
-                try {
-                    const response = await fetch(githubApiUrl, { headers: { 'Authorization': `token ${token}` } });
-                    if (response.status === 404) {
-                        setPapers([]); setFileSha(null);
-                    } else if (response.ok) {
-                        const data = await response.json();
-                        setFileSha(data.sha);
-                        const content = atob(data.content);
-                        const parsedPapers = JSON.parse(content);
-                        const updatedPapers = parsedPapers.map(paper => ({ ...paper, createdAt: paper.createdAt || new Date().toISOString() }));
-                        setPapers(updatedPapers);
-                    } else {
-                        const errorData = await response.json();
-                        console.error("Error loading papers:", errorData.message);
-                        alert(`Error loading data: ${errorData.message}`);
-                    }
-                } catch (error) {
-                    console.error("Failed to fetch from GitHub:", error);
-                    alert("A network error occurred while loading data.");
-                } finally {
-                    setIsLoading(false);
-                }
-            }, [githubApiUrl, token]);
-
-            const savePapersToGithub = useCallback(async (papersToSave) => {
-                if (isLoading) return;
-                setIsSaving(true);
-                const content = btoa(JSON.stringify(papersToSave, null, 2));
-                try {
-                    const response = await fetch(githubApiUrl, {
-                        method: 'PUT',
-                        headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ message: `Update papers data: ${new Date().toISOString()}`, content, sha: fileSha }),
-                    });
-                    if (response.ok) {
-                        const data = await response.json();
-                        setFileSha(data.content.sha);
-                    } else {
-                        const errorData = await response.json();
-                        console.error("Error saving papers:", errorData.message);
-                        alert(`Error saving data: ${errorData.message}`);
-                        loadPapersFromGithub();
-                    }
-                } catch (error) {
-                    console.error("Failed to save to GitHub:", error);
-                    alert("A network error occurred while saving data.");
-                    loadPapersFromGithub();
-                } finally {
-                    setIsSaving(false);
-                }
-            }, [fileSha, githubApiUrl, token, isLoading, loadPapersFromGithub]);
-            
-            useEffect(() => { loadPapersFromGithub(); }, [loadPapersFromGithub]);
-
-            const allJournals = useMemo(() => Array.from(new Set(papers.flatMap(p => p.submissions?.map(s => s.journal).filter(Boolean) || []))), [papers]);
-            const allTags = useMemo(() => Array.from(new Set(papers.flatMap(p => p.tags?.filter(Boolean) || []))), [papers]);
-
-            const stats = useMemo(() => {
-                const acceptedPapers = papers.filter(p => p.submissions?.[p.submissions.length - 1]?.status === 'Accepted');
-                
-                const acceptanceTimes = acceptedPapers.map(p => {
-                    const firstSub = p.submissions[0];
-                    const lastSub = p.submissions[p.submissions.length - 1];
-                    if (!firstSub || lastSub.status !== 'Accepted') return null;
-                    const startDate = new Date(firstSub.date || firstSub.createdAt);
-                    const endDate = new Date(lastSub.date || lastSub.updatedAt);
-                    const diffTime = Math.abs(endDate - startDate);
-                    return Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-                }).filter(t => t !== null);
-
-                const avgTimeToAcceptanceInDays = acceptanceTimes.length > 0
-                    ? Math.round(acceptanceTimes.reduce((a, b) => a + b, 0) / acceptanceTimes.length)
-                    : 0;
-
-                const acceptanceYears = {};
-                acceptedPapers.forEach(p => {
-                    const lastSub = p.submissions[p.submissions.length - 1];
-                    const year = new Date(lastSub.date || lastSub.updatedAt).getFullYear();
-                    acceptanceYears[year] = (acceptanceYears[year] || 0) + 1;
-                });
-                const yearsWithAcceptances = Object.keys(acceptanceYears).length;
-                const avgAcceptedPerYear = yearsWithAcceptances > 0 
-                    ? (acceptedPapers.length / yearsWithAcceptances).toFixed(1) 
-                    : 0;
-
-                return {
-                    total: papers.length,
-                    accepted: acceptedPapers.length,
-                    underReview: papers.filter(p => ['Submitted', 'Under Revision'].includes(p.submissions?.[p.submissions.length - 1]?.status)).length,
-                    notSubmitted: papers.filter(p => !p.submissions || p.submissions.length === 0).length,
-                    avgTimeToAcceptanceInDays,
-                    avgAcceptedPerYear
-                };
-            }, [papers]);
-
-            const processedPapers = useMemo(() => {
-                const getTimeToAcceptance = (paper) => {
-                    const lastSub = paper.submissions?.[paper.submissions.length - 1];
-                    if (!lastSub || lastSub.status !== 'Accepted' || !paper.submissions[0]) {
-                        return Infinity;
-                    }
-                    const firstSub = paper.submissions[0];
-                    const startDate = new Date(firstSub.date || firstSub.createdAt);
-                    const endDate = new Date(lastSub.date || lastSub.updatedAt);
-                    const diffTime = Math.abs(endDate - startDate);
-                    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                };
-
-                let filtered = [...papers];
-                if (searchTerm) {
-                    filtered = filtered.filter(p =>
-                        p.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                        p.collaborators?.some(c => c.toLowerCase().includes(searchTerm.toLowerCase())) ||
-                        p.tags?.some(t => t.toLowerCase().includes(searchTerm.toLowerCase()))
-                    );
-                }
-                if (selectedStatus !== 'all') {
-                    filtered = filtered.filter(p => (p.submissions?.[p.submissions.length - 1]?.status || 'Not Submitted') === selectedStatus);
-                }
-                
-                filtered.sort((a, b) => {
-                    if (sortBy === 'title') {
-                        return a.title.localeCompare(b.title);
-                    }
-                    
-                    if (sortBy === 'timeToAcceptance') {
-                        return getTimeToAcceptance(a) - getTimeToAcceptance(b);
-                    }
-
-                    const aIsSubmitted = a.submissions && a.submissions.length > 0;
-                    const bIsSubmitted = b.submissions && b.submissions.length > 0;
-
-                    if (!aIsSubmitted && bIsSubmitted) return -1;
-                    if (aIsSubmitted && !bIsSubmitted) return 1;
-
-                    if (aIsSubmitted && bIsSubmitted) {
-                        const aLastSub = a.submissions[a.submissions.length - 1];
-                        const bLastSub = b.submissions[b.submissions.length - 1];
-                        const aDate = new Date(aLastSub.date || aLastSub.updatedAt || aLastSub.createdAt);
-                        const bDate = new Date(bLastSub.date || bLastSub.updatedAt || bLastSub.createdAt);
-                        return bDate - aDate;
-                    }
-
-                    return new Date(b.createdAt) - new Date(a.createdAt);
-                });
-
-                if (groupBy === 'none') return filtered;
-                
-                return filtered.reduce((acc, paper) => {
-                    let keys = [];
-                    if (groupBy === 'status') keys.push(paper.submissions?.[paper.submissions.length - 1]?.status || 'Not Submitted');
-                    else if (groupBy === 'collaborator') keys = paper.collaborators?.length ? paper.collaborators : ['(No Collaborators)'];
-                    else if (groupBy === 'tag') keys = paper.tags?.length ? paper.tags : ['(No Tags)'];
-                    keys.forEach(key => { (acc[key] = acc[key] || []).push(paper); });
-                    return acc;
-                }, {});
-            }, [papers, sortBy, groupBy, searchTerm, selectedStatus]);
-
-            const handleSavePaper = (paperData) => {
-                let updatedPapers;
-                if (editingPaper) {
-                    updatedPapers = papers.map(p => p.id === editingPaper.id ? { ...p, ...paperData, updatedAt: new Date().toISOString() } : p);
-                } else {
-                    updatedPapers = [{ ...paperData, id: crypto.randomUUID(), createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }, ...papers];
-                }
-                setPapers(updatedPapers);
-                savePapersToGithub(updatedPapers);
-                closeForm();
-            };
-            
-            const handleDeletePaper = (paperId) => {
-                const updatedPapers = papers.filter(p => p.id !== paperId);
-                setPapers(updatedPapers);
-                savePapersToGithub(updatedPapers);
-                setShowDeleteConfirm(null);
-            };
-
-            const handleDownload = () => {
-                const dataStr = JSON.stringify(papers, null, 2);
-                const url = URL.createObjectURL(new Blob([dataStr], { type: "application/json" }));
-                const link = document.createElement("a");
-                link.href = url;
-                link.download = `working-papers-backup-${new Date().toISOString().slice(0,10)}.json`;
-                link.click();
-                URL.revokeObjectURL(url);
-            };
-
-            const handleUpload = (event) => {
-                const file = event.target.files[0];
-                if (!file) return;
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    try {
-                        const uploadedPapers = JSON.parse(e.target.result);
-                        if (Array.isArray(uploadedPapers) && confirm("This will overwrite your current data. Are you sure?")) {
-                            setPapers(uploadedPapers);
-                            savePapersToGithub(uploadedPapers);
-                        } else alert("Invalid file format.");
-                    } catch (error) { alert("Could not parse file."); }
-                };
-                reader.readAsText(file);
-                event.target.value = null;
-            };
-
-            const openForm = (paper = null) => { setEditingPaper(paper); setIsFormOpen(true); };
-            const closeForm = () => { setEditingPaper(null); setIsFormOpen(false); };
-            const handleDeleteRequest = (paperId) => setShowDeleteConfirm(paperId);
-
-            if (isLoading) return (
-                <div className="min-h-screen flex flex-col items-center justify-center text-slate-500 dark:text-slate-400">
-                    <div className="w-16 h-16 spinner border-4 border-slate-200 dark:border-slate-700"></div>
-                    <p className="mt-4 text-lg">Loading your papers...</p>
+            {showStats && (
+              <div className="mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                <StatCard label="Total" value={stats.total}/>
+                <StatCard label="Accepted" value={stats.accepted} accent="emerald"/>
+                <StatCard label="Under Review" value={stats.underReview} accent="amber"/>
+                <StatCard label="Not Submitted" value={stats.notSubmitted}/>
+                <StatCard label="Acceptance Rate" value={`${stats.acceptanceRate}%`}/>
+                <StatCard label="Median Days to Acceptance" value={stats.medianDaysToAcceptance}/>
+                <div className="glass-effect rounded-xl p-4 shadow-sm col-span-2 md:col-span-3 lg:col-span-6">
+                  <div className="flex items-center justify-between mb-2"><h3 className="text-sm font-semibold text-slate-600 dark:text-slate-300">Top Journals by Submissions</h3></div>
+                  <canvas ref={chartRef} height="120"></canvas>
                 </div>
-            );
+              </div>
+            )}
+          </header>
 
-            return (
-                <div className="min-h-screen font-sans">
-                    <div className="container mx-auto p-4 sm:p-6 lg:p-8 max-w-7xl">
-                        <header className="mb-8">
-                            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
-                                <div>
-                                    <h1 className="text-4xl font-bold bg-gradient-to-r from-[var(--color-primary-light)] to-emerald-600 dark:from-[var(--color-primary-dark)] dark:to-emerald-400 bg-clip-text text-transparent">
-                                        Working Papers
-                                    </h1>
-                                    <p className="text-slate-600 dark:text-slate-300 mt-2">Track your research progress and submissions</p>
-                                    <div className={`text-sm mt-2 transition-all duration-500 ${isSaving ? 'opacity-100' : 'opacity-0'}`}>
-                                        <span className="flex items-center gap-2 text-[var(--color-primary-light)] dark:text-[var(--color-primary-dark)] font-semibold">
-                                            <div className="w-3 h-3 spinner border-2 border-slate-200 dark:border-slate-700"></div>
-                                            Syncing to GitHub...
-                                        </span>
-                                    </div>
-                                </div>
-                                <div className="flex flex-wrap items-center gap-3">
-                                    <button onClick={() => setShowStats(!showStats)} className="flex items-center gap-2 glass-effect text-slate-700 dark:text-slate-200 font-semibold py-2.5 px-4 rounded-xl shadow-sm hover:shadow-md transition-all"> <StatsIcon /> <span className="hidden sm:inline">Stats</span> </button>
-                                    <button onClick={handleDownload} className="flex items-center gap-2 glass-effect text-slate-700 dark:text-slate-200 font-semibold py-2.5 px-4 rounded-xl shadow-sm hover:shadow-md transition-all"> <DownloadIcon /> <span className="hidden sm:inline">Backup</span> </button>
-                                    <label className="flex items-center gap-2 glass-effect text-slate-700 dark:text-slate-200 font-semibold py-2.5 px-4 rounded-xl shadow-sm hover:shadow-md transition-all cursor-pointer"> <UploadIcon /> <span className="hidden sm:inline">Restore</span> <input type="file" accept=".json" className="hidden" onChange={handleUpload} /> </label>
-                                    <ThemeToggleButton />
-                                    <button onClick={() => openForm()} className="btn-primary py-2.5 px-4"> <PlusIcon /> <span className="hidden sm:inline ml-2">Add Paper</span> </button>
-                                </div>
-                            </div>
-                            {showStats && (
-                                <div className="mt-6 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                                    <div className="glass-effect rounded-xl p-4 shadow-sm"><div className="text-2xl font-bold text-slate-800 dark:text-white">{stats.total}</div><div className="text-sm text-slate-600 dark:text-slate-400">Total Papers</div></div>
-                                    <div className="glass-effect rounded-xl p-4 shadow-sm"><div className="text-2xl font-bold text-emerald-700 dark:text-emerald-400">{stats.accepted}</div><div className="text-sm text-emerald-600 dark:text-emerald-500">Accepted</div></div>
-                                    <div className="glass-effect rounded-xl p-4 shadow-sm"><div className="text-2xl font-bold text-amber-700 dark:text-amber-400">{stats.underReview}</div><div className="text-sm text-amber-600 dark:text-amber-500">Under Review</div></div>
-                                    <div className="glass-effect rounded-xl p-4 shadow-sm"><div className="text-2xl font-bold text-slate-700 dark:text-slate-300">{stats.notSubmitted}</div><div className="text-sm text-slate-600 dark:text-slate-400">Not Submitted</div></div>
-                                    <div className="glass-effect rounded-xl p-4 shadow-sm"><div className="text-2xl font-bold text-slate-800 dark:text-white">{stats.avgTimeToAcceptanceInDays}<span className="text-base font-medium"> days</span></div><div className="text-sm text-slate-600 dark:text-slate-400">Avg. Time to Acceptance</div></div>
-                                    <div className="glass-effect rounded-xl p-4 shadow-sm"><div className="text-2xl font-bold text-slate-800 dark:text-white">{stats.avgAcceptedPerYear}<span className="text-base font-medium"> /yr</span></div><div className="text-sm text-slate-600 dark:text-slate-400">Avg. Accepted</div></div>
-                                </div>
-                            )}
-                        </header>
-                        <div className="mb-8 p-4 glass-effect rounded-xl shadow-sm">
-                            <div className="flex flex-wrap gap-4 items-center">
-                                <div className="relative flex-grow min-w-[250px]">
-                                    <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 dark:text-slate-500" />
-                                    <input type="text" placeholder="Search papers, collaborators..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-white/50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 rounded-xl shadow-sm focus:ring-2 focus:ring-[var(--color-primary-light)] dark:focus:ring-[var(--color-primary-dark)] focus:border-transparent transition" />
-                                </div>
-                                <div className="flex items-center gap-2"><label htmlFor="status-filter" className="text-sm font-medium text-slate-700 dark:text-slate-300">Status:</label><select id="status-filter" value={selectedStatus} onChange={e => setSelectedStatus(e.target.value)} className="rounded-lg border-slate-300 dark:border-slate-600 shadow-sm text-sm bg-white/80 dark:bg-slate-700/80 dark:text-white"><option value="all">All</option><option value="Accepted">Accepted</option><option value="Under Revision">Under Revision</option><option value="Submitted">Submitted</option><option value="Rejected">Rejected</option><option value="Not Submitted">Not Submitted</option></select></div>
-                                <div className="flex items-center gap-2"><label htmlFor="group-by" className="text-sm font-medium text-slate-700 dark:text-slate-300">Group:</label><select id="group-by" value={groupBy} onChange={e => setGroupBy(e.target.value)} className="rounded-lg border-slate-300 dark:border-slate-600 shadow-sm text-sm bg-white/80 dark:bg-slate-700/80 dark:text-white"><option value="none">None</option><option value="status">Status</option><option value="collaborator">Collaborator</option><option value="tag">Tag</option></select></div>
-                                <div className="flex items-center gap-2"><label htmlFor="sort-by" className="text-sm font-medium text-slate-700 dark:text-slate-300">Sort:</label><select id="sort-by" value={sortBy} onChange={e => setSortBy(e.target.value)} className="rounded-lg border-slate-300 dark:border-slate-600 shadow-sm text-sm bg-white/80 dark:bg-slate-700/80 dark:text-white"><option value="latestAction">Latest Action</option><option value="title">Title</option><option value="timeToAcceptance">Time to Acceptance</option></select></div>
-                            </div>
-                        </div>
-                        {isFormOpen && <PaperForm onSave={handleSavePaper} onClose={closeForm} paper={editingPaper} journalSuggestions={allJournals} tagSuggestions={allTags} />}
-                        {showDeleteConfirm && <ConfirmationModal title="Delete Paper" message="Are you sure? This action cannot be undone." onConfirm={() => handleDeletePaper(showDeleteConfirm)} onCancel={() => setShowDeleteConfirm(null)} />}
-                        <PaperList papers={processedPapers} isGrouped={groupBy !== 'none'} onEdit={openForm} onDelete={handleDeleteRequest} searchTerm={searchTerm} />
-                        {papers.length === 0 && !isLoading && (
-                            <div className="text-center py-20 px-4 glass-effect rounded-2xl shadow-sm">
-                                <div className="w-24 h-24 bg-gradient-to-r from-emerald-100 to-green-100 dark:from-emerald-900/50 dark:to-green-900/50 rounded-full mx-auto mb-6 flex items-center justify-center"><i className="fa-solid fa-file-circle-plus text-4xl text-[var(--color-primary-light)] dark:text-[var(--color-primary-dark)]"></i></div>
-                                <h2 className="text-2xl font-semibold text-slate-700 dark:text-slate-200 mb-2">No papers yet!</h2>
-                                <p className="text-slate-500 dark:text-slate-400 mb-6">Start tracking your research by adding your first paper.</p>
-                                <button onClick={() => openForm()} className="btn-primary"><PlusIcon /> <span className="ml-2">Add Your First Paper</span></button>
-                            </div>
-                        )}
-                        {papers.length > 0 && (Array.isArray(processedPapers) ? processedPapers.length === 0 : Object.keys(processedPapers).length === 0) && (
-                            <div className="text-center py-16 px-4 glass-effect rounded-2xl shadow-sm">
-                                <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full mx-auto mb-4 flex items-center justify-center"><SearchIcon className="text-slate-400 dark:text-slate-500" /></div>
-                                <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 mb-2">No papers found</h3>
-                                <p className="text-slate-500 dark:text-slate-400">Try adjusting your search or filter criteria.</p>
-                            </div>
-                        )}
+          <div className="mb-4 flex flex-wrap gap-3 items-center">
+            <div className="relative flex-grow min-w-[240px]">
+              <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500"/>
+              <input type="text" placeholder="Search title, abstract, collaborators, tags, links..." value={searchTerm} onChange={e=>setSearchTerm(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-white/50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 rounded-xl shadow-sm focus:ring-2 focus:ring-[var(--color-primary-light)] dark:focus:ring-[var(--color-primary-dark)] focus:border-transparent"/>
+            </div>
+            <Select label="Status" value={selectedStatus} onChange={setSelectedStatus} options={[['all','All'],['Accepted','Accepted'],['Under Revision','Under Revision'],['Submitted','Submitted'],['Rejected','Rejected'],['Not Submitted','Not Submitted']]}/>
+            <Select label="Group" value={groupBy} onChange={setGroupBy} options={[['none','None'],['status','Status'],['collaborator','Collaborator'],['tag','Tag']]}/>
+            <Select label="Sort" value={sortBy} onChange={setSortBy} options={[['latestAction','Latest Action'],['title','Title'],['timeToAcceptance','Time to Acceptance']]}/>
+            <Toggle labelLeft="List" labelRight="Kanban" value={view==='kanban'} onToggle={()=>setView(v=>v==='list'?'kanban':'list')}/>
+          </div>
+
+          {isFormOpen && <PaperForm onSave={handleSavePaper} onClose={closeForm} paper={editingPaper} journalSuggestions={allJournals} tagSuggestions={allTags} />}
+          {showDeleteConfirm && <ConfirmationModal title="Delete Paper" message="This action cannot be undone." onConfirm={()=>handleDeletePaper(showDeleteConfirm)} onCancel={()=>setShowDeleteConfirm(null)} />}
+
+          {view==='list' ? (
+            <PaperList papers={processedPapers} isGrouped={groupBy!=='none'} onEdit={openForm} onDelete={setShowDeleteConfirm} searchTerm={searchTerm} />
+          ) : (
+            <KanbanBoard papers={all} onEdit={openForm} onDelete={setShowDeleteConfirm} onDropStatus={updatePaperStatus}/>
+          )}
+
+          {papers.length===0 && !isLoading && (
+            <EmptyState onAdd={()=>openForm()}/>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  function StatCard({ label, value, accent }){
+    const color = accent==='emerald' ? 'text-emerald-700 dark:text-emerald-400' : accent==='amber' ? 'text-amber-700 dark:text-amber-400' : 'text-slate-800 dark:text-white';
+    return (
+      <div className="glass-effect rounded-xl p-4 shadow-sm">
+        <div className={`text-2xl font-bold ${color}`}>{value}</div>
+        <div className="text-sm text-slate-600 dark:text-slate-400">{label}</div>
+      </div>
+    );
+  }
+
+  function Toggle({ labelLeft, labelRight, value, onToggle }){
+    return (
+      <button onClick={onToggle} className="glass-effect rounded-xl px-3 py-2 text-sm font-semibold">
+        <span className={!value? 'text-emerald-600 dark:text-emerald-400' : ''}>{labelLeft}</span>
+        <span className="mx-2">/</span>
+        <span className={value? 'text-emerald-600 dark:text-emerald-400' : ''}>{labelRight}</span>
+      </button>
+    );
+  }
+
+  function Select({ label, value, onChange, options }){
+    return (
+      <div className="flex items-center gap-2">
+        <label className="text-sm font-medium text-slate-700 dark:text-slate-300">{label}:</label>
+        <select value={value} onChange={(e)=>onChange(e.target.value)} className="rounded-lg border-slate-300 dark:border-slate-600 shadow-sm text-sm bg-white/80 dark:bg-slate-700/80 dark:text-white">
+          {options.map(([v,t]) => <option key={v} value={v}>{t}</option>)}
+        </select>
+      </div>
+    );
+  }
+
+  function EmptyState({ onAdd }){
+    return (
+      <div className="text-center py-20 px-4 glass-effect rounded-2xl shadow-sm">
+        <div className="w-24 h-24 bg-gradient-to-r from-emerald-100 to-green-100 dark:from-emerald-900/50 dark:to-green-900/50 rounded-full mx-auto mb-6 flex items-center justify-center"><i className="fa-solid fa-file-circle-plus text-4xl text-[var(--color-primary-light)] dark:text-[var(--color-primary-dark)]"></i></div>
+        <h2 className="text-2xl font-semibold text-slate-700 dark:text-slate-200 mb-2">No papers yet!</h2>
+        <p className="text-slate-500 dark:text-slate-400 mb-6">Start tracking your research by adding your first paper.</p>
+        <button onClick={onAdd} className="btn-primary"><i className="fa-solid fa-plus mr-2"></i>Add Your First Paper</button>
+      </div>
+    );
+  }
+
+  // --- Confirmation Modal ---
+  function ConfirmationModal({ title, message, onConfirm, onCancel }){
+    return (
+      <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex justify-center items-center p-4 z-50">
+        <div className="glass-effect rounded-2xl shadow-2xl p-6 w-full max-w-sm">
+          <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">{title}</h3>
+          <p className="text-slate-600 dark:text-slate-300 mb-6">{message}</p>
+          <div className="flex justify-end gap-3">
+            <button onClick={onCancel} className="px-4 py-2 bg-slate-200/50 dark:bg-slate-700/50 text-slate-800 dark:text-slate-200 rounded-lg hover:bg-slate-300/50 dark:hover:bg-slate-600/50 font-semibold">Cancel</button>
+            <button onClick={onConfirm} className="px-4 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700">Delete</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // --- Form ---
+  function PaperForm({ onSave, onClose, paper, journalSuggestions, tagSuggestions }){
+    const [title, setTitle] = useState(paper?.title || '');
+    const [abstract, setAbstract] = useState(paper?.abstract || '');
+    const [collaborators, setCollaborators] = useState(paper?.collaborators?.join(', ') || '');
+    const [tags, setTags] = useState(paper?.tags?.join(', ') || '');
+    const [notes, setNotes] = useState(paper?.notes || '');
+    const [links, setLinks] = useState(paper?.links || []); // {label,url}
+    const [submissions, setSubmissions] = useState(paper?.submissions || []);
+    const [error, setError] = useState('');
+
+    const addLink = () => setLinks([...links, { label: '', url: '' }]);
+    const removeLink = (i) => setLinks(links.filter((_,idx)=>idx!==i));
+    const updateLink = (i, key, value) => setLinks(links.map((l,idx)=> idx===i ? { ...l, [key]: value } : l));
+
+    const addSubmission = () => setSubmissions([...(submissions||[]), { journal: '', status: 'Submitted', date: todayISO(), createdAt: new Date().toISOString() }]);
+    const removeSubmission = (i) => setSubmissions(submissions.filter((_,idx)=>idx!==i));
+    const handleSubmissionChange = (i, field, value) => setSubmissions(submissions.map((s,idx)=> idx===i ? { ...s, [field]: value, updatedAt: new Date().toISOString() } : s));
+
+    const submit = (e) => {
+      e.preventDefault(); if(!title.trim()){ setError('Paper title is required.'); return; }
+      onSave({
+        title,
+        abstract,
+        collaborators: collaborators.split(',').map(c=>c.trim()).filter(Boolean),
+        tags: tags.split(',').map(t=>t.trim()).filter(Boolean),
+        notes,
+        links: links.filter(l=>l.url?.trim()),
+        submissions: (submissions||[]).filter(s=> (s.journal||'').trim()!=='' ),
+      });
+    };
+
+    return (
+      <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex justify-center items-start p-4 z-40 overflow-y-auto custom-scrollbar">
+        <div className="glass-effect rounded-2xl shadow-2xl mt-8 mb-8 p-6 w-full max-w-4xl">
+          <h2 className="text-3xl font-bold text-slate-800 dark:text-white mb-6">{paper ? 'Edit Paper' : 'Add New Paper'}</h2>
+          {error && <div className="bg-red-100 dark:bg-red-900/30 border border-red-200 dark:border-red-500/30 text-red-800 dark:text-red-300 px-4 py-3 rounded-xl mb-6 flex items-center gap-2"><i className="fa-solid fa-circle-exclamation"></i>{error}</div>}
+          <form onSubmit={submit} className="space-y-6">
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Paper Title *</label>
+              <input value={title} onChange={e=>setTitle(e.target.value)} className="w-full px-4 py-3 bg-white/50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-600 rounded-xl shadow-sm focus:ring-2 focus:ring-[var(--color-primary-light)] dark:focus:ring-[var(--color-primary-dark)] focus:border-transparent" placeholder="Enter your paper title..." required />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Abstract</label>
+              <textarea value={abstract} onChange={e=>setAbstract(e.target.value)} rows="4" className="w-full px-4 py-3 bg-white/50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-600 rounded-xl shadow-sm focus:ring-2 focus:ring-[var(--color-primary-light)] dark:focus:ring-[var(--color-primary-dark)] resize-y" placeholder="Short abstract..." />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Collaborators</label>
+                <input value={collaborators} onChange={e=>setCollaborators(e.target.value)} className="w-full px-4 py-3 bg-white/50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-600 rounded-xl shadow-sm focus:ring-2 focus:ring-[var(--color-primary-light)] dark:focus:ring-[var(--color-primary-dark)]" placeholder="UNINA, Oxford..." />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Tags</label>
+                <input value={tags} onChange={e=>setTags(e.target.value)} list="tag-list" className="w-full px-4 py-3 bg-white/50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-600 rounded-xl shadow-sm focus:ring-2 focus:ring-[var(--color-primary-light)] dark:focus:ring-[var(--color-primary-dark)]" placeholder="fmm, economics..." />
+                <datalist id="tag-list">{tagSuggestions.map(t => <option key={t} value={t} />)}</datalist>
+              </div>
+            </div>
+
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-lg font-semibold text-slate-800 dark:text-white">External Links</h3>
+                <button type="button" onClick={addLink} className="px-3 py-1.5 bg-green-100 dark:bg-green-800/40 text-green-800 dark:text-green-200 rounded-lg text-sm font-semibold hover:bg-green-200 dark:hover:bg-green-800/60"><i className="fa-solid fa-plus mr-1"></i>Add</button>
+              </div>
+              <div className="space-y-3">
+                {links.length ? links.map((l,i)=> (
+                  <div key={i} className="grid grid-cols-1 md:grid-cols-12 gap-3 p-3 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50/50 dark:bg-slate-800/30">
+                    <div className="md:col-span-4"><label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">Label</label><input value={l.label} onChange={e=>updateLink(i,'label',e.target.value)} placeholder="Overleaf / Zotero / DOI / OSF / ORCID" className="w-full px-3 py-2 bg-white/80 dark:bg-slate-700/80 border border-slate-300 dark:border-slate-600 rounded-lg text-sm"/></div>
+                    <div className="md:col-span-7"><label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">URL</label><input value={l.url} onChange={e=>updateLink(i,'url',e.target.value)} placeholder="https://..." className="w-full px-3 py-2 bg-white/80 dark:bg-slate-700/80 border border-slate-300 dark:border-slate-600 rounded-lg text-sm"/></div>
+                    <div className="md:col-span-1 flex items-end"><button type="button" onClick={()=>removeLink(i)} className="p-2 text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-500 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg" title="Remove"><TrashIcon/></button></div>
+                  </div>
+                )) : (
+                  <div className="text-center py-6 text-slate-500 dark:text-slate-400 bg-slate-50/50 dark:bg-slate-800/30 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-700">No links yet.</div>
+                )}
+              </div>
+            </div>
+
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-lg font-semibold text-slate-800 dark:text-white">Submission History</h3>
+                <button type="button" onClick={addSubmission} className="px-3 py-1.5 bg-green-100 dark:bg-green-800/40 text-green-800 dark:text-green-200 rounded-lg text-sm font-semibold hover:bg-green-200 dark:hover:bg-green-800/60"><i className="fa-solid fa-plus mr-1"></i>Add</button>
+              </div>
+              <div className="space-y-4 max-h-80 overflow-y-auto custom-scrollbar p-1">
+                <datalist id="journal-list">{journalSuggestions.map(j => <option key={j} value={j} />)}</datalist>
+                {submissions.length ? submissions.map((s,i)=> (
+                  <div key={i} className="grid grid-cols-1 md:grid-cols-12 gap-4 p-4 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50/50 dark:bg-slate-800/30">
+                    <div className="md:col-span-5"><label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">Journal</label><input value={s.journal} list="journal-list" onChange={e=>handleSubmissionChange(i,'journal',e.target.value)} placeholder="Journal Name" className="w-full px-3 py-2 bg-white/80 dark:bg-slate-700/80 border border-slate-300 dark:border-slate-600 rounded-lg text-sm" required/></div>
+                    <div className="md:col-span-3"><label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">Status</label><select value={s.status} onChange={e=>handleSubmissionChange(i,'status',e.target.value)} className="w-full px-3 py-2 bg-white/80 dark:bg-slate-700/80 border border-slate-300 dark:border-slate-600 rounded-lg text-sm"><option>Submitted</option><option>Under Revision</option><option>Rejected</option><option>Accepted</option></select></div>
+                    <div className="md:col-span-3"><label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">Date</label><input type="date" value={s.date||''} onChange={e=>handleSubmissionChange(i,'date',e.target.value)} className="w-full px-3 py-2 bg-white/80 dark:bg-slate-700/80 border border-slate-300 dark:border-slate-600 rounded-lg text-sm"/></div>
+                    <div className="md:col-span-1 flex items-end"><button type="button" onClick={()=>removeSubmission(i)} className="p-2 text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-500 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg" title="Remove"><TrashIcon/></button></div>
+                  </div>
+                )) : (
+                  <div className="text-center py-8 text-slate-500 dark:text-slate-400 bg-slate-50/50 dark:bg-slate-800/30 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-700"><CalendarIcon className="mx-auto mb-2"/><p className="text-sm">No submissions yet.</p></div>
+                )}
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Notes</label>
+              <textarea value={notes} onChange={e=>setNotes(e.target.value)} rows="3" className="w-full px-4 py-3 bg-white/50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-600 rounded-xl shadow-sm focus:ring-2 focus:ring-[var(--color-primary-light)] dark:focus:ring-[var(--color-primary-dark)] resize-y" placeholder="Additional notes..."></textarea>
+            </div>
+
+            <div className="flex justify-end gap-4 pt-6 border-t border-slate-200 dark:border-slate-700">
+              <button type="button" onClick={onClose} className="px-6 py-3 bg-slate-200/50 dark:bg-slate-700/50 text-slate-800 dark:text-slate-200 rounded-xl border border-slate-300 dark:border-slate-600 hover:bg-slate-300/50 dark:hover:bg-slate-600/50 font-semibold">Cancel</button>
+              <button type="submit" className="btn-primary px-6 py-3">{paper ? 'Update Paper' : 'Save Paper'}</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    );
+  }
+
+  // --- List ---
+  function PaperList({ papers, isGrouped, onEdit, onDelete, searchTerm }){
+    if (isGrouped) {
+      return (
+        <div className="space-y-8">
+          {Object.keys(papers).sort().map(groupName => (
+            <div key={groupName}>
+              <div className="flex items-center gap-3 mb-4"><h2 className="text-xl font-bold text-slate-700 dark:text-slate-200">{groupName}</h2><span className="bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-semibold px-2 py-1 rounded-full">{papers[groupName].length}</span></div>
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">{papers[groupName].map(p => <PaperItem key={p.id} paper={p} onEdit={onEdit} onDelete={onDelete} searchTerm={searchTerm} />)}</div>
+            </div>
+          ))}
+        </div>
+      );
+    }
+    return <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">{papers.map(p => <PaperItem key={p.id} paper={p} onEdit={onEdit} onDelete={onDelete} searchTerm={searchTerm} />)}</div>;
+  }
+
+  function Chip({ colorClass, children }){
+    return <span className={`text-xs font-semibold px-3 py-1 rounded-full ${colorClass}`}>{children}</span>;
+  }
+  function statusChipClass(status){
+    const base = 'text-xs font-semibold px-3 py-1 rounded-full';
+    switch(status){
+      case 'Accepted': return `${base} bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-300`;
+      case 'Under Revision': return `${base} bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-300`;
+      case 'Rejected': return `${base} bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300`;
+      case 'Submitted': return `${base} bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300`;
+      default: return `${base} bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-300`;
+    }
+  }
+
+  function highlight(text, term){
+    if(!term) return text; const parts = String(text||'').split(new RegExp(`(${term})`, 'gi')); return parts.map((p,i)=> p.toLowerCase()===term.toLowerCase() ? <mark key={i} className="bg-emerald-200/50 dark:bg-emerald-400/30 text-emerald-900 dark:text-emerald-100 px-0.5 rounded">{p}</mark> : p);
+  }
+
+  function PaperItem({ paper, onEdit, onDelete, searchTerm }){
+    const latest = paper.submissions?.[paper.submissions.length-1];
+    const status = latest?.status || 'Not Submitted';
+
+    const timeToAcceptance = useMemo(()=>{
+      if(status!=='Accepted' || !paper.submissions?.length) return null;
+      const first = paper.submissions[0];
+      const last = latest; const start = new Date(first.date||first.createdAt); const end = new Date(last.date||last.updatedAt);
+      const days = Math.ceil((end-start)/(1000*60*60*24));
+      return `${days} days`;
+    }, [paper, status, latest]);
+
+    return (
+      <div className="glass-effect rounded-2xl p-6 transition duration-300 hover:shadow-lg hover:bg-white/70 dark:hover:bg-slate-800/70 group flex flex-col h-full">
+        <div className="flex items-start justify-between mb-3">
+          <div className="flex flex-col gap-2">
+            <div className={statusChipClass(status)}>{status}</div>
+            {timeToAcceptance && (<div className="text-xs font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1.5"><i className="fa-solid fa-trophy text-amber-500"></i><span>{timeToAcceptance}</span></div>)}
+          </div>
+          <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition">
+            <button onClick={()=>onEdit(paper)} className="p-2 text-slate-400 dark:text-slate-500 hover:text-[var(--color-primary-light)] dark:hover:text-[var(--color-primary-dark)] hover:bg-green-50 dark:hover:bg-green-900/30 rounded-lg" title="Edit"><EditIcon/></button>
+            <button onClick={()=>onDelete(paper.id)} className="p-2 text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg" title="Delete"><TrashIcon/></button>
+          </div>
+        </div>
+        <div className="flex-grow mb-4">
+          <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-1 line-clamp-2">{highlight(paper.title, searchTerm)}</h3>
+          {paper.abstract && <p className="text-sm text-slate-600 dark:text-slate-400 mb-2 line-clamp-3">{highlight(paper.abstract, searchTerm)}</p>}
+          {paper.links?.length>0 && (
+            <div className="flex flex-wrap gap-2 mb-2">
+              {paper.links.slice(0,4).map((l,idx)=> (
+                <a key={idx} href={l.url} target="_blank" rel="noreferrer" className="text-[11px] font-medium bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 px-2 py-1 rounded-full hover:underline flex items-center gap-1">
+                  <LinkIcon/> {l.label||'Link'}
+                </a>
+              ))}
+              {paper.links.length>4 && <span className="text-[11px] font-medium bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">+{paper.links.length-4}</span>}
+            </div>
+          )}
+          {paper.collaborators?.length>0 && <p className="text-sm text-slate-600 dark:text-slate-400 mb-2 flex items-center gap-1.5"><i className="fa-solid fa-users text-xs"></i>{paper.collaborators.map(c=>highlight(c, searchTerm)).reduce((p,c)=>[p,', ',c])}</p>}
+          {paper.tags?.length>0 && <div className="flex flex-wrap gap-2 mb-2">{paper.tags.slice(0,3).map(tag => <span key={tag} className="text-xs font-medium bg-green-100/80 dark:bg-green-900/50 text-green-800 dark:text-green-300 px-2 py-1 rounded-full">{highlight(tag, searchTerm)}</span>)}{paper.tags.length>3 && <span className="text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">+{paper.tags.length-3}</span>}</div>}
+        </div>
+        <div className="mt-auto">
+          <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 mb-3">
+            <div className="flex items-center gap-1"><ClockIcon className="w-3 h-3"/><span>{fmtDate(paper.createdAt)}</span></div>
+            {paper.updatedAt && paper.updatedAt !== paper.createdAt && <span>Updated {fmtDate(paper.updatedAt)}</span>}
+          </div>
+          {paper.submissions?.length>0 && (
+            <div className="pt-3 border-t border-slate-200/80 dark:border-slate-700/80">
+              <h4 className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider flex items-center gap-2"><CalendarIcon className="w-3 h-3"/>Timeline</h4>
+              <div className="space-y-3 max-h-32 overflow-y-auto custom-scrollbar pr-2">
+                {paper.submissions.slice(-3).reverse().map((s,i)=> (
+                  <div key={i} className="relative pl-6">
+                    <div className="absolute left-[9px] top-1 w-3 h-3 bg-white dark:bg-slate-600 border-2 border-green-400 dark:border-green-500 rounded-full"></div>
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                      <div>
+                        <div className="font-semibold text-slate-700 dark:text-slate-300 text-sm">{highlight(s.journal, searchTerm)}</div>
+                        {s.date && <div className="text-xs text-slate-500 dark:text-slate-400">{fmtDate(s.date)}</div>}
+                      </div>
+                      <span className={`${statusChipClass(s.status)} text-[10px]`}>{s.status}</span>
                     </div>
+                  </div>
+                ))}
+                {paper.submissions.length>3 && <div className="text-xs text-slate-400 dark:text-slate-500 text-center pt-2">+{paper.submissions.length-3} more</div>}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // --- Kanban ---
+  function KanbanBoard({ papers, onEdit, onDelete, onDropStatus }){
+    const columns = ['Not Submitted','Submitted','Under Revision','Accepted','Rejected'];
+    const byStatus = (status) => papers.filter(p => (p.submissions?.[p.submissions.length-1]?.status || 'Not Submitted') === status);
+
+    const onDragStart = (e, id) => { e.dataTransfer.setData('text/plain', id); e.dataTransfer.effectAllowed = 'move'; };
+    const onDragOver = (e) => { e.preventDefault(); e.currentTarget.classList.add('drag-over'); };
+    const onDragLeave = (e) => { e.currentTarget.classList.remove('drag-over'); };
+    const onDrop = (e, status) => { e.preventDefault(); e.currentTarget.classList.remove('drag-over'); const id = e.dataTransfer.getData('text/plain'); if(id) onDropStatus(id, status); };
+
+    return (
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+        {columns.map(col => (
+          <div key={col} onDragOver={onDragOver} onDragLeave={onDragLeave} onDrop={(e)=>onDrop(e,col)} className="glass-effect rounded-2xl p-4 min-h-[260px]">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">{col}</h3>
+              <span className="text-xs text-slate-500 dark:text-slate-400">{byStatus(col).length}</span>
+            </div>
+            <div className="space-y-3">
+              {byStatus(col).map(p => (
+                <div key={p.id} draggable onDragStart={(e)=>onDragStart(e,p.id)} className="p-3 bg-white/70 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm cursor-grab active:cursor-grabbing">
+                  <div className="text-sm font-semibold text-slate-800 dark:text-white mb-1 line-clamp-2">{p.title}</div>
+                  <div className="text-[11px] text-slate-500 dark:text-slate-400 mb-2">{p.collaborators?.join(', ')}</div>
+                  <div className="flex items-center justify-end gap-2 opacity-90">
+                    <button onClick={()=>onEdit(p)} className="text-slate-400 hover:text-emerald-600"><i className="fa-solid fa-pen"></i></button>
+                    <button onClick={()=>onDelete(p.id)} className="text-slate-400 hover:text-red-600"><i className="fa-solid fa-trash"></i></button>
+                  </div>
                 </div>
-            );
-        }
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
 
-        function ConfirmationModal({ title, message, onConfirm, onCancel }) {
-            return (
-                <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex justify-center items-center p-4 z-50">
-                    <div className="glass-effect rounded-2xl shadow-2xl p-6 w-full max-w-sm">
-                        <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">{title}</h3>
-                        <p className="text-slate-600 dark:text-slate-300 mb-6">{message}</p>
-                        <div className="flex justify-end gap-3">
-                            <button onClick={onCancel} className="px-4 py-2 bg-slate-200/50 dark:bg-slate-700/50 text-slate-800 dark:text-slate-200 rounded-lg hover:bg-slate-300/50 dark:hover:bg-slate-600/50 font-semibold transition">Cancel</button>
-                            <button onClick={onConfirm} className="px-4 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition">Delete</button>
-                        </div>
-                    </div>
-                </div>
-            );
-        }
-
-        function PaperForm({ onSave, onClose, paper, journalSuggestions, tagSuggestions }) {
-            const [title, setTitle] = useState(paper?.title || '');
-            const [collaborators, setCollaborators] = useState(paper?.collaborators?.join(', ') || '');
-            const [tags, setTags] = useState(paper?.tags?.join(', ') || '');
-            const [notes, setNotes] = useState(paper?.notes || '');
-            const [submissions, setSubmissions] = useState(paper?.submissions || []);
-            const [error, setError] = useState('');
-
-            const handleSubmissionChange = (index, field, value) => {
-                const newSubmissions = [...submissions];
-                newSubmissions[index] = { ...newSubmissions[index], [field]: value, updatedAt: new Date().toISOString() };
-                setSubmissions(newSubmissions);
-            };
-
-            const addSubmission = () => setSubmissions([...submissions, { journal: '', status: 'Submitted', date: new Date().toISOString().split('T')[0], createdAt: new Date().toISOString() }]);
-            const removeSubmission = (index) => setSubmissions(submissions.filter((_, i) => i !== index));
-
-            const handleSubmit = (e) => {
-                e.preventDefault();
-                if (!title.trim()) { setError("Paper title is required."); return; }
-                onSave({
-                    title,
-                    collaborators: collaborators.split(',').map(c => c.trim()).filter(Boolean),
-                    tags: tags.split(',').map(t => t.trim()).filter(Boolean),
-                    notes,
-                    submissions: submissions.filter(s => s.journal.trim() !== ''),
-                });
-            };
-
-            return (
-                <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex justify-center items-start p-4 z-40 overflow-y-auto custom-scrollbar">
-                    <div className="glass-effect rounded-2xl shadow-2xl mt-8 mb-8 p-6 w-full max-w-3xl">
-                        <h2 className="text-3xl font-bold text-slate-800 dark:text-white mb-6">{paper ? 'Edit Paper' : 'Add New Paper'}</h2>
-                        {error && <div className="bg-red-100 dark:bg-red-900/30 border border-red-200 dark:border-red-500/30 text-red-800 dark:text-red-300 px-4 py-3 rounded-xl mb-6 flex items-center gap-2"><i className="fa-solid fa-circle-exclamation"></i>{error}</div>}
-                        <form onSubmit={handleSubmit} className="space-y-6">
-                            <div>
-                                <label htmlFor="title" className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Paper Title *</label>
-                                <input type="text" id="title" value={title} onChange={e => setTitle(e.target.value)} className="w-full px-4 py-3 bg-white/50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-600 rounded-xl shadow-sm focus:ring-2 focus:ring-[var(--color-primary-light)] dark:focus:ring-[var(--color-primary-dark)] focus:border-transparent transition" required placeholder="Enter your paper title..." />
-                            </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div><label htmlFor="collaborators" className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Collaborators</label><input type="text" id="collaborators" value={collaborators} onChange={e => setCollaborators(e.target.value)} className="w-full px-4 py-3 bg-white/50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-600 rounded-xl shadow-sm focus:ring-2 focus:ring-[var(--color-primary-light)] dark:focus:ring-[var(--color-primary-dark)] focus:border-transparent transition" placeholder="UNINA, Oxford..." /></div>
-                                <div><label htmlFor="tags" className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Tags</label><input type="text" id="tags" value={tags} onChange={e => setTags(e.target.value)} list="tag-list" className="w-full px-4 py-3 bg-white/50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-600 rounded-xl shadow-sm focus:ring-2 focus:ring-[var(--color-primary-light)] dark:focus:ring-[var(--color-primary-dark)] focus:border-transparent transition" placeholder="fmm, economics..." /><datalist id="tag-list">{tagSuggestions.map(t => <option key={t} value={t} />)}</datalist></div>
-                            </div>
-                            <div><label htmlFor="notes" className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Notes</label><textarea id="notes" value={notes} onChange={e => setNotes(e.target.value)} rows="3" className="w-full px-4 py-3 bg-white/50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-600 rounded-xl shadow-sm focus:ring-2 focus:ring-[var(--color-primary-light)] dark:focus:ring-[var(--color-primary-dark)] focus:border-transparent resize-none" placeholder="Additional notes..."></textarea></div>
-                            <div>
-                                <div className="flex items-center justify-between mb-4">
-                                    <h3 className="text-lg font-semibold text-slate-800 dark:text-white">Submission History</h3>
-                                    <button type="button" onClick={addSubmission} className="px-3 py-1.5 bg-green-100 dark:bg-green-800/40 text-green-800 dark:text-green-200 rounded-lg text-sm font-semibold hover:bg-green-200 dark:hover:bg-green-800/60 transition-colors flex items-center gap-1.5">
-                                        <PlusIcon className="w-4 h-4" /> Add
-                                    </button>
-                                </div>
-                                <div className="space-y-4 max-h-80 overflow-y-auto custom-scrollbar p-1"><datalist id="journal-list">{journalSuggestions.map(j => <option key={j} value={j} />)}</datalist>{submissions.length > 0 ? submissions.map((sub, index) => (<div key={index} className="grid grid-cols-1 md:grid-cols-12 gap-4 p-4 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50/50 dark:bg-slate-800/30"><div className="md:col-span-5"><label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">Journal</label><input type="text" placeholder="Journal Name" value={sub.journal} list="journal-list" onChange={e => handleSubmissionChange(index, 'journal', e.target.value)} className="w-full px-3 py-2 bg-white/80 dark:bg-slate-700/80 border border-slate-300 dark:border-slate-600 rounded-lg text-sm focus:ring-1 focus:ring-[var(--color-primary-light)] dark:focus:ring-[var(--color-primary-dark)] focus:border-transparent" required /></div><div className="md:col-span-3"><label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">Status</label><select value={sub.status} onChange={e => handleSubmissionChange(index, 'status', e.target.value)} className="w-full px-3 py-2 bg-white/80 dark:bg-slate-700/80 border border-slate-300 dark:border-slate-600 rounded-lg text-sm focus:ring-1 focus:ring-[var(--color-primary-light)] dark:focus:ring-[var(--color-primary-dark)] focus:border-transparent"><option>Submitted</option><option>Under Revision</option><option>Rejected</option><option>Accepted</option></select></div><div className="md:col-span-3"><label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">Date</label><input type="date" value={sub.date || ''} onChange={e => handleSubmissionChange(index, 'date', e.target.value)} className="w-full px-3 py-2 bg-white/80 dark:bg-slate-700/80 border border-slate-300 dark:border-slate-600 rounded-lg text-sm focus:ring-1 focus:ring-[var(--color-primary-light)] dark:focus:ring-[var(--color-primary-dark)] focus:border-transparent" /></div><div className="md:col-span-1 flex items-end"><button type="button" onClick={() => removeSubmission(index)} className="p-2 text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-500 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg transition" title="Remove"><TrashIcon /></button></div></div>)) : (<div className="text-center py-8 text-slate-500 dark:text-slate-400 bg-slate-50/50 dark:bg-slate-800/30 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-700"><CalendarIcon className="mx-auto mb-2" /><p className="text-sm">No submissions yet.</p></div>)}</div>
-                            </div>
-                            <div className="flex justify-end gap-4 pt-6 border-t border-slate-200 dark:border-slate-700"><button type="button" onClick={onClose} className="px-6 py-3 bg-slate-200/50 dark:bg-slate-700/50 text-slate-800 dark:text-slate-200 rounded-xl border border-slate-300 dark:border-slate-600 hover:bg-slate-300/50 dark:hover:bg-slate-600/50 font-semibold transition">Cancel</button><button type="submit" className="btn-primary px-6 py-3">{paper ? 'Update Paper' : 'Save Paper'}</button></div>
-                        </form>
-                    </div>
-                </div>
-            );
-        }
-
-        function PaperList({ papers, isGrouped, onEdit, onDelete, searchTerm }) {
-            if (isGrouped) {
-                return (
-                    <div className="space-y-8">
-                        {Object.keys(papers).sort().map(groupName => (
-                            <div key={groupName}>
-                                <div className="flex items-center gap-3 mb-4"><h2 className="text-xl font-bold text-slate-700 dark:text-slate-200">{groupName}</h2><span className="bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-semibold px-2 py-1 rounded-full">{papers[groupName].length}</span></div>
-                                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">{papers[groupName].map(paper => <PaperItem key={paper.id} paper={paper} onEdit={onEdit} onDelete={onDelete} searchTerm={searchTerm} />)}</div>
-                            </div>
-                        ))}
-                    </div>
-                );
-            }
-            return <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">{papers.map(paper => <PaperItem key={paper.id} paper={paper} onEdit={onEdit} onDelete={onDelete} searchTerm={searchTerm} />)}</div>;
-        }
-
-        function PaperItem({ paper, onEdit, onDelete, searchTerm }) {
-            const getStatusChip = (status) => {
-                const base = "text-xs font-semibold px-3 py-1 rounded-full";
-                switch (status) {
-                    case 'Accepted': return `${base} bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-300`;
-                    case 'Under Revision': return `${base} bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-300`;
-                    case 'Rejected': return `${base} bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300`;
-                    case 'Submitted': return `${base} bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300`;
-                    default: return `${base} bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-300`;
-                }
-            };
-            const highlightText = (text, term) => {
-                if (!term) return text;
-                const parts = text.split(new RegExp(`(${term})`, 'gi'));
-                return parts.map((part, i) => part.toLowerCase() === term.toLowerCase() ? <mark key={i} className="bg-emerald-200/50 dark:bg-emerald-400/30 text-emerald-900 dark:text-emerald-100 px-0.5 rounded">{part}</mark> : part);
-            };
-            const latestSubmission = paper.submissions?.[paper.submissions.length - 1];
-            const currentStatus = latestSubmission?.status || 'Not Submitted';
-            const formatDate = (d) => new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-
-            const timeToAcceptance = useMemo(() => {
-                if (currentStatus !== 'Accepted' || !paper.submissions || paper.submissions.length === 0) {
-                    return null;
-                }
-                const firstSub = paper.submissions[0];
-                const lastSub = latestSubmission;
-                const startDate = new Date(firstSub.date || firstSub.createdAt);
-                const endDate = new Date(lastSub.date || lastSub.updatedAt);
-                const diffTime = Math.abs(endDate - startDate);
-                const days = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                return `${days} days`;
-            }, [paper, currentStatus, latestSubmission]);
-
-            return (
-                <div className="glass-effect rounded-2xl p-6 transition duration-300 hover:shadow-lg hover:bg-white/70 dark:hover:bg-slate-800/70 group flex flex-col h-full">
-                    <div className="flex items-start justify-between mb-4">
-                        <div className="flex flex-col gap-2">
-                            <div className={getStatusChip(currentStatus)}>{currentStatus}</div>
-                             {timeToAcceptance && (
-                                <div className="text-xs font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
-                                    <i className="fa-solid fa-trophy text-amber-500"></i>
-                                    <span>{timeToAcceptance}</span>
-                                </div>
-                            )}
-                        </div>
-                        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition">
-                            <button onClick={() => onEdit(paper)} className="p-2 text-slate-400 dark:text-slate-500 hover:text-[var(--color-primary-light)] dark:hover:text-[var(--color-primary-dark)] hover:bg-green-50 dark:hover:bg-green-900/30 rounded-lg" title="Edit"><EditIcon /></button>
-                            <button onClick={() => onDelete(paper.id)} className="p-2 text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg" title="Delete"><TrashIcon /></button>
-                        </div>
-                    </div>
-                    <div className="flex-grow mb-4">
-                        <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-2 line-clamp-2">{highlightText(paper.title, searchTerm)}</h3>
-                        {paper.collaborators?.length > 0 && <p className="text-sm text-slate-600 dark:text-slate-400 mb-3 flex items-center gap-1.5"><i className="fa-solid fa-users text-xs"></i>{paper.collaborators.map(c => highlightText(c, searchTerm)).reduce((p, c) => [p, ', ', c])}</p>}
-                        {paper.tags?.length > 0 && <div className="flex flex-wrap gap-2 mb-4">{paper.tags.slice(0, 3).map(tag => <span key={tag} className="text-xs font-medium bg-green-100/80 dark:bg-green-900/50 text-green-800 dark:text-green-300 px-2 py-1 rounded-full">{highlightText(tag, searchTerm)}</span>)}{paper.tags.length > 3 && <span className="text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">+{paper.tags.length - 3}</span>}</div>}
-                    </div>
-                    <div className="mt-auto">
-                        <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 mb-4">
-                            <div className="flex items-center gap-1"><ClockIcon className="w-3 h-3" /><span>{formatDate(paper.createdAt)}</span></div>
-                            {paper.updatedAt && paper.updatedAt !== paper.createdAt && <span>Updated {formatDate(paper.updatedAt)}</span>}
-                        </div>
-                        {paper.submissions?.length > 0 && 
-                            <div className="pt-4 border-t border-slate-200/80 dark:border-slate-700/80">
-                                <h4 className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-3 uppercase tracking-wider flex items-center gap-2"><CalendarIcon className="w-3 h-3"/>Timeline</h4>
-                                <div className="space-y-3 max-h-32 overflow-y-auto custom-scrollbar pr-2">
-                                    {paper.submissions.slice(-3).reverse().map((sub, i) => (
-                                        <div key={i} className="relative pl-6 timeline-item">
-                                            <div className="absolute left-[9px] top-1 w-3 h-3 bg-white dark:bg-slate-600 border-2 border-green-400 dark:border-green-500 rounded-full"></div>
-                                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
-                                                <div>
-                                                    <div className="font-semibold text-slate-700 dark:text-slate-300 text-sm">{highlightText(sub.journal, searchTerm)}</div>
-                                                    {sub.date && <div className="text-xs text-slate-500 dark:text-slate-400">{formatDate(sub.date)}</div>}
-                                                </div>
-                                                <span className={`${getStatusChip(sub.status)} text-[10px]`}>{sub.status}</span>
-                                            </div>
-                                        </div>
-                                    ))}
-                                    {paper.submissions.length > 3 && <div className="text-xs text-slate-400 dark:text-slate-500 text-center pt-2">+{paper.submissions.length - 3} more</div>}
-                                </div>
-                            </div>
-                        }
-                    </div>
-                </div>
-            );
-        }
-
-        const container = document.getElementById('root');
-        const root = ReactDOM.createRoot(container);
-        root.render(<App />);
-    </script>
+  // --- Mount ---
+  const root = ReactDOM.createRoot(document.getElementById('root'));
+  root.render(<App/>);
+</script>
 </body>
 </html>
