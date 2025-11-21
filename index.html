@@ -8,7 +8,8 @@
     <meta name="description" content="Official website of Giovanbattista Califano, a behavioral scientist at the University of Naples Federico II. Explore research on AI in food, consumer choice, and sustainability, with media features in the BBC and Rolling Stone.">
     <meta name="author" content="Giovanbattista Califano">
     <meta name="keywords" content="Behavioral Science, Consumer Research, Food Innovation, Sustainability, Psychometrics, Giovanbattista Califano, Artificial Intelligence, Crossmodal Research, Food Waste, Choice Experiment, Gastrophysics">
-    
+    <link rel="canonical" href="https://califano.xyz">
+
     <meta property="og:title" content="Giovanbattista Califano – Behavioral Science & Food Innovation">
     <meta property="og:description" content="Explore research, teaching, and media coverage of Giovanbattista Califano, researcher in consumer behavior and sustainable food systems.">
     <meta property="og:type" content="website">
@@ -74,15 +75,6 @@
             --shadow-lg: 0 10px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
             --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
         }
-        
-        @keyframes aurora {
-            from {
-                background-position: 0% 50%;
-            }
-            to {
-                background-position: 100% 50%;
-            }
-        }
 
         body {
             font-family: 'Inter', sans-serif;
@@ -104,10 +96,7 @@
         body::before {
             content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             background: linear-gradient(125deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
             z-index: -1;
         }
@@ -125,7 +114,7 @@
             -webkit-backdrop-filter: blur(20px);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.25);
-            transition: background 0.3s ease, border 0.3s ease, box-shadow 0.3s ease;
+            transition: background 0.3s ease, border 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
         }
 
         html.dark .glass-effect {
@@ -163,7 +152,6 @@
             transition: all 0.3s ease;
             text-decoration: none;
             box-shadow: var(--shadow-md);
-
             background: linear-gradient(135deg, var(--color-primary-light), #5a9a3f);
             color: white;
             border: 1px solid rgba(255, 255, 255, 0.3);
@@ -201,12 +189,10 @@
             background-color: rgba(30, 41, 59, 0.7);
         }
 
-
         .card {
             border-radius: 1.25rem;
             padding: 1.75rem;
             box-shadow: none;
-            transition: box-shadow 0.3s ease, transform 0.3s ease;
         }
         .card:hover {
             transform: translateY(-6px);
@@ -228,6 +214,7 @@
         html.dark .link-primary:hover {
             color: #6ee7b7;
         }
+
         :focus-visible {
             outline: 3px solid var(--color-primary-light);
             outline-offset: 3px;
@@ -241,17 +228,32 @@
             padding-top: 6rem;
             margin-top: -4rem;
         }
+
+        /* Scroll-to-top button */
+        #scroll-top-btn {
+            position: fixed;
+            right: 1.25rem;
+            bottom: 1.25rem;
+            z-index: 40;
+            display: none;
+        }
     </style>
+
+<!-- GoatCounter analytics -->
+<script data-goatcounter="https://califano.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
 
     <header class="sticky top-0 z-40 w-full">
         <div class="container mx-auto max-w-4xl px-4">
             <div class="flex items-center justify-between h-16">
-                <a href="#about" class="text-xl font-bold text-slate-900 dark:text-white hover:text-[var(--color-primary-light)] dark:hover:text-[var(--color-primary-dark)] transition-colors">
+                <a href="#about" class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white hover:text-[var(--color-primary-light)] dark:hover:text-[var(--color-primary-dark)] transition-colors">
                     Giovanbattista Califano <small><small><i>PhD</i></small></small>
                 </a>
-                <div class="flex items-center space-x-4">
+
+                <div class="flex items-center space-x-2 sm:space-x-4">
+                    <!-- Desktop nav -->
                     <nav class="hidden md:block">
                         <ul class="flex items-center space-x-6 text-sm font-medium text-slate-700 dark:text-slate-300">
                             <li><a href="#about" class="hover:text-[var(--color-primary-light)] dark:hover:text-[var(--color-primary-dark)] transition-colors nav-link">About</a></li>
@@ -261,73 +263,113 @@
                             <li><a href="#contact" class="hover:text-[var(--color-primary-light)] dark:hover:text-[var(--color-primary-dark)] transition-colors nav-link">Contact</a></li>
                         </ul>
                     </nav>
+
+                    <!-- Theme toggle -->
                     <button id="theme-toggle" type="button" aria-label="Toggle dark mode" class="text-slate-500 dark:text-slate-400 hover:bg-slate-100/50 dark:hover:bg-slate-700/50 rounded-lg text-sm p-2.5 glass-effect">
                         <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
                         <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 5.05A1 1 0 016.465 3.636l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
                     </button>
+
+                    <!-- Mobile menu button -->
+                    <button id="mobile-menu-button" class="inline-flex items-center justify-center md:hidden rounded-lg p-2 glass-effect text-slate-600 dark:text-slate-300" aria-expanded="false" aria-controls="mobile-menu" aria-label="Toggle navigation">
+                        <svg id="mobile-menu-open-icon" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                        <svg id="mobile-menu-close-icon" class="h-5 w-5 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
                 </div>
             </div>
+
+            <!-- Mobile nav -->
+            <nav id="mobile-menu" class="md:hidden mt-2 mb-3 hidden">
+                <div class="glass-effect rounded-2xl px-4 py-3">
+                    <ul class="space-y-2 text-sm font-medium text-slate-700 dark:text-slate-300">
+                        <li><a href="#about" class="block py-1 nav-link">About</a></li>
+                        <li><a href="#research" class="block py-1 nav-link">Research</a></li>
+                        <li><a href="#teaching" class="block py-1 nav-link">Teaching</a></li>
+                        <li><a href="#media" class="block py-1 nav-link">Media</a></li>
+                        <li><a href="#contact" class="block py-1 nav-link">Contact</a></li>
+                    </ul>
+                </div>
+            </nav>
         </div>
     </header>
 
     <main class="container mx-auto max-w-4xl px-4 py-8 md:py-12">
-        <section id="about">
+        <!-- ABOUT -->
+        <section id="about" aria-labelledby="about-heading">
             <div class="card glass-effect">
                 <div class="flex flex-col md:flex-row items-center justify-between">
                     <div class="flex flex-col md:flex-row items-center gap-8 w-full">
                         <div class="relative flex-shrink-0">
-                            <img src="img/giovanbattista-califano.webp" alt="Giovanbattista Califano" class="w-48 h-48 md:w-56 md:h-56 rounded-full shadow-lg">
+                            <img src="img/giovanbattista-califano.webp" alt="Portrait of Giovanbattista Califano" class="w-40 h-40 md:w-52 md:h-52 rounded-full shadow-lg object-cover">
                             <div class="absolute inset-0 rounded-full border-2 border-white/30 pointer-events-none"></div>
                         </div>
                         <div class="text-center md:text-left w-full">
-                            <h1 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white tracking-tight">Giovanbattista Califano</h1>
-                            <p class="text-slate-700 dark:text-slate-300 mt-2 text-lg">Researcher in Consumer Science & Behavioral Economics</p>
+                            <h1 id="about-heading" class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white tracking-tight">Giovanbattista Califano</h1>
+                            <p class="text-slate-700 dark:text-slate-300 mt-2 text-lg">
+                                Researcher in Consumer Science
+                            </p>
                             <p class="text-slate-600 dark:text-slate-400 text-sm mt-3">
                                 <a href="https://endless.agecon.unina.it" target="_blank" rel="noopener noreferrer" class="hover:text-[var(--color-primary-light)] dark:hover:text-[var(--color-primary-dark)] transition-colors">
-                                    Economics and Policy Group <br>
+                                    Economics & Policy Group <br>
                                     Department of Agricultural Sciences <br>
                                     University of Naples Federico II
                                 </a>
                             </p>
+
+                            <!-- quick chips -->
+                            <div class="flex flex-wrap justify-center md:justify-start gap-2 mt-4 text-xs">
+                                <span class="px-3 py-1 rounded-full bg-white/60 dark:bg-slate-800/70 border border-white/60 dark:border-slate-700/60 text-slate-700 dark:text-slate-200">AI & food imagery</span>
+                                <span class="px-3 py-1 rounded-full bg-white/60 dark:bg-slate-800/70 border border-white/60 dark:border-slate-700/60 text-slate-700 dark:text-slate-200">Consumer choice</span>
+                                <span class="px-3 py-1 rounded-full bg-white/60 dark:bg-slate-800/70 border border-white/60 dark:border-slate-700/60 text-slate-700 dark:text-slate-200">Sustainable food systems</span>
+                                <span class="px-3 py-1 rounded-full bg-white/60 dark:bg-slate-800/70 border border-white/60 dark:border-slate-700/60 text-slate-700 dark:text-slate-200">Psychometrics</span>
+                            </div>
+
                             <div class="flex items-center justify-center md:justify-start space-x-4 text-slate-500 dark:text-slate-400 mt-6">
-                                <a href="https://scholar.google.com/citations?user=9_K3YpQAAAAJ&hl=en" target="_blank" rel="noopener noreferrer" aria-label="Google Scholar">
+                                <a href="https://scholar.google.com/citations?user=9_K3YpQAAAAJ&hl=en" target="_blank" rel="noopener noreferrer" aria-label="Google Scholar profile">
                                     <img src="img/scholar.webp" alt="Google Scholar" class="w-9 h-9 rounded-full transition-transform duration-200 hover:scale-110 hover:shadow-lg">
                                 </a>
-                                <a href="https://www.scopus.com/authid/detail.uri?authorId=57358445100" target="_blank" rel="noopener noreferrer" aria-label="Scopus">
+                                <a href="https://www.scopus.com/authid/detail.uri?authorId=57358445100" target="_blank" rel="noopener noreferrer" aria-label="Scopus profile">
                                     <img src="img/scopus.png" alt="Scopus" class="w-9 h-9 rounded-full transition-transform duration-200 hover:scale-110 hover:shadow-lg">
                                 </a>
-                                <a href="https://www.researchgate.net/profile/Giovanbattista-Califano" target="_blank" rel="noopener noreferrer" aria-label="ResearchGate">
+                                <a href="https://www.researchgate.net/profile/Giovanbattista-Califano" target="_blank" rel="noopener noreferrer" aria-label="ResearchGate profile">
                                     <img src="img/researchgate.png" alt="ResearchGate" class="w-9 h-9 rounded-full transition-transform duration-200 hover:scale-110 hover:shadow-lg">
                                 </a>
-                                <a href="https://orcid.org/0000-0003-2088-2023" target="_blank" rel="noopener noreferrer" aria-label="ORCID">
+                                <a href="https://orcid.org/0000-0003-2088-2023" target="_blank" rel="noopener noreferrer" aria-label="ORCID profile">
                                     <img src="img/orcid.png" alt="ORCID" class="w-9 h-9 rounded-full transition-transform duration-200 hover:scale-110 hover:shadow-lg">
                                 </a>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="mt-8 pt-6 border-t border-white/20 dark:border-white/10">
-                    <p class="text-slate-800 dark:text-slate-200 text-left">As a psychologist and behavioral economist, I investigate the intersection of technology and human behavior, with a focus on food innovation and sustainability. My work blends insights from economics and psychology to address real-world challenges.</p>
+                <div class="mt-8 pt-6 border-t border-white/20 dark:border-white/10 text-left">
+                    <p class="text-slate-800 dark:text-slate-200">
+                        As a psychologist and behavioral economist, I study how people interact with food technologies and how digital cues shape expectations, appetite, and choice. My work combines tools from econometrics and psychometrics to address applied questions in food innovation, sustainability, and consumer welfare.
+                    </p>
                 </div>
             </div>
         </section>
 
-        <section id="research" class="space-y-8">
-            <h2 class="text-3xl font-bold text-slate-900 dark:text-white tracking-tight text-center">Research</h2>
+        <!-- RESEARCH -->
+        <section id="research" class="space-y-8" aria-labelledby="research-heading">
+            <h2 id="research-heading" class="text-3xl font-bold text-slate-900 dark:text-white tracking-tight text-center">Research</h2>
             <div class="card glass-effect">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center text-slate-700 dark:text-slate-300">
-                  <div>
-                    <div id="openalex-papers" class="text-4xl font-bold text-[var(--color-primary-light)] dark:text-[var(--color-primary-dark)]">0</div>
-                    <div class="text-sm uppercase tracking-wider">Publications</div>
-                  </div>
-                  <div>
-                    <div id="openalex-citations" class="text-4xl font-bold text-[var(--color-primary-light)] dark:text-[var(--color-primary-dark)]">0</div>
-                    <div class="text-sm uppercase tracking-wider">Citations</div>
-                  </div>
-                  <div>
-                    <div id="openalex-hindex" class="text-4xl font-bold text-[var(--color-primary-light)] dark:text-[var(--color-primary-dark)]">0</div>
-                    <div class="text-sm uppercase tracking-wider">H-Index</div>
-                  </div>
+                    <div>
+                        <div id="openalex-papers" class="text-4xl font-bold text-[var(--color-primary-light)] dark:text-[var(--color-primary-dark)]">0</div>
+                        <div class="text-sm uppercase tracking-wider">Publications</div>
+                    </div>
+                    <div>
+                        <div id="openalex-citations" class="text-4xl font-bold text-[var(--color-primary-light)] dark:text-[var(--color-primary-dark)]">0</div>
+                        <div class="text-sm uppercase tracking-wider">Citations</div>
+                    </div>
+                    <div>
+                        <div id="openalex-hindex" class="text-4xl font-bold text-[var(--color-primary-light)] dark:text-[var(--color-primary-dark)]">0</div>
+                        <div class="text-sm uppercase tracking-wider">H-Index</div>
+                    </div>
                 </div>
 
                 <div class="flex justify-center items-center gap-4 mt-8">
@@ -338,7 +380,7 @@
                 </div>
             </div>
             
-            <div id="publications-container" class="hidden">
+            <div id="publications-container" class="hidden" aria-live="polite">
                 <div id="publications-list">
                     <!-- Skeleton Loader -->
                     <div class="space-y-6 pt-4 animate-pulse">
@@ -372,13 +414,14 @@
             </div>
         </section>
 
-        <section id="teaching" class="space-y-8">
-            <h2 class="text-3xl font-bold text-slate-900 dark:text-white tracking-tight text-center">Teaching</h2>
+        <!-- TEACHING -->
+        <section id="teaching" class="space-y-8" aria-labelledby="teaching-heading">
+            <h2 id="teaching-heading" class="text-3xl font-bold text-slate-900 dark:text-white tracking-tight text-center">Teaching</h2>
             <div class="space-y-12">
-                <article class="card glass-effect">
+                <article class="card glass-effect" aria-label="Monday Lab">
                     <div class="flex flex-col md:flex-row gap-8">
                         <div class="md:w-1/3 flex-shrink-0">
-                            <img src="img/mlab.webp" class="rounded-lg w-full h-full object-cover shadow-lg" alt="Monday Lab">
+                            <img src="img/mlab.webp" class="rounded-lg w-full h-full object-cover shadow-lg" alt="Students working together in Monday Lab">
                         </div>
                         <div class="flex-grow">
                             <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-3">Monday Lab</h3>
@@ -389,10 +432,10 @@
                         </div>
                     </div>
                 </article>
-                <article class="card glass-effect">
+                <article class="card glass-effect" aria-label="Psychometrics for Consumer Science">
                     <div class="flex flex-col md:flex-row gap-8">
                         <div class="md:w-1/3 flex-shrink-0">
-                           <img src="img/psyconsci.webp" class="rounded-lg w-full h-full object-cover shadow-lg" alt="Psychometrics for Consumer Science">
+                           <img src="img/psyconsci.webp" class="rounded-lg w-full h-full object-cover shadow-lg" alt="Psychometrics for Consumer Science course illustration">
                         </div>
                         <div class="flex-grow">
                             <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-3">Psychometrics for Consumer Science</h3>
@@ -406,68 +449,71 @@
             </div>
         </section>
 
-        <section id="media" class="space-y-8">
-            <h2 class="text-3xl font-bold text-slate-900 dark:text-white tracking-tight text-center">In the News</h2>
+        <!-- MEDIA -->
+        <section id="media" class="space-y-8" aria-labelledby="media-heading">
+            <h2 id="media-heading" class="text-3xl font-bold text-slate-900 dark:text-white tracking-tight text-center">In the News</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 
                 <a href="https://www.bbc.com/future/article/20240823-artificial-intelligence-wants-to-tell-you-what-to-cook-but-are-the-results-edible" target="_blank" rel="noopener noreferrer" class="block card glass-effect p-4">
-                    <img src="img/bbc.jpg" alt="AI Generated Food" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
+                    <img src="img/bbc.jpg" alt="BBC article about AI-generated food" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
                     <h3 class="font-bold text-slate-900 dark:text-white leading-tight">'It looks like cat food': The grey goop dreamed up by artificial intelligence</h3>
                     <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">bbc.com</p>
                 </a>
 
                 <a href="https://www.rollingstone.com/culture/culture-features/ah-food-pictures-fake-delivery-recipes-1235135386/" target="_blank" rel="noopener noreferrer" class="block card glass-effect p-4">
-                    <img src="img/rolling.jpg" alt="AI Food Images" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
+                    <img src="img/rolling.jpg" alt="Rolling Stone article on AI food images" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
                     <h3 class="font-bold text-slate-900 dark:text-white leading-tight">AI Images May Be Changing the Way We Look at Food</h3>
                     <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">rollingstone.com</p>
                 </a>
 
                 <a href="https://cacm.acm.org/news/ai-in-the-kitchen/" target="_blank" rel="noopener noreferrer" class="block card glass-effect p-4">
-                    <img src="https://cacm.acm.org/wp-content/uploads/2025/10/100225.News_.AI-in-Kitchen-S.jpg?resize=2048,1152" alt="AI in the Kitchen" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
+                    <img src="https://cacm.acm.org/wp-content/uploads/2025/10/100225.News_.AI-in-Kitchen-S.jpg?resize=2048,1152" alt="Communications of the ACM article on AI in the kitchen" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
                     <h3 class="font-bold text-slate-900 dark:text-white leading-tight">AI in the Kitchen</h3>
                     <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">cacm.acm.org</p>
                 </a>
 
                 <a href="https://www.dailymail.co.uk/sciencetech/article-13183271/Fake-food-created-AI-looks-tastier.html" target="_blank" rel="noopener noreferrer" class="block card glass-effect p-4">
-                    <img src="https://i.dailymail.co.uk/1s/2024/03/11/16/82322161-0-image-m-60_1710175258577.jpg" alt="Fake food created by AI" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
+                    <img src="https://i.dailymail.co.uk/1s/2024/03/11/16/82322161-0-image-m-60_1710175258577.jpg" alt="Daily Mail article on AI fake food" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
                     <h3 class="font-bold text-slate-900 dark:text-white leading-tight">Fake food created by AI looks tastier than real dishes, scientists say - so, can you tell which of these are actual meals?</h3>
                     <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">dailymail.co.uk</p>
                 </a>
 
                 <a href="https://web.archive.org/web/20241015032252/https://www.foxcomms.com/foxquarterly/a-recipe-for-success/" target="_blank" rel="noopener noreferrer" class="block card glass-effect p-4">
-                    <img src="img/foxbanner.webp" alt="AI in Luxury Gastronomy" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
+                    <img src="img/foxbanner.webp" alt="Foxcomms article on AI and luxury gastronomy" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
                     <h3 class="font-bold text-slate-900 dark:text-white leading-tight">The Role of AI in Shaping the Future of Luxury Gastronomy</h3>
                     <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">foxcomms.com</p>
                 </a>
 
                  <a href="https://petapixel.com/2024/03/15/study-shows-that-ai-images-of-food-look-tastier-than-real-food-photos/" target="_blank" rel="noopener noreferrer" class="block card glass-effect p-4">
-                    <img src="img/ppixel.jpg" alt="AI Food Photos" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
+                    <img src="img/ppixel.jpg" alt="PetaPixel article on AI food photos" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
                     <h3 class="font-bold text-slate-900 dark:text-white leading-tight">Study Shows That AI Images of Food Look Tastier Than Real Food Photos</h3>
                     <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">petapixel.com</p>
                 </a>
 
                 <a href="https://ilsalvagente.it/2025/07/28/boom-di-gluten-free-scelto-perche-ritenuto-salutare-da-chi-non-ha-bisogno/" target="_blank" rel="noopener noreferrer" class="block card glass-effect p-4">
-                    <img src="https://ilsalvagente.it/wp-content/uploads/2019/05/iStock-963861508.jpg" alt="Gluten-free Bread" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
+                    <img src="https://ilsalvagente.it/wp-content/uploads/2019/05/iStock-963861508.jpg" alt="Article about gluten-free consumption" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
                     <h3 class="font-bold text-slate-900 dark:text-white leading-tight">Boom di gluten-free? Scelto perché ritenuto salutare da chi non ha bisogno</h3>
                     <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">ilsalvagente.it</p>
                 </a>
 
                 <a href="https://aawsat.com/يوميات-الشرق/4907561-هل-يجعل-الذكاء-الاصطناعي-صور-الطعام-ألذ-من-الحقيقة؟" target="_blank" rel="noopener noreferrer" class="block card glass-effect p-4">
-                    <img src="https://static.srpcdigital.com/styles/1200x600/public/2024-03/571038.jpeg.webp" alt="AI Food Photos AAWSAT" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
+                    <img src="https://static.srpcdigital.com/styles/1200x600/public/2024-03/571038.jpeg.webp" alt="AAWSAT article on AI food photos" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
                     <h3 class="font-bold text-slate-900 dark:text-white leading-tight">هل يجعل الذكاء الاصطناعي صور الطعام ألذ من الحقيقة؟</h3>
                     <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">aawsat.com</p>
                 </a>
 
                 <a href="https://issues.fr/regalez-vous-les-yeux-comment-lia-propose-des-images-culinaires-plus-delicieuses-que-la-realite/" target="_blank" rel="noopener noreferrer" class="block card glass-effect p-4">
-                    <img src="img/issuesfr.jpg" alt="AI culinary images" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
+                    <img src="img/issuesfr.jpg" alt="Issues.fr article on AI culinary images" class="rounded-lg mb-3 aspect-video object-cover" loading="lazy">
                     <h3 class="font-bold text-slate-900 dark:text-white leading-tight">Régalez-vous les yeux : comment l’IA propose des images culinaires plus délicieuses que la réalité</h3>
                     <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">issues.fr</p>
                 </a>
 
             </div>
         </section>
-        <section id="contact" class="space-y-8">
-            <h2 class="text-3xl font-bold text-slate-900 dark:text-white tracking-tight text-center">Get in Touch</h2>
+
+        <!-- CONTACT -->
+        <section id="contact" class="space-y-8" aria-labelledby="contact-heading">
+            <h2 id="contact-heading" class="text-3xl font-bold text-slate-900 dark:text-white tracking-tight text-center">Get in Touch</h2>
             <div class="card glass-effect text-center">
                 <p class="text-slate-700 dark:text-slate-300 mb-6 max-w-md mx-auto">
                     Have a question or want to collaborate? I'd be happy to hear from you. Click the button below to send an email.
@@ -485,9 +531,14 @@
             All Rights Reserved © Giovanbattista Califano 2025
         </p>
         <p class="text-sm text-slate-500 dark:text-slate-400 mt-2">
-            <a href="privacy.html" class="hover:underline">Privacy & Cookie Policy</a>
+            <a href="privacy.html" class="hover:underline">Privacy &amp; Cookie Policy</a>
         </p>
     </footer>
+
+    <!-- Scroll-to-top button -->
+    <button id="scroll-top-btn" class="glass-effect rounded-full p-2 shadow-lg" aria-label="Scroll to top">
+        <i class="fa-solid fa-arrow-up text-slate-700 dark:text-slate-200"></i>
+    </button>
 
     <script src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script>
 
@@ -513,28 +564,60 @@
             updateThemeIcons();
         }
 
+        // --- Mobile Nav ---
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileOpenIcon = document.getElementById('mobile-menu-open-icon');
+        const mobileCloseIcon = document.getElementById('mobile-menu-close-icon');
+
+        function toggleMobileMenu() {
+            if (!mobileMenu) return;
+            const isHidden = mobileMenu.classList.contains('hidden');
+            mobileMenu.classList.toggle('hidden', !isHidden);
+            mobileMenuButton.setAttribute('aria-expanded', String(isHidden));
+            mobileOpenIcon.classList.toggle('hidden', !isHidden);
+            mobileCloseIcon.classList.toggle('hidden', isHidden);
+        }
+
+        if (mobileMenuButton) {
+            mobileMenuButton.addEventListener('click', toggleMobileMenu);
+        }
+
+        // close mobile menu when clicking a link
+        if (mobileMenu) {
+            mobileMenu.querySelectorAll('a.nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        toggleMobileMenu();
+                    }
+                });
+            });
+        }
+
         // --- Publications Toggle ---
         const toggleBtn = document.getElementById('toggle-research-btn');
         const publicationsContainer = document.getElementById('publications-container');
         const toggleIcon = document.getElementById('toggle-research-icon');
         let publicationsLoaded = false;
 
-        toggleBtn.addEventListener('click', () => {
-            const isHidden = publicationsContainer.classList.toggle('hidden');
-            toggleBtn.setAttribute('aria-expanded', !isHidden);
-            
-            if (!isHidden) {
-                toggleBtn.querySelector('span').textContent = 'Hide Publications';
-                toggleIcon.classList.add('rotate-180');
-                if (!publicationsLoaded) {
-                    fetchPublications();
-                    publicationsLoaded = true;
+        if (toggleBtn && publicationsContainer && toggleIcon) {
+            toggleBtn.addEventListener('click', () => {
+                const isHidden = publicationsContainer.classList.toggle('hidden');
+                toggleBtn.setAttribute('aria-expanded', String(!isHidden));
+                
+                if (!isHidden) {
+                    toggleBtn.querySelector('span').textContent = 'Hide Publications';
+                    toggleIcon.classList.add('rotate-180');
+                    if (!publicationsLoaded) {
+                        fetchPublications();
+                        publicationsLoaded = true;
+                    }
+                } else {
+                    toggleBtn.querySelector('span').textContent = 'Explore Publications';
+                    toggleIcon.classList.remove('rotate-180');
                 }
-            } else {
-                toggleBtn.querySelector('span').textContent = 'Explore Publications';
-                toggleIcon.classList.remove('rotate-180');
-            }
-        });
+            });
+        }
         
         // --- BibTeX Section ---
         const toggleBibtexBtn = document.getElementById('toggle-bibtex-btn');
@@ -542,7 +625,7 @@
         const bibtexContentEl = document.getElementById('bibtex-content');
         const copyBibtexBtn = document.getElementById('copy-bibtex-btn');
 
-        if (toggleBibtexBtn) {
+        if (toggleBibtexBtn && bibtexContainer) {
             toggleBibtexBtn.addEventListener('click', () => {
                 const isHidden = bibtexContainer.classList.toggle('hidden');
                 toggleBibtexBtn.setAttribute('aria-expanded', String(!isHidden));
@@ -553,7 +636,7 @@
             });
         }
 
-        if (copyBibtexBtn) {
+        if (copyBibtexBtn && bibtexContentEl) {
             copyBibtexBtn.addEventListener('click', () => {
                 const textToCopy = bibtexContentEl.textContent;
                 if (textToCopy.startsWith('Loading...') || textToCopy.startsWith('Error:')) return;
@@ -665,11 +748,11 @@
             
             const doi = work.doi ? ` ${work.doi}` : '';
 
-            // Note: The journal and volume should be italicized by the user after pasting.
             return `${authorsStr} (${year}). ${title}. ${publicationDetails}.${doi}`;
         }
 
         async function fetchPublications() {
+            if (!publicationsListEl) return;
             try {
                 const url = `https://api.openalex.org/works?filter=authorships.author.id:${AUTHOR_ID}&sort=publication_year:desc&per_page=100`;
                 const response = await fetch(url);
@@ -683,6 +766,7 @@
         }
         
         function renderPublications(works) {
+            if (!publicationsListEl) return;
             if (!works.length) {
                 publicationsListEl.innerHTML = `<p class="text-center text-slate-500 dark:text-slate-400">No publications found.</p>`;
                 return;
@@ -699,7 +783,9 @@
                     .map(createPublicationCard)
                     .join("");
                 return `<div class="year-section mb-10 pt-4">
-                            <h3 class="sticky top-16 z-10 text-2xl font-bold text-slate-800 dark:text-slate-200 border-b-2 border-white/20 dark:border-white/10 pb-2 mb-6 glass-effect p-4 rounded-xl">${year}</h3>
+                            <h3 class="sticky top-16 z-10 text-2xl font-bold text-slate-800 dark:text-slate-200 border-b-2 border-white/20 dark:border-white/10 pb-2 mb-6 glass-effect p-4 rounded-xl bg-white/70 dark:bg-slate-900/60 backdrop-blur">
+                                ${year}
+                            </h3>
                             <div class="space-y-6">${papersHtml}</div>
                         </div>`;
             }).join("");
@@ -712,12 +798,18 @@
         }
 
         function populateFullBibtex(works) {
+            if (!bibtexContentEl) return;
             const allBibtex = works.map(generateBibtex).join('\n\n');
             bibtexContentEl.textContent = allBibtex;
         }
 
         function createPublicationCard(work) {
-            const authors = work.authorships?.map(a => a.author.display_name === AUTHOR_NAME ? `<strong class="font-semibold text-slate-900 dark:text-white">${a.author.display_name}</strong>` : a.author.display_name).join(", ") || "N/A";
+            const authors = work.authorships?.map(a => 
+                a.author.display_name === AUTHOR_NAME 
+                    ? `<strong class="font-semibold text-slate-900 dark:text-white">${a.author.display_name}</strong>` 
+                    : a.author.display_name
+            ).join(", ") || "N/A";
+
             const journalName = work.host_venue?.display_name || work.primary_location?.source?.display_name;
             const journalHtml = journalName 
                 ? `<div class="text-sm text-slate-600 dark:text-slate-400 italic">${journalName}</div>` 
@@ -747,7 +839,7 @@
                             </div>
                         </div>
                         <div class="mt-4 pt-4 border-t border-white/20 dark:border-white/10">
-                            <div class="flex items-center justify-between gap-4">
+                            <div class="flex items-center justify-between gap-4 flex-wrap">
                                 <div class="flex items-center flex-wrap gap-x-4 gap-y-2">
                                     <button class="toggle-abstract text-sm font-medium text-[var(--color-primary-light)] hover:text-[#5a9a3f] dark:text-[var(--color-primary-dark)] dark:hover:text-[#6ee7b7]"
                                         onclick="toggleAbstract('${abstractId}', this)" aria-expanded="false" aria-controls="${abstractId}">
@@ -771,6 +863,7 @@
         
         window.toggleAbstract = (id, btn) => {
             const abstract = document.getElementById(id);
+            if (!abstract || !btn) return;
             const isHidden = abstract.classList.contains('hidden'); 
             abstract.classList.toggle('hidden'); 
             btn.textContent = isHidden ? "Hide Abstract" : "Show Abstract"; 
@@ -801,6 +894,7 @@
 
         // --- Animated Stats Counter ---
         function animateValue(obj, start, end, duration) {
+            if (!obj) return;
             let startTimestamp = null;
             const step = (timestamp) => {
                 if (!startTimestamp) startTimestamp = timestamp;
@@ -830,10 +924,27 @@
 
             } catch (err) {
               console.error("Error fetching OpenAlex data:", err);
-              ["papers", "citations", "hindex"].forEach(m =>
-                document.getElementById(`openalex-${m}`).innerText = "—"
-              );
+              ["papers", "citations", "hindex"].forEach(m => {
+                const el = document.getElementById(`openalex-${m}`);
+                if (el) el.innerText = "—";
+              });
             }
+        }
+
+        // --- Scroll-to-top button ---
+        const scrollTopBtn = document.getElementById('scroll-top-btn');
+        if (scrollTopBtn) {
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 400) {
+                    scrollTopBtn.style.display = 'inline-flex';
+                } else {
+                    scrollTopBtn.style.display = 'none';
+                }
+            });
+
+            scrollTopBtn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
         }
 
         // --- Initial Data Fetch ---
