@@ -3,757 +3,540 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Working Papers Tracker</title>
-  <!-- Tailwind CSS for styling -->
+  <title>Research Tracker v2</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts: Inter -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <!-- Font Awesome for Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <!-- React Libraries (production) -->
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" defer></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" defer></script>
-  <!-- Chart.js for analytics -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
-  <!-- Babel to translate JSX in the browser (keep for single-file convenience) -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js" defer></script>
   <script>
-    // Tailwind dark mode
-    tailwind.config = { darkMode: 'class' };
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            surface: { 50: '#f9fafb', 100: '#f3f4f6', 200: '#e5e7eb', 800: '#1f2937', 900: '#111827' },
+            brand: { light: '#2563eb', DEFAULT: '#3b82f6', dark: '#1d4ed8' } // Professional Blue
+          }
+        }
+      }
+    };
   </script>
   <style>
-    :root {
-      --color-primary-light: #6aa84f;
-      --color-primary-dark: #34d399;
-      --shadow-lg: 0 10px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-    }
-    body { font-family: 'Inter', sans-serif; color: #111827; background: #f3f4f6; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-    html.dark body { color: #e5e7eb; background: #030712; }
-    .glass-effect { background: rgba(255, 255, 255, 0.5); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.25); transition: background 0.3s ease, border 0.3s ease, box-shadow 0.3s ease; }
-    html.dark .glass-effect { background: rgba(20,20,30,0.5); border: 1px solid rgba(255,255,255,0.1); }
-    .btn-primary { display: inline-flex; align-items: center; justify-content: center; font-weight: 700; padding: 0.6rem 1.2rem; border-radius: 0.75rem; transition: all 0.3s ease; text-decoration: none; box-shadow: var(--shadow-md); background: linear-gradient(135deg, var(--color-primary-light), #5a9a3f); color: white; border: 1px solid rgba(255,255,255,0.3); }
-    .btn-primary:hover { transform: translateY(-3px) scale(1.05); box-shadow: var(--shadow-lg); }
-    html.dark .btn-primary { background: linear-gradient(135deg, var(--color-primary-dark), #10b981); color: #111827; border-color: rgba(255,255,255,0.2); }
-    :focus-visible { outline: 3px solid var(--color-primary-light); outline-offset: 3px; border-radius: 0.5rem; }
-    html.dark :focus-visible { outline-color: var(--color-primary-dark); }
-    .spinner { border: 3px solid rgba(0,0,0,0.1); width: 24px; height: 24px; border-radius: 50%; border-left-color: var(--color-primary-light); animation: spin 1s ease infinite; }
-    html.dark .spinner { border-left-color: var(--color-primary-dark); }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg);} }
-    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-    .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 3px; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-    html.dark .custom-scrollbar::-webkit-scrollbar-track { background: #1e293b; }
-    html.dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #475569; }
-    html.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #64748b; }
-    .drag-over { outline: 2px dashed #34d399; outline-offset: 6px; }
+    body { background-color: #f9fafb; color: #111827; }
+    html.dark body { background-color: #0f172a; color: #f3f4f6; }
+    .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    html.dark .custom-scroll::-webkit-scrollbar-thumb { background: #334155; }
+    .card-hover { transition: all 0.2s ease-in-out; }
+    .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
   </style>
 </head>
 <body>
 <div id="root"></div>
+
 <script type="text/babel">
   const { useState, useEffect, useMemo, useCallback, useRef } = React;
 
-  // --- GitHub Configuration ---
+  // --- CONFIGURATION ---
   const GITHUB_OWNER = 'gbcalifano';
   const GITHUB_REPO = 'private';
   const GITHUB_DATA_PATH = 'papers.json';
   const GITHUB_TOKEN_KEY = 'githubToken';
 
-  // --- Theme Management ---
-  const ThemeManager = {
-    init() {
-      if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
-    },
-    toggle() {
-      const isDark = document.documentElement.classList.toggle('dark');
-      localStorage.theme = isDark ? 'dark' : 'light';
-    },
-    isDark() { return document.documentElement.classList.contains('dark'); }
+  // --- ICONS (SVG) ---
+  const Icons = {
+    Plus: () => <svg fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>,
+    Trash: () => <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>,
+    Edit: () => <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" /></svg>,
+    Search: () => <svg fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>,
+    Link: () => <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3 h-3"><path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" /></svg>,
+    Moon: () => <svg fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" /></svg>,
+    Sun: () => <svg fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" /></svg>,
+    Check: () => <svg fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-3 h-3"><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>,
+    History: () => <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>,
+    Refresh: () => <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" /></svg>,
+    Download: () => <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>,
+    Filter: () => <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z" /></svg>,
   };
-  ThemeManager.init();
 
-  // --- Utilities ---
-  const uid = () => (crypto?.randomUUID ? crypto.randomUUID() : `id_${Math.random().toString(36).slice(2)}`);
+  // --- HELPERS ---
+  const uid = () => `id_${Math.random().toString(36).slice(2)}_${Date.now()}`;
   const todayISO = () => new Date().toISOString().split('T')[0];
-  const fmtDate = (d) => new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+  const fmtDate = (d) => d ? new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: '2-digit' }) : '';
+  const daysBetween = (d1, d2) => Math.ceil(Math.abs(new Date(d2) - new Date(d1)) / (1000 * 60 * 60 * 24));
 
-  // --- Icons ---
-  const Icon = ({ path, className = 'w-6 h-6', fillRule = 'evenodd', clipRule = 'evenodd' }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}>
-      <path fillRule={fillRule} d={path} clipRule={clipRule} />
-    </svg>
-  );
-  const PlusIcon = () => <Icon path="M12 5a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H6a1 1 0 110-2h5V6a1 1 0 011-1z" className="w-5 h-5"/>;
-  const EditIcon = () => <Icon path="M13.49 2.24a2.121 2.121 0 013.01 0l4.25 4.25a2.121 2.121 0 010 3.01L9.25 21H3v-6.25L13.49 2.24zM15.25 7.5l-9 9H5v-1.25l9-9L15.25 7.5z" fillRule="nonzero" className="w-4 h-4"/>;
-  const TrashIcon = () => <Icon path="M10 2a.75.75 0 01.75.75v.5h4.5v-.5a.75.75 0 011.5 0v.5h.75a.75.75 0 010 1.5h-.75v12.5a3 3 0 01-3 3h-6a3 3 0 01-3-3V4.75H4.5a.75.75 0 010-1.5h.75v-.5A.75.75 0 016 2h4zm-2.25 4.5a.75.75 0 00-1.5 0v10.5a.75.75 0 001.5 0V6.5zm3.75 0a.75.75 0 00-1.5 0v10.5a.75.75 0 001.5 0V6.5z" className="w-4 h-4"/>;
-  const DownloadIcon = () => <Icon path="M12 1.75a.75.75 0 01.75.75v9.34l3.97-3.97a.75.75 0 111.06 1.06l-5.25 5.25a.75.75 0 01-1.06 0L5.22 8.84a.75.75 0 111.06-1.06l3.97 3.97V2.5A.75.75 0 0112 1.75zM3.5 14a.75.75 0 01.75.75v3.5c0 .414.336.75.75.75h13.5a.75.75 0 00.75-.75v-3.5a.75.75 0 011.5 0v3.5A2.25 2.25 0 0118.75 21H5.25A2.25 2.25 0 013 18.75v-3.5a.75.75 0 01.5-.75z" className="w-4 h-4"/>;
-  const UploadIcon = () => <Icon path="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 7.5m0 0L7.5 12m4.5-4.5v11.25" className="w-4 h-4"/>;
-  const SearchIcon = () => <Icon path="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" className="w-5 h-5"/>;
-  const CalendarIcon = () => <Icon path="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5a2.25 2.25 0 002.25-2.25m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5a2.25 2.25 0 012.25 2.25v7.5" className="w-4 h-4"/>;
-  const StatsIcon = () => <Icon path="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" className="w-4 h-4"/>;
-  const ClockIcon = () => <Icon path="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" className="w-4 h-4"/>;
-  const LinkIcon = () => <i className="fa-solid fa-arrow-up-right-from-square"></i>;
+  const StatusColors = {
+    'Accepted': 'bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-900/40 dark:text-emerald-300 dark:border-emerald-800',
+    'Under Revision': 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-900/40 dark:text-amber-300 dark:border-amber-800',
+    'Submitted': 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:border-blue-800',
+    'Rejected': 'bg-rose-100 text-rose-800 border-rose-200 dark:bg-rose-900/40 dark:text-rose-300 dark:border-rose-800',
+    'Not Submitted': 'bg-slate-100 text-slate-600 border-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700'
+  };
 
-  // --- Theme Toggle Button ---
-  function ThemeToggleButton() {
-    const [isDark, setIsDark] = useState(ThemeManager.isDark());
+  // --- COMPONENTS ---
+
+  const Toast = ({ message, type, onClose }) => {
+    useEffect(() => { const t = setTimeout(onClose, 3000); return () => clearTimeout(t); }, [onClose]);
+    const bg = type === 'error' ? 'bg-red-500' : 'bg-slate-800 dark:bg-white';
+    const text = type === 'error' ? 'text-white' : 'text-white dark:text-slate-900';
     return (
-      <button onClick={() => { ThemeManager.toggle(); setIsDark(ThemeManager.isDark()); }} type="button" aria-label="Toggle dark mode" className="text-slate-500 dark:text-slate-400 hover:bg-slate-100/50 dark:hover:bg-slate-700/50 rounded-lg text-sm p-2.5 glass-effect">
-        {isDark ? (
-          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
-        ) : (
-          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 5.05A1 1 0 016.465 3.636l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fillRule="evenodd" clipRule="evenodd"></path></svg>
-        )}
-      </button>
+      <div className={`fixed bottom-6 right-6 z-50 px-4 py-3 rounded shadow-lg flex items-center gap-3 animate-bounce-in ${bg} ${text}`}>
+        <span className="font-medium text-sm">{message}</span>
+      </div>
     );
+  };
+
+  const Modal = ({ title, onClose, children, maxWidth = "max-w-2xl" }) => (
+    <div className="fixed inset-0 z-40 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={onClose}>
+      <div className={`bg-white dark:bg-slate-900 rounded-xl shadow-2xl w-full ${maxWidth} max-h-[90vh] overflow-hidden flex flex-col`} onClick={e => e.stopPropagation()}>
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800">
+          <h2 className="text-lg font-bold text-slate-900 dark:text-white">{title}</h2>
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><Icons.Plus className="rotate-45" /></button>
+        </div>
+        <div className="overflow-y-auto p-6 custom-scroll">{children}</div>
+      </div>
+    </div>
+  );
+
+  const StatusBadge = ({ status }) => (
+    <span className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full border ${StatusColors[status] || StatusColors['Not Submitted']}`}>
+      {status}
+    </span>
+  );
+
+  // --- MAIN APP ---
+
+  function App() {
+    const [token, setToken] = useState(sessionStorage.getItem(GITHUB_TOKEN_KEY));
+    
+    if (!token) return <AuthScreen onLogin={t => { sessionStorage.setItem(GITHUB_TOKEN_KEY, t); setToken(t); }} />;
+    return <Dashboard token={token} onLogout={() => { sessionStorage.removeItem(GITHUB_TOKEN_KEY); setToken(null); }} />;
   }
 
-  // --- App ---
-  function App(){
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-    useEffect(() => { if (sessionStorage.getItem(GITHUB_TOKEN_KEY)) setIsAuthenticated(true); }, []);
-    const handleLoginSuccess = (token) => { sessionStorage.setItem(GITHUB_TOKEN_KEY, token); setIsAuthenticated(true); };
-
-    if (!isAuthenticated) return <AuthScreen onLoginSuccess={handleLoginSuccess} />;
-    return <PaperTrackerApp/>;
-  }
-
-  // --- Auth ---
-  function AuthScreen({ onLoginSuccess }){
-    const [token, setToken] = useState('');
-    const [error, setError] = useState('');
-    const [isVerifying, setIsVerifying] = useState(false);
-
-    const verify = async (e) => {
-      e.preventDefault(); setError(''); if(!token.trim()){ setError('Please enter a token.'); return; }
-      setIsVerifying(true);
-      try {
-        const r = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}`, { headers: { 'Authorization': `token ${token}` } });
-        if (r.ok) onLoginSuccess(token); else { const j = await r.json(); setError(`Verification failed: ${j.message}.`); }
-      } catch { setError('Network error. Could not verify token.'); }
-      finally { setIsVerifying(false); }
-    };
-
+  function AuthScreen({ onLogin }) {
+    const [val, setVal] = useState('');
     return (
-      <div className="min-h-screen flex items-center justify-center p-4">
-        <div className="w-full max-w-md glass-effect p-8 rounded-2xl shadow-2xl">
-          <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-gradient-to-r from-[var(--color-primary-light)] to-emerald-500 dark:from-[var(--color-primary-dark)] dark:to-emerald-400 rounded-full mx-auto mb-4 flex items-center justify-center shadow-lg">
-              <i className="fa-solid fa-lock text-white text-2xl"></i>
-            </div>
-            <h1 className="text-3xl font-bold text-slate-800 dark:text-white mb-2">Authentication Required</h1>
-            <p className="text-slate-600 dark:text-slate-300">Enter a GitHub token with <code>repo</code> scope.</p>
-          </div>
-          <form onSubmit={verify} className="space-y-6">
-            <input type="password" value={token} onChange={(e)=>setToken(e.target.value)} className="w-full px-4 py-3 text-lg bg-white/50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-600 rounded-xl shadow-sm focus:ring-2 focus:ring-[var(--color-primary-light)] dark:focus:ring-[var(--color-primary-dark)] focus:border-transparent" placeholder="github_pat_..." disabled={isVerifying} />
-            {error && <p className="text-red-500 text-sm mt-2 flex items-center gap-2"><i className="fa-solid fa-circle-exclamation"></i>{error}</p>}
-            <button type="submit" className="w-full btn-primary py-3" disabled={isVerifying}>{isVerifying ? <div className="spinner border-white dark:border-black border-l-transparent"></div> : 'Authorize & Continue'}</button>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-950 p-4">
+        <div className="w-full max-w-md bg-white dark:bg-slate-900 p-8 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-800 text-center">
+          <div className="mb-6 flex justify-center"><div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-300"><i className="fa-solid fa-lock text-xl"></i></div></div>
+          <h1 className="text-2xl font-bold mb-2 dark:text-white">Research Tracker</h1>
+          <p className="text-slate-500 dark:text-slate-400 text-sm mb-6">Enter your GitHub Personal Access Token</p>
+          <form onSubmit={e => { e.preventDefault(); if(val.trim()) onLogin(val); }}>
+            <input type="password" value={val} onChange={e => setVal(e.target.value)} className="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none mb-4" placeholder="github_pat_..." autoFocus />
+            <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition">Access Dashboard</button>
           </form>
         </div>
       </div>
     );
   }
 
-  // --- Main App ---
-  function PaperTrackerApp(){
+  function Dashboard({ token, onLogout }) {
+    // State
     const [papers, setPapers] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [isSaving, setIsSaving] = useState(false);
-    const [isFormOpen, setIsFormOpen] = useState(false);
-    const [editingPaper, setEditingPaper] = useState(null);
-    const [showDeleteConfirm, setShowDeleteConfirm] = useState(null);
-
-    const [groupBy, setGroupBy] = useState('none');
-    const [sortBy, setSortBy] = useState('latestAction');
-    const [searchTerm, setSearchTerm] = useState('');
-    const [selectedStatus, setSelectedStatus] = useState('all');
-    const [showStats, setShowStats] = useState(false);
-    const [view, setView] = useState('list'); // 'list' | 'kanban'
-
     const [fileSha, setFileSha] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [syncing, setSyncing] = useState(false);
+    const [toast, setToast] = useState(null);
+    
+    // UI State
+    const [sidebarOpen, setSidebarOpen] = useState(true); // Default open on desktop
+    const [filterStatus, setFilterStatus] = useState('All');
+    const [search, setSearch] = useState('');
+    const [sortBy, setSortBy] = useState('updated'); // updated, title, status
+    const [editingPaper, setEditingPaper] = useState(null); // Paper obj or null
+    const [deleteConfirm, setDeleteConfirm] = useState(null); // ID
 
-    const githubApiUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_DATA_PATH}`;
-    const token = sessionStorage.getItem(GITHUB_TOKEN_KEY);
+    // Data Fetching
+    const api = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_DATA_PATH}`;
+    const headers = useMemo(() => ({ 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }), [token]);
 
-    const loadPapersFromGithub = useCallback(async () => {
-      setIsLoading(true);
+    const loadData = useCallback(async () => {
+      setLoading(true);
       try {
-        const response = await fetch(githubApiUrl, { headers: { 'Authorization': `token ${token}` } });
-        if (response.status === 404) { setPapers([]); setFileSha(null); }
-        else if (response.ok) {
-          const data = await response.json();
-          setFileSha(data.sha);
-          const content = atob(data.content);
-          const parsedPapers = JSON.parse(content);
-          const updatedPapers = parsedPapers.map(p => ({ ...p, createdAt: p.createdAt || new Date().toISOString(), id: p.id || uid() }));
-          setPapers(updatedPapers);
-        } else { const e = await response.json(); alert(`Error loading data: ${e.message}`); }
-      } catch (err) { console.error(err); alert('Network error while loading data.'); }
-      finally { setIsLoading(false); }
-    }, [githubApiUrl, token]);
+        const res = await fetch(api, { headers });
+        if (res.status === 404) { setPapers([]); return; }
+        if (!res.ok) throw new Error('Failed to fetch');
+        const data = await res.json();
+        setFileSha(data.sha);
+        const content = JSON.parse(atob(data.content));
+        // Normalize data
+        setPapers(content.map(p => ({ ...p, submissions: p.submissions || [], links: p.links || [] })));
+      } catch (err) {
+        setToast({ msg: 'Error loading data. Check token/internet.', type: 'error' });
+      } finally { setLoading(false); }
+    }, [api, headers]);
 
-    const savePapersToGithub = useCallback(async (papersToSave) => {
-      if (isLoading) return;
-      setIsSaving(true);
-      const content = btoa(JSON.stringify(papersToSave, null, 2));
+    useEffect(() => { loadData(); }, [loadData]);
+
+    const saveData = async (newPapers) => {
+      setSyncing(true);
+      setPapers(newPapers); // Optimistic update
       try {
-        const response = await fetch(githubApiUrl, { method: 'PUT', headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ message: `Update papers data: ${new Date().toISOString()}`, content, sha: fileSha }) });
-        if (response.ok) { const d = await response.json(); setFileSha(d.content.sha); }
-        else { const e = await response.json(); alert(`Error saving data: ${e.message}`); loadPapersFromGithub(); }
-      } catch (err) { console.error(err); alert('Network error while saving data.'); loadPapersFromGithub(); }
-      finally { setIsSaving(false); }
-    }, [fileSha, githubApiUrl, token, isLoading, loadPapersFromGithub]);
+        const content = btoa(JSON.stringify(newPapers, null, 2));
+        const body = { message: 'Update papers [v2]', content, sha: fileSha };
+        const res = await fetch(api, { method: 'PUT', headers, body: JSON.stringify(body) });
+        if (!res.ok) throw new Error('Save failed');
+        const data = await res.json();
+        setFileSha(data.content.sha);
+        setToast({ msg: 'Saved successfully', type: 'success' });
+      } catch (err) {
+        setToast({ msg: 'Sync failed! Changes local only.', type: 'error' });
+      } finally { setSyncing(false); }
+    };
 
-    useEffect(() => { loadPapersFromGithub(); }, [loadPapersFromGithub]);
+    // Actions
+    const handleSavePaper = (paper) => {
+      const now = new Date().toISOString();
+      let updated;
+      if (papers.find(p => p.id === paper.id)) {
+        updated = papers.map(p => p.id === paper.id ? { ...paper, updatedAt: now } : p);
+      } else {
+        updated = [{ ...paper, id: uid(), createdAt: now, updatedAt: now }, ...papers];
+      }
+      saveData(updated);
+      setEditingPaper(null);
+    };
 
-    // Suggestions
-    const allJournals = useMemo(() => Array.from(new Set(papers.flatMap(p => p.submissions?.map(s => s.journal).filter(Boolean) || []))).sort(), [papers]);
-    const allTags = useMemo(() => Array.from(new Set(papers.flatMap(p => p.tags?.filter(Boolean) || []))).sort(), [papers]);
+    const handleDelete = (id) => {
+      saveData(papers.filter(p => p.id !== id));
+      setDeleteConfirm(null);
+    };
 
-    // Stats
+    // Derived State
+    const processedPapers = useMemo(() => {
+      let res = papers;
+      if (filterStatus !== 'All') res = res.filter(p => {
+        const last = p.submissions.length ? p.submissions[p.submissions.length-1].status : 'Not Submitted';
+        return last === filterStatus;
+      });
+      if (search) {
+        const q = search.toLowerCase();
+        res = res.filter(p => p.title.toLowerCase().includes(q) || (p.tags||[]).some(t=>t.toLowerCase().includes(q)) || (p.collaborators||[]).some(c=>c.toLowerCase().includes(q)));
+      }
+      res.sort((a, b) => {
+        if (sortBy === 'title') return a.title.localeCompare(b.title);
+        const dateA = new Date(a.updatedAt || a.createdAt);
+        const dateB = new Date(b.updatedAt || b.createdAt);
+        return dateB - dateA;
+      });
+      return res;
+    }, [papers, filterStatus, search, sortBy]);
+
     const stats = useMemo(() => {
-      const lastStatus = (p) => p.submissions?.[p.submissions.length - 1]?.status || 'Not Submitted';
-      const accepted = papers.filter(p => lastStatus(p) === 'Accepted');
-
-      const acceptanceTimes = accepted.map(p => {
-        if (!p.submissions?.length) return null;
-        const first = p.submissions[0];
-        const last = p.submissions[p.submissions.length - 1];
-        const start = new Date(first.date || first.createdAt);
-        const end = new Date(last.date || last.updatedAt);
-        return Math.ceil((end - start) / (1000*60*60*24));
-      }).filter(x => x !== null);
-
-      const median = (arr) => arr.length ? [...arr].sort((a,b)=>a-b)[Math.floor(arr.length/2)] : 0;
-
-      const journals = {};
-      papers.forEach(p => p.submissions?.forEach(s => { if(!s.journal) return; journals[s.journal] = (journals[s.journal]||0)+1; }));
-      const topJournals = Object.entries(journals).sort((a,b)=>b[1]-a[1]).slice(0,5);
-
-      return {
-        total: papers.length,
-        accepted: accepted.length,
-        underReview: papers.filter(p => ['Submitted','Under Revision'].includes(lastStatus(p))).length,
-        notSubmitted: papers.filter(p => lastStatus(p) === 'Not Submitted').length,
-        acceptanceRate: papers.length ? Math.round( (accepted.length / papers.length) * 100) : 0,
-        medianDaysToAcceptance: acceptanceTimes.length ? median(acceptanceTimes) : 0,
-        topJournals
-      };
+      const counts = { total: papers.length, accepted: 0, underReview: 0 };
+      papers.forEach(p => {
+        const last = p.submissions.length ? p.submissions[p.submissions.length-1].status : 'Not Submitted';
+        if (last === 'Accepted') counts.accepted++;
+        if (['Submitted', 'Under Revision'].includes(last)) counts.underReview++;
+      });
+      return counts;
     }, [papers]);
 
-    // Charts
-    const chartRef = useRef(null);
-    const chartObj = useRef(null);
-    useEffect(()=>{
-      if(!showStats) return;
-      const ctx = chartRef.current?.getContext('2d');
-      if(!ctx) return;
-      if(chartObj.current) chartObj.current.destroy();
-      const labels = stats.topJournals.map(([j])=>j);
-      const values = stats.topJournals.map(([,n])=>n);
-      chartObj.current = new Chart(ctx, {
-        type: 'bar',
-        data: { labels, datasets: [{ label: 'Submissions by Journal', data: values }] },
-        options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
-      });
-    }, [showStats, stats.topJournals]);
+    // Theme
+    const [dark, setDark] = useState(localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches));
+    useEffect(() => {
+      if (dark) document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');
+      localStorage.theme = dark ? 'dark' : 'light';
+    }, [dark]);
 
-    // Process filters/sorts
-    const processedPapers = useMemo(() => {
-      const getTimeToAcceptance = (paper) => {
-        const lastSub = paper.submissions?.[paper.submissions.length - 1];
-        if (!lastSub || lastSub.status !== 'Accepted' || !paper.submissions?.[0]) return Infinity;
-        const start = new Date(paper.submissions[0].date || paper.submissions[0].createdAt);
-        const end = new Date(lastSub.date || lastSub.updatedAt);
-        return Math.ceil((end - start) / (1000*60*60*24));
-      };
-
-      let filtered = [...papers];
-      if (searchTerm) {
-        const t = searchTerm.toLowerCase();
-        filtered = filtered.filter(p =>
-          p.title.toLowerCase().includes(t) ||
-          p.abstract?.toLowerCase().includes(t) ||
-          p.collaborators?.some(c => c.toLowerCase().includes(t)) ||
-          p.tags?.some(tag => tag.toLowerCase().includes(t)) ||
-          p.links?.some(link => (link.label||'').toLowerCase().includes(t) || (link.url||'').toLowerCase().includes(t))
-        );
-      }
-      if (selectedStatus !== 'all') {
-        filtered = filtered.filter(p => (p.submissions?.[p.submissions.length - 1]?.status || 'Not Submitted') === selectedStatus);
-      }
-      filtered.sort((a,b)=>{
-        if (sortBy==='title') return a.title.localeCompare(b.title);
-        if (sortBy==='timeToAcceptance') return getTimeToAcceptance(a) - getTimeToAcceptance(b);
-        // latestAction
-        const aSub = a.submissions?.[a.submissions.length-1];
-        const bSub = b.submissions?.[b.submissions.length-1];
-        const aDate = aSub ? new Date(aSub.date || aSub.updatedAt || aSub.createdAt) : new Date(a.updatedAt || a.createdAt);
-        const bDate = bSub ? new Date(bSub.date || bSub.updatedAt || bSub.createdAt) : new Date(b.updatedAt || b.createdAt);
-        return bDate - aDate;
-      });
-
-      if (groupBy==='none') return filtered;
-      return filtered.reduce((acc, p) => {
-        let keys = [];
-        if (groupBy==='status') keys.push(p.submissions?.[p.submissions.length-1]?.status || 'Not Submitted');
-        else if (groupBy==='collaborator') keys = p.collaborators?.length ? p.collaborators : ['(No Collaborators)'];
-        else if (groupBy==='tag') keys = p.tags?.length ? p.tags : ['(No Tags)'];
-        keys.forEach(k => { (acc[k] = acc[k] || []).push(p); });
-        return acc;
-      }, {});
-    }, [papers, sortBy, groupBy, searchTerm, selectedStatus]);
-
-    // CRUD
-    const openForm = (paper=null) => { setEditingPaper(paper); setIsFormOpen(true); };
-    const closeForm = () => { setEditingPaper(null); setIsFormOpen(false); };
-
-    const handleSavePaper = (paperData) => {
-      let updated;
-      if (editingPaper) updated = papers.map(p => p.id === editingPaper.id ? { ...p, ...paperData, updatedAt: new Date().toISOString() } : p);
-      else updated = [{ ...paperData, id: uid(), createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }, ...papers];
-      setPapers(updated); savePapersToGithub(updated); closeForm();
-    };
-
-    const handleDeletePaper = (paperId) => { const updated = papers.filter(p => p.id !== paperId); setPapers(updated); savePapersToGithub(updated); setShowDeleteConfirm(null); };
-
-    // Backup / Restore / CSV
-    const backupJSON = () => {
-      const dataStr = JSON.stringify(papers, null, 2);
-      const url = URL.createObjectURL(new Blob([dataStr], { type: 'application/json' }));
-      const link = document.createElement('a');
-      link.href = url; link.download = `working-papers-backup-${new Date().toISOString().slice(0,10)}.json`; link.click();
-      URL.revokeObjectURL(url);
-    };
-    const restoreJSON = (event) => {
-      const file = event.target.files[0]; if (!file) return; const reader = new FileReader();
-      reader.onload = (e) => { try { const arr = JSON.parse(e.target.result); if (Array.isArray(arr) && confirm('Overwrite current data?')) { setPapers(arr); savePapersToGithub(arr); } else alert('Invalid file format.'); } catch { alert('Could not parse file.'); } };
-      reader.readAsText(file); event.target.value = null;
-    };
-    const exportCSV = () => {
-      const rows = [['id','title','collaborators','tags','status','lastJournal','lastDate']];
-      papers.forEach(p=>{
-        const last = p.submissions?.[p.submissions.length-1]||{};
-        rows.push([p.id, p.title, (p.collaborators||[]).join('; '), (p.tags||[]).join('; '), last.status||'Not Submitted', last.journal||'', last.date||'']);
-      });
-      const csv = rows.map(r=>r.map(x=>`"${String(x||'').replace(/"/g,'""')}"`).join(',')).join('\n');
-      const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
-      const a = document.createElement('a'); a.href = url; a.download = 'working-papers.csv'; a.click(); URL.revokeObjectURL(url);
-    };
-
-    // Kanban DnD helpers
-    const updatePaperStatus = (paperId, newStatus) => {
-      const updated = papers.map(p => {
-        if (p.id !== paperId) return p;
-        const subs = p.submissions ? [...p.submissions] : [];
-        const last = subs[subs.length-1];
-        if (last && last.journal && last.status === newStatus) return p; // no-op
-        subs.push({ journal: last?.journal || '—', status: newStatus, date: todayISO(), createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
-        return { ...p, submissions: subs, updatedAt: new Date().toISOString() };
-      });
-      setPapers(updated); savePapersToGithub(updated);
-    };
-
-    if (isLoading) return (
-      <div className="min-h-screen flex flex-col items-center justify-center text-slate-500 dark:text-slate-400">
-        <div className="w-16 h-16 spinner border-4 border-slate-200 dark:border-slate-700"></div>
-        <p className="mt-4 text-lg">Loading your papers...</p>
-      </div>
-    );
-
-    const all = Array.isArray(processedPapers) ? processedPapers : Object.values(processedPapers).flat();
+    if (loading) return <div className="min-h-screen flex items-center justify-center text-slate-400"><i className="fa-solid fa-circle-notch fa-spin text-3xl"></i></div>;
 
     return (
-      <div className="min-h-screen">
-        <div className="container mx-auto p-4 sm:p-6 lg:p-8 max-w-7xl">
-          <header className="mb-8">
-            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
-              <div>
-                <h1 className="text-4xl font-bold bg-gradient-to-r from-[var(--color-primary-light)] to-emerald-600 dark:from-[var(--color-primary-dark)] dark:to-emerald-400 bg-clip-text text-transparent">Working Papers</h1>
-                <p className="text-slate-600 dark:text-slate-300 mt-2">Track research, submissions, links, and analytics</p>
-                <div className={`text-sm mt-2 transition-all duration-500 ${isSaving ? 'opacity-100' : 'opacity-0'}`}>
-                  <span className="flex items-center gap-2 text-[var(--color-primary-light)] dark:text-[var(--color-primary-dark)] font-semibold">
-                    <div className="w-3 h-3 spinner border-2 border-slate-200 dark:border-slate-700"></div>
-                    Syncing to GitHub...
-                  </span>
-                </div>
+      <div className="flex min-h-screen">
+        {/* Sidebar */}
+        <aside className={`fixed inset-y-0 left-0 z-30 w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 transform transition-transform duration-300 lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+          <div className="h-full flex flex-col p-6">
+            <h1 className="text-xl font-bold tracking-tight mb-8 flex items-center gap-2 dark:text-white">
+              <span className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center text-sm"><i className="fa-solid fa-paper-plane"></i></span>
+              Tracker
+            </h1>
+
+            {/* Global Stats */}
+            <div className="grid grid-cols-2 gap-3 mb-8">
+              <div className="p-3 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-900">
+                <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{stats.underReview}</div>
+                <div className="text-[10px] uppercase font-semibold text-slate-500 dark:text-slate-400">Reviewing</div>
               </div>
-              <div className="flex flex-wrap items-center gap-3">
-                <button onClick={()=>setShowStats(s=>!s)} className="flex items-center gap-2 glass-effect text-slate-700 dark:text-slate-200 font-semibold py-2.5 px-4 rounded-xl shadow-sm hover:shadow-md"><StatsIcon/><span className="hidden sm:inline">Stats</span></button>
-                <button onClick={exportCSV} className="flex items-center gap-2 glass-effect text-slate-700 dark:text-slate-200 font-semibold py-2.5 px-4 rounded-xl shadow-sm hover:shadow-md"><i className="fa-solid fa-file-csv"></i><span className="hidden sm:inline">CSV</span></button>
-                <button onClick={backupJSON} className="flex items-center gap-2 glass-effect text-slate-700 dark:text-slate-200 font-semibold py-2.5 px-4 rounded-xl shadow-sm hover:shadow-md"><DownloadIcon/><span className="hidden sm:inline">Backup</span></button>
-                <label className="flex items-center gap-2 glass-effect text-slate-700 dark:text-slate-200 font-semibold py-2.5 px-4 rounded-xl shadow-sm hover:shadow-md cursor-pointer"><UploadIcon/><span className="hidden sm:inline">Restore</span><input type="file" accept=".json" className="hidden" onChange={restoreJSON} /></label>
-                <ThemeToggleButton/>
-                <button onClick={()=>openForm()} className="btn-primary py-2.5 px-4"><PlusIcon/><span className="hidden sm:inline ml-2">Add Paper</span></button>
+              <div className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-900">
+                <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{stats.accepted}</div>
+                <div className="text-[10px] uppercase font-semibold text-slate-500 dark:text-slate-400">Accepted</div>
               </div>
             </div>
 
-            {showStats && (
-              <div className="mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                <StatCard label="Total" value={stats.total}/>
-                <StatCard label="Accepted" value={stats.accepted} accent="emerald"/>
-                <StatCard label="Under Review" value={stats.underReview} accent="amber"/>
-                <StatCard label="Not Submitted" value={stats.notSubmitted}/>
-                <StatCard label="Acceptance Rate" value={`${stats.acceptanceRate}%`}/>
-                <StatCard label="Median Days to Acceptance" value={stats.medianDaysToAcceptance}/>
-                <div className="glass-effect rounded-xl p-4 shadow-sm col-span-2 md:col-span-3 lg:col-span-6">
-                  <div className="flex items-center justify-between mb-2"><h3 className="text-sm font-semibold text-slate-600 dark:text-slate-300">Top Journals by Submissions</h3></div>
-                  <canvas ref={chartRef} height="120"></canvas>
-                </div>
-              </div>
-            )}
-          </header>
-
-          <div className="mb-4 flex flex-wrap gap-3 items-center">
-            <div className="relative flex-grow min-w-[240px]">
-              <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500"/>
-              <input type="text" placeholder="Search title, abstract, collaborators, tags, links..." value={searchTerm} onChange={e=>setSearchTerm(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-white/50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 rounded-xl shadow-sm focus:ring-2 focus:ring-[var(--color-primary-light)] dark:focus:ring-[var(--color-primary-dark)] focus:border-transparent"/>
-            </div>
-            <Select label="Status" value={selectedStatus} onChange={setSelectedStatus} options={[['all','All'],['Accepted','Accepted'],['Under Revision','Under Revision'],['Submitted','Submitted'],['Rejected','Rejected'],['Not Submitted','Not Submitted']]}/>
-            <Select label="Group" value={groupBy} onChange={setGroupBy} options={[['none','None'],['status','Status'],['collaborator','Collaborator'],['tag','Tag']]}/>
-            <Select label="Sort" value={sortBy} onChange={setSortBy} options={[['latestAction','Latest Action'],['title','Title'],['timeToAcceptance','Time to Acceptance']]}/>
-            <Toggle labelLeft="List" labelRight="Kanban" value={view==='kanban'} onToggle={()=>setView(v=>v==='list'?'kanban':'list')}/>
-          </div>
-
-          {isFormOpen && <PaperForm onSave={handleSavePaper} onClose={closeForm} paper={editingPaper} journalSuggestions={allJournals} tagSuggestions={allTags} />}
-          {showDeleteConfirm && <ConfirmationModal title="Delete Paper" message="This action cannot be undone." onConfirm={()=>handleDeletePaper(showDeleteConfirm)} onCancel={()=>setShowDeleteConfirm(null)} />}
-
-          {view==='list' ? (
-            <PaperList papers={processedPapers} isGrouped={groupBy!=='none'} onEdit={openForm} onDelete={setShowDeleteConfirm} searchTerm={searchTerm} />
-          ) : (
-            <KanbanBoard papers={all} onEdit={openForm} onDelete={setShowDeleteConfirm} onDropStatus={updatePaperStatus}/>
-          )}
-
-          {papers.length===0 && !isLoading && (
-            <EmptyState onAdd={()=>openForm()}/>
-          )}
-        </div>
-      </div>
-    );
-  }
-
-  function StatCard({ label, value, accent }){
-    const color = accent==='emerald' ? 'text-emerald-700 dark:text-emerald-400' : accent==='amber' ? 'text-amber-700 dark:text-amber-400' : 'text-slate-800 dark:text-white';
-    return (
-      <div className="glass-effect rounded-xl p-4 shadow-sm">
-        <div className={`text-2xl font-bold ${color}`}>{value}</div>
-        <div className="text-sm text-slate-600 dark:text-slate-400">{label}</div>
-      </div>
-    );
-  }
-
-  function Toggle({ labelLeft, labelRight, value, onToggle }){
-    return (
-      <button onClick={onToggle} className="glass-effect rounded-xl px-3 py-2 text-sm font-semibold">
-        <span className={!value? 'text-emerald-600 dark:text-emerald-400' : ''}>{labelLeft}</span>
-        <span className="mx-2">/</span>
-        <span className={value? 'text-emerald-600 dark:text-emerald-400' : ''}>{labelRight}</span>
-      </button>
-    );
-  }
-
-  function Select({ label, value, onChange, options }){
-    return (
-      <div className="flex items-center gap-2">
-        <label className="text-sm font-medium text-slate-700 dark:text-slate-300">{label}:</label>
-        <select value={value} onChange={(e)=>onChange(e.target.value)} className="rounded-lg border-slate-300 dark:border-slate-600 shadow-sm text-sm bg-white/80 dark:bg-slate-700/80 dark:text-white">
-          {options.map(([v,t]) => <option key={v} value={v}>{t}</option>)}
-        </select>
-      </div>
-    );
-  }
-
-  function EmptyState({ onAdd }){
-    return (
-      <div className="text-center py-20 px-4 glass-effect rounded-2xl shadow-sm">
-        <div className="w-24 h-24 bg-gradient-to-r from-emerald-100 to-green-100 dark:from-emerald-900/50 dark:to-green-900/50 rounded-full mx-auto mb-6 flex items-center justify-center"><i className="fa-solid fa-file-circle-plus text-4xl text-[var(--color-primary-light)] dark:text-[var(--color-primary-dark)]"></i></div>
-        <h2 className="text-2xl font-semibold text-slate-700 dark:text-slate-200 mb-2">No papers yet!</h2>
-        <p className="text-slate-500 dark:text-slate-400 mb-6">Start tracking your research by adding your first paper.</p>
-        <button onClick={onAdd} className="btn-primary"><i className="fa-solid fa-plus mr-2"></i>Add Your First Paper</button>
-      </div>
-    );
-  }
-
-  // --- Confirmation Modal ---
-  function ConfirmationModal({ title, message, onConfirm, onCancel }){
-    return (
-      <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex justify-center items-center p-4 z-50">
-        <div className="glass-effect rounded-2xl shadow-2xl p-6 w-full max-w-sm">
-          <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">{title}</h3>
-          <p className="text-slate-600 dark:text-slate-300 mb-6">{message}</p>
-          <div className="flex justify-end gap-3">
-            <button onClick={onCancel} className="px-4 py-2 bg-slate-200/50 dark:bg-slate-700/50 text-slate-800 dark:text-slate-200 rounded-lg hover:bg-slate-300/50 dark:hover:bg-slate-600/50 font-semibold">Cancel</button>
-            <button onClick={onConfirm} className="px-4 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700">Delete</button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // --- Form ---
-  function PaperForm({ onSave, onClose, paper, journalSuggestions, tagSuggestions }){
-    const [title, setTitle] = useState(paper?.title || '');
-    const [abstract, setAbstract] = useState(paper?.abstract || '');
-    const [collaborators, setCollaborators] = useState(paper?.collaborators?.join(', ') || '');
-    const [tags, setTags] = useState(paper?.tags?.join(', ') || '');
-    const [notes, setNotes] = useState(paper?.notes || '');
-    const [links, setLinks] = useState(paper?.links || []); // {label,url}
-    const [submissions, setSubmissions] = useState(paper?.submissions || []);
-    const [error, setError] = useState('');
-
-    const addLink = () => setLinks([...links, { label: '', url: '' }]);
-    const removeLink = (i) => setLinks(links.filter((_,idx)=>idx!==i));
-    const updateLink = (i, key, value) => setLinks(links.map((l,idx)=> idx===i ? { ...l, [key]: value } : l));
-
-    const addSubmission = () => setSubmissions([...(submissions||[]), { journal: '', status: 'Submitted', date: todayISO(), createdAt: new Date().toISOString() }]);
-    const removeSubmission = (i) => setSubmissions(submissions.filter((_,idx)=>idx!==i));
-    const handleSubmissionChange = (i, field, value) => setSubmissions(submissions.map((s,idx)=> idx===i ? { ...s, [field]: value, updatedAt: new Date().toISOString() } : s));
-
-    const submit = (e) => {
-      e.preventDefault(); if(!title.trim()){ setError('Paper title is required.'); return; }
-      onSave({
-        title,
-        abstract,
-        collaborators: collaborators.split(',').map(c=>c.trim()).filter(Boolean),
-        tags: tags.split(',').map(t=>t.trim()).filter(Boolean),
-        notes,
-        links: links.filter(l=>l.url?.trim()),
-        submissions: (submissions||[]).filter(s=> (s.journal||'').trim()!=='' ),
-      });
-    };
-
-    return (
-      <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex justify-center items-start p-4 z-40 overflow-y-auto custom-scrollbar">
-        <div className="glass-effect rounded-2xl shadow-2xl mt-8 mb-8 p-6 w-full max-w-4xl">
-          <h2 className="text-3xl font-bold text-slate-800 dark:text-white mb-6">{paper ? 'Edit Paper' : 'Add New Paper'}</h2>
-          {error && <div className="bg-red-100 dark:bg-red-900/30 border border-red-200 dark:border-red-500/30 text-red-800 dark:text-red-300 px-4 py-3 rounded-xl mb-6 flex items-center gap-2"><i className="fa-solid fa-circle-exclamation"></i>{error}</div>}
-          <form onSubmit={submit} className="space-y-6">
-            <div>
-              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Paper Title *</label>
-              <input value={title} onChange={e=>setTitle(e.target.value)} className="w-full px-4 py-3 bg-white/50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-600 rounded-xl shadow-sm focus:ring-2 focus:ring-[var(--color-primary-light)] dark:focus:ring-[var(--color-primary-dark)] focus:border-transparent" placeholder="Enter your paper title..." required />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Abstract</label>
-              <textarea value={abstract} onChange={e=>setAbstract(e.target.value)} rows="4" className="w-full px-4 py-3 bg-white/50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-600 rounded-xl shadow-sm focus:ring-2 focus:ring-[var(--color-primary-light)] dark:focus:ring-[var(--color-primary-dark)] resize-y" placeholder="Short abstract..." />
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Collaborators</label>
-                <input value={collaborators} onChange={e=>setCollaborators(e.target.value)} className="w-full px-4 py-3 bg-white/50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-600 rounded-xl shadow-sm focus:ring-2 focus:ring-[var(--color-primary-light)] dark:focus:ring-[var(--color-primary-dark)]" placeholder="UNINA, Oxford..." />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Tags</label>
-                <input value={tags} onChange={e=>setTags(e.target.value)} list="tag-list" className="w-full px-4 py-3 bg-white/50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-600 rounded-xl shadow-sm focus:ring-2 focus:ring-[var(--color-primary-light)] dark:focus:ring-[var(--color-primary-dark)]" placeholder="fmm, economics..." />
-                <datalist id="tag-list">{tagSuggestions.map(t => <option key={t} value={t} />)}</datalist>
-              </div>
-            </div>
-
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="text-lg font-semibold text-slate-800 dark:text-white">External Links</h3>
-                <button type="button" onClick={addLink} className="px-3 py-1.5 bg-green-100 dark:bg-green-800/40 text-green-800 dark:text-green-200 rounded-lg text-sm font-semibold hover:bg-green-200 dark:hover:bg-green-800/60"><i className="fa-solid fa-plus mr-1"></i>Add</button>
-              </div>
-              <div className="space-y-3">
-                {links.length ? links.map((l,i)=> (
-                  <div key={i} className="grid grid-cols-1 md:grid-cols-12 gap-3 p-3 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50/50 dark:bg-slate-800/30">
-                    <div className="md:col-span-4"><label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">Label</label><input value={l.label} onChange={e=>updateLink(i,'label',e.target.value)} placeholder="Overleaf / Zotero / DOI / OSF / ORCID" className="w-full px-3 py-2 bg-white/80 dark:bg-slate-700/80 border border-slate-300 dark:border-slate-600 rounded-lg text-sm"/></div>
-                    <div className="md:col-span-7"><label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">URL</label><input value={l.url} onChange={e=>updateLink(i,'url',e.target.value)} placeholder="https://..." className="w-full px-3 py-2 bg-white/80 dark:bg-slate-700/80 border border-slate-300 dark:border-slate-600 rounded-lg text-sm"/></div>
-                    <div className="md:col-span-1 flex items-end"><button type="button" onClick={()=>removeLink(i)} className="p-2 text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-500 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg" title="Remove"><TrashIcon/></button></div>
-                  </div>
-                )) : (
-                  <div className="text-center py-6 text-slate-500 dark:text-slate-400 bg-slate-50/50 dark:bg-slate-800/30 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-700">No links yet.</div>
-                )}
-              </div>
-            </div>
-
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="text-lg font-semibold text-slate-800 dark:text-white">Submission History</h3>
-                <button type="button" onClick={addSubmission} className="px-3 py-1.5 bg-green-100 dark:bg-green-800/40 text-green-800 dark:text-green-200 rounded-lg text-sm font-semibold hover:bg-green-200 dark:hover:bg-green-800/60"><i className="fa-solid fa-plus mr-1"></i>Add</button>
-              </div>
-              <div className="space-y-4 max-h-80 overflow-y-auto custom-scrollbar p-1">
-                <datalist id="journal-list">{journalSuggestions.map(j => <option key={j} value={j} />)}</datalist>
-                {submissions.length ? submissions.map((s,i)=> (
-                  <div key={i} className="grid grid-cols-1 md:grid-cols-12 gap-4 p-4 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50/50 dark:bg-slate-800/30">
-                    <div className="md:col-span-5"><label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">Journal</label><input value={s.journal} list="journal-list" onChange={e=>handleSubmissionChange(i,'journal',e.target.value)} placeholder="Journal Name" className="w-full px-3 py-2 bg-white/80 dark:bg-slate-700/80 border border-slate-300 dark:border-slate-600 rounded-lg text-sm" required/></div>
-                    <div className="md:col-span-3"><label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">Status</label><select value={s.status} onChange={e=>handleSubmissionChange(i,'status',e.target.value)} className="w-full px-3 py-2 bg-white/80 dark:bg-slate-700/80 border border-slate-300 dark:border-slate-600 rounded-lg text-sm"><option>Submitted</option><option>Under Revision</option><option>Rejected</option><option>Accepted</option></select></div>
-                    <div className="md:col-span-3"><label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">Date</label><input type="date" value={s.date||''} onChange={e=>handleSubmissionChange(i,'date',e.target.value)} className="w-full px-3 py-2 bg-white/80 dark:bg-slate-700/80 border border-slate-300 dark:border-slate-600 rounded-lg text-sm"/></div>
-                    <div className="md:col-span-1 flex items-end"><button type="button" onClick={()=>removeSubmission(i)} className="p-2 text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-500 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg" title="Remove"><TrashIcon/></button></div>
-                  </div>
-                )) : (
-                  <div className="text-center py-8 text-slate-500 dark:text-slate-400 bg-slate-50/50 dark:bg-slate-800/30 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-700"><CalendarIcon className="mx-auto mb-2"/><p className="text-sm">No submissions yet.</p></div>
-                )}
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Notes</label>
-              <textarea value={notes} onChange={e=>setNotes(e.target.value)} rows="3" className="w-full px-4 py-3 bg-white/50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-600 rounded-xl shadow-sm focus:ring-2 focus:ring-[var(--color-primary-light)] dark:focus:ring-[var(--color-primary-dark)] resize-y" placeholder="Additional notes..."></textarea>
-            </div>
-
-            <div className="flex justify-end gap-4 pt-6 border-t border-slate-200 dark:border-slate-700">
-              <button type="button" onClick={onClose} className="px-6 py-3 bg-slate-200/50 dark:bg-slate-700/50 text-slate-800 dark:text-slate-200 rounded-xl border border-slate-300 dark:border-slate-600 hover:bg-slate-300/50 dark:hover:bg-slate-600/50 font-semibold">Cancel</button>
-              <button type="submit" className="btn-primary px-6 py-3">{paper ? 'Update Paper' : 'Save Paper'}</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    );
-  }
-
-  // --- List ---
-  function PaperList({ papers, isGrouped, onEdit, onDelete, searchTerm }){
-    if (isGrouped) {
-      return (
-        <div className="space-y-8">
-          {Object.keys(papers).sort().map(groupName => (
-            <div key={groupName}>
-              <div className="flex items-center gap-3 mb-4"><h2 className="text-xl font-bold text-slate-700 dark:text-slate-200">{groupName}</h2><span className="bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-semibold px-2 py-1 rounded-full">{papers[groupName].length}</span></div>
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">{papers[groupName].map(p => <PaperItem key={p.id} paper={p} onEdit={onEdit} onDelete={onDelete} searchTerm={searchTerm} />)}</div>
-            </div>
-          ))}
-        </div>
-      );
-    }
-    return <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">{papers.map(p => <PaperItem key={p.id} paper={p} onEdit={onEdit} onDelete={onDelete} searchTerm={searchTerm} />)}</div>;
-  }
-
-  function Chip({ colorClass, children }){
-    return <span className={`text-xs font-semibold px-3 py-1 rounded-full ${colorClass}`}>{children}</span>;
-  }
-  function statusChipClass(status){
-    const base = 'text-xs font-semibold px-3 py-1 rounded-full';
-    switch(status){
-      case 'Accepted': return `${base} bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-300`;
-      case 'Under Revision': return `${base} bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-300`;
-      case 'Rejected': return `${base} bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300`;
-      case 'Submitted': return `${base} bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300`;
-      default: return `${base} bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-300`;
-    }
-  }
-
-  function highlight(text, term){
-    if(!term) return text; const parts = String(text||'').split(new RegExp(`(${term})`, 'gi')); return parts.map((p,i)=> p.toLowerCase()===term.toLowerCase() ? <mark key={i} className="bg-emerald-200/50 dark:bg-emerald-400/30 text-emerald-900 dark:text-emerald-100 px-0.5 rounded">{p}</mark> : p);
-  }
-
-  function PaperItem({ paper, onEdit, onDelete, searchTerm }){
-    const latest = paper.submissions?.[paper.submissions.length-1];
-    const status = latest?.status || 'Not Submitted';
-
-    const timeToAcceptance = useMemo(()=>{
-      if(status!=='Accepted' || !paper.submissions?.length) return null;
-      const first = paper.submissions[0];
-      const last = latest; const start = new Date(first.date||first.createdAt); const end = new Date(last.date||last.updatedAt);
-      const days = Math.ceil((end-start)/(1000*60*60*24));
-      return `${days} days`;
-    }, [paper, status, latest]);
-
-    return (
-      <div className="glass-effect rounded-2xl p-6 transition duration-300 hover:shadow-lg hover:bg-white/70 dark:hover:bg-slate-800/70 group flex flex-col h-full">
-        <div className="flex items-start justify-between mb-3">
-          <div className="flex flex-col gap-2">
-            <div className={statusChipClass(status)}>{status}</div>
-            {timeToAcceptance && (<div className="text-xs font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1.5"><i className="fa-solid fa-trophy text-amber-500"></i><span>{timeToAcceptance}</span></div>)}
-          </div>
-          <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition">
-            <button onClick={()=>onEdit(paper)} className="p-2 text-slate-400 dark:text-slate-500 hover:text-[var(--color-primary-light)] dark:hover:text-[var(--color-primary-dark)] hover:bg-green-50 dark:hover:bg-green-900/30 rounded-lg" title="Edit"><EditIcon/></button>
-            <button onClick={()=>onDelete(paper.id)} className="p-2 text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg" title="Delete"><TrashIcon/></button>
-          </div>
-        </div>
-        <div className="flex-grow mb-4">
-          <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-1 line-clamp-2">{highlight(paper.title, searchTerm)}</h3>
-          {paper.abstract && <p className="text-sm text-slate-600 dark:text-slate-400 mb-2 line-clamp-3">{highlight(paper.abstract, searchTerm)}</p>}
-          {paper.links?.length>0 && (
-            <div className="flex flex-wrap gap-2 mb-2">
-              {paper.links.slice(0,4).map((l,idx)=> (
-                <a key={idx} href={l.url} target="_blank" rel="noreferrer" className="text-[11px] font-medium bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 px-2 py-1 rounded-full hover:underline flex items-center gap-1">
-                  <LinkIcon/> {l.label||'Link'}
-                </a>
+            {/* Navigation */}
+            <nav className="space-y-1 flex-1">
+              <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Filters</div>
+              {['All', 'Submitted', 'Under Revision', 'Accepted', 'Rejected', 'Not Submitted'].map(s => (
+                <button key={s} onClick={() => setFilterStatus(s)} className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition ${filterStatus === s ? 'bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50'}`}>
+                  {s}
+                </button>
               ))}
-              {paper.links.length>4 && <span className="text-[11px] font-medium bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">+{paper.links.length-4}</span>}
+            </nav>
+
+            <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <button onClick={() => setDark(!dark)} className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-white transition">
+                {dark ? <Icons.Sun/> : <Icons.Moon/>}
+              </button>
+              <button onClick={onLogout} className="text-xs font-medium text-slate-400 hover:text-red-500">Log Out</button>
+            </div>
+          </div>
+        </aside>
+
+        {/* Main Content */}
+        <main className={`flex-1 transition-all duration-300 lg:ml-64 p-4 lg:p-8`}>
+          {/* Header */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+            <div className="relative flex-1 max-w-lg">
+              <Icons.Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+              <input type="text" placeholder="Search papers..." value={search} onChange={e => setSearch(e.target.value)} 
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white dark:bg-slate-800 border-none shadow-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500" />
+            </div>
+            <div className="flex items-center gap-3">
+              <select value={sortBy} onChange={e => setSortBy(e.target.value)} className="bg-white dark:bg-slate-800 border-none shadow-sm rounded-lg py-2.5 px-3 text-sm text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-blue-500 cursor-pointer">
+                <option value="updated">Recently Updated</option>
+                <option value="title">Title (A-Z)</option>
+              </select>
+              <button onClick={() => setEditingPaper({ title: '', submissions: [], links: [], collaborators: [], tags: [] })} 
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-lg text-sm font-medium shadow-sm flex items-center gap-2 transition">
+                <Icons.Plus /> New Paper
+              </button>
+            </div>
+          </div>
+
+          {/* Paper Grid */}
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {processedPapers.map(paper => (
+              <PaperCard 
+                key={paper.id} 
+                paper={paper} 
+                onEdit={() => setEditingPaper(paper)} 
+                onDelete={() => setDeleteConfirm(paper.id)}
+                onUpdateStatus={(newSub) => {
+                   const updatedSubs = [...paper.submissions, newSub];
+                   handleSavePaper({ ...paper, submissions: updatedSubs });
+                }}
+              />
+            ))}
+          </div>
+
+          {processedPapers.length === 0 && (
+            <div className="text-center py-20">
+              <div className="inline-block p-4 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 mb-4"><Icons.Filter /></div>
+              <h3 className="text-lg font-medium text-slate-900 dark:text-white">No papers found</h3>
+              <p className="text-slate-500 dark:text-slate-400">Try adjusting your search or filters.</p>
             </div>
           )}
-          {paper.collaborators?.length>0 && <p className="text-sm text-slate-600 dark:text-slate-400 mb-2 flex items-center gap-1.5"><i className="fa-solid fa-users text-xs"></i>{paper.collaborators.map(c=>highlight(c, searchTerm)).reduce((p,c)=>[p,', ',c])}</p>}
-          {paper.tags?.length>0 && <div className="flex flex-wrap gap-2 mb-2">{paper.tags.slice(0,3).map(tag => <span key={tag} className="text-xs font-medium bg-green-100/80 dark:bg-green-900/50 text-green-800 dark:text-green-300 px-2 py-1 rounded-full">{highlight(tag, searchTerm)}</span>)}{paper.tags.length>3 && <span className="text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">+{paper.tags.length-3}</span>}</div>}
+        </main>
+
+        {/* Modals & Overlays */}
+        {editingPaper && (
+          <EditorModal 
+            paper={editingPaper} 
+            onClose={() => setEditingPaper(null)} 
+            onSave={handleSavePaper} 
+          />
+        )}
+
+        {deleteConfirm && (
+          <Modal title="Delete Paper" onClose={() => setDeleteConfirm(null)} maxWidth="max-w-sm">
+            <p className="text-slate-600 dark:text-slate-300 mb-6">Are you sure you want to delete this paper? This cannot be undone.</p>
+            <div className="flex justify-end gap-3">
+              <button onClick={() => setDeleteConfirm(null)} className="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg">Cancel</button>
+              <button onClick={() => handleDelete(deleteConfirm)} className="px-4 py-2 text-sm font-medium bg-red-600 text-white rounded-lg hover:bg-red-700">Delete</button>
+            </div>
+          </Modal>
+        )}
+
+        {/* Toast */}
+        {toast && <Toast message={toast.msg} type={toast.type} onClose={() => setToast(null)} />}
+        
+        {/* Sync Indicator */}
+        <div className={`fixed bottom-4 left-4 lg:left-72 text-xs font-medium text-slate-400 flex items-center gap-2 transition-opacity ${syncing ? 'opacity-100' : 'opacity-0'}`}>
+          <i className="fa-solid fa-rotate fa-spin"></i> Saving...
         </div>
-        <div className="mt-auto">
-          <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 mb-3">
-            <div className="flex items-center gap-1"><ClockIcon className="w-3 h-3"/><span>{fmtDate(paper.createdAt)}</span></div>
-            {paper.updatedAt && paper.updatedAt !== paper.createdAt && <span>Updated {fmtDate(paper.updatedAt)}</span>}
+      </div>
+    );
+  }
+
+  // --- SUB-COMPONENTS ---
+
+  function PaperCard({ paper, onEdit, onDelete, onUpdateStatus }) {
+    const lastSub = paper.submissions.length ? paper.submissions[paper.submissions.length-1] : null;
+    const status = lastSub ? lastSub.status : 'Not Submitted';
+    const journal = lastSub ? lastSub.journal : '';
+
+    // Quick Update State
+    const [showQuick, setShowQuick] = useState(false);
+    const [quickJournal, setQuickJournal] = useState('');
+    
+    const handleQuickSubmit = (newStatus) => {
+      onUpdateStatus({ 
+        journal: quickJournal || (lastSub?.journal) || 'Unknown Journal', 
+        status: newStatus, 
+        date: todayISO() 
+      });
+      setShowQuick(false); setQuickJournal('');
+    };
+
+    return (
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 card-hover flex flex-col h-full relative group">
+        
+        {/* Header: Status & Actions */}
+        <div className="flex justify-between items-start mb-3">
+          <StatusBadge status={status} />
+          <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            <button onClick={onEdit} className="p-1.5 text-slate-400 hover:text-blue-600 rounded bg-slate-50 dark:bg-slate-800"><Icons.Edit/></button>
+            <button onClick={onDelete} className="p-1.5 text-slate-400 hover:text-red-600 rounded bg-slate-50 dark:bg-slate-800"><Icons.Trash/></button>
           </div>
-          {paper.submissions?.length>0 && (
-            <div className="pt-3 border-t border-slate-200/80 dark:border-slate-700/80">
-              <h4 className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider flex items-center gap-2"><CalendarIcon className="w-3 h-3"/>Timeline</h4>
-              <div className="space-y-3 max-h-32 overflow-y-auto custom-scrollbar pr-2">
-                {paper.submissions.slice(-3).reverse().map((s,i)=> (
-                  <div key={i} className="relative pl-6">
-                    <div className="absolute left-[9px] top-1 w-3 h-3 bg-white dark:bg-slate-600 border-2 border-green-400 dark:border-green-500 rounded-full"></div>
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
-                      <div>
-                        <div className="font-semibold text-slate-700 dark:text-slate-300 text-sm">{highlight(s.journal, searchTerm)}</div>
-                        {s.date && <div className="text-xs text-slate-500 dark:text-slate-400">{fmtDate(s.date)}</div>}
-                      </div>
-                      <span className={`${statusChipClass(s.status)} text-[10px]`}>{s.status}</span>
-                    </div>
-                  </div>
+        </div>
+
+        {/* Content */}
+        <div className="flex-1">
+          <h3 className="font-bold text-slate-900 dark:text-white leading-tight mb-2">{paper.title}</h3>
+          
+          <div className="text-sm text-slate-500 dark:text-slate-400 mb-3 line-clamp-2">
+             {paper.collaborators && paper.collaborators.length > 0 && <span className="mr-2 text-slate-800 dark:text-slate-200"><i className="fa-solid fa-user-group text-xs mr-1"></i> {paper.collaborators.join(', ')}</span>}
+             {paper.abstract}
+          </div>
+
+          {/* Timeline Node Visualization */}
+          {lastSub && (
+             <div className="flex items-center gap-3 mt-4 text-xs bg-slate-50 dark:bg-slate-800/50 p-2 rounded-lg">
+                <div className={`w-2 h-2 rounded-full ${status === 'Accepted' ? 'bg-emerald-500' : status === 'Rejected' ? 'bg-red-500' : 'bg-blue-500'}`}></div>
+                <div className="flex-1">
+                  <div className="font-medium text-slate-700 dark:text-slate-200">{journal}</div>
+                  <div className="text-slate-400">{fmtDate(lastSub.date)}</div>
+                </div>
+                {status === 'Accepted' && paper.submissions.length > 1 && (
+                   <div className="text-emerald-600 font-semibold">{daysBetween(paper.submissions[0].date, lastSub.date)} days</div>
+                )}
+             </div>
+          )}
+        </div>
+
+        {/* Footer: Quick Actions */}
+        <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
+           {!showQuick ? (
+              <button onClick={() => setShowQuick(true)} className="w-full text-center text-xs font-semibold text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 py-2 rounded-lg transition">
+                Update Status
+              </button>
+           ) : (
+              <div className="bg-slate-50 dark:bg-slate-800 p-2 rounded-lg animate-fade-in">
+                 <input 
+                    type="text" 
+                    placeholder={lastSub?.journal || "Journal Name"} 
+                    value={quickJournal} 
+                    onChange={e => setQuickJournal(e.target.value)}
+                    className="w-full text-xs p-1.5 mb-2 rounded border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700"
+                    autoFocus
+                 />
+                 <div className="grid grid-cols-3 gap-1">
+                    <button onClick={() => handleQuickSubmit('Submitted')} className="text-[10px] bg-blue-100 text-blue-700 py-1 rounded hover:bg-blue-200">Submit</button>
+                    <button onClick={() => handleQuickSubmit('Rejected')} className="text-[10px] bg-red-100 text-red-700 py-1 rounded hover:bg-red-200">Reject</button>
+                    <button onClick={() => handleQuickSubmit('Accepted')} className="text-[10px] bg-emerald-100 text-emerald-700 py-1 rounded hover:bg-emerald-200">Accept</button>
+                 </div>
+                 <button onClick={() => setShowQuick(false)} className="w-full text-[10px] text-slate-400 mt-1 hover:text-slate-600">Cancel</button>
+              </div>
+           )}
+        </div>
+      </div>
+    );
+  }
+
+  function EditorModal({ paper, onClose, onSave }) {
+    // Local state needed for form fields
+    const [form, setForm] = useState({
+      title: paper.title || '',
+      abstract: paper.abstract || '',
+      collaborators: (paper.collaborators || []).join(', '),
+      tags: (paper.tags || []).join(', '),
+      links: paper.links || [],
+      submissions: paper.submissions || []
+    });
+
+    const handleChange = (f, v) => setForm(prev => ({ ...prev, [f]: v }));
+    
+    // Submissions Handling
+    const addSub = () => setForm(p => ({ ...p, submissions: [...p.submissions, { journal: '', status: 'Submitted', date: todayISO() }] }));
+    const updateSub = (i, k, v) => setForm(p => {
+       const subs = [...p.submissions]; subs[i][k] = v; return { ...p, submissions: subs };
+    });
+    const removeSub = (i) => setForm(p => ({ ...p, submissions: p.submissions.filter((_, idx) => idx !== i) }));
+
+    const handleSave = () => {
+       onSave({
+         ...paper,
+         title: form.title,
+         abstract: form.abstract,
+         collaborators: form.collaborators.split(',').map(s=>s.trim()).filter(Boolean),
+         tags: form.tags.split(',').map(s=>s.trim()).filter(Boolean),
+         links: form.links.filter(l => l.url),
+         submissions: form.submissions.filter(s => s.journal)
+       });
+    };
+
+    return (
+      <Modal title={paper.id ? "Edit Paper" : "Add Paper"} onClose={onClose}>
+        <div className="space-y-5">
+          {/* Main Info */}
+          <div>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Title</label>
+            <input value={form.title} onChange={e => handleChange('title', e.target.value)} className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Paper Title" />
+          </div>
+          
+          <div className="grid grid-cols-2 gap-4">
+             <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Collaborators</label>
+                <input value={form.collaborators} onChange={e => handleChange('collaborators', e.target.value)} className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 dark:text-white text-sm" placeholder="Name 1, Name 2" />
+             </div>
+             <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Tags</label>
+                <input value={form.tags} onChange={e => handleChange('tags', e.target.value)} className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 dark:text-white text-sm" placeholder="Econ, Labor, Micro" />
+             </div>
+          </div>
+
+          <div>
+             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Abstract</label>
+             <textarea rows="3" value={form.abstract} onChange={e => handleChange('abstract', e.target.value)} className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 dark:text-white text-sm" placeholder="Brief summary..."></textarea>
+          </div>
+
+          {/* Submission History Section */}
+          <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-700">
+             <div className="flex justify-between items-center mb-3">
+                <h3 className="text-sm font-bold text-slate-700 dark:text-slate-300">Submission History</h3>
+                <button onClick={addSub} className="text-xs bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 px-2 py-1 rounded hover:bg-slate-50">Add</button>
+             </div>
+             <div className="space-y-2">
+                {form.submissions.map((sub, i) => (
+                   <div key={i} className="flex gap-2 items-center">
+                      <input value={sub.journal} onChange={e => updateSub(i, 'journal', e.target.value)} placeholder="Journal" className="flex-1 text-sm px-2 py-1.5 rounded border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 dark:text-white" />
+                      <select value={sub.status} onChange={e => updateSub(i, 'status', e.target.value)} className="text-sm px-2 py-1.5 rounded border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 dark:text-white">
+                         {['Submitted', 'Under Revision', 'Accepted', 'Rejected'].map(o => <option key={o}>{o}</option>)}
+                      </select>
+                      <input type="date" value={sub.date} onChange={e => updateSub(i, 'date', e.target.value)} className="text-sm px-2 py-1.5 rounded border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 dark:text-white w-32" />
+                      <button onClick={() => removeSub(i)} className="text-slate-400 hover:text-red-500"><Icons.Trash /></button>
+                   </div>
                 ))}
-                {paper.submissions.length>3 && <div className="text-xs text-slate-400 dark:text-slate-500 text-center pt-2">+{paper.submissions.length-3} more</div>}
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  }
-
-  // --- Kanban ---
-  function KanbanBoard({ papers, onEdit, onDelete, onDropStatus }){
-    const columns = ['Not Submitted','Submitted','Under Revision','Accepted','Rejected'];
-    const byStatus = (status) => papers.filter(p => (p.submissions?.[p.submissions.length-1]?.status || 'Not Submitted') === status);
-
-    const onDragStart = (e, id) => { e.dataTransfer.setData('text/plain', id); e.dataTransfer.effectAllowed = 'move'; };
-    const onDragOver = (e) => { e.preventDefault(); e.currentTarget.classList.add('drag-over'); };
-    const onDragLeave = (e) => { e.currentTarget.classList.remove('drag-over'); };
-    const onDrop = (e, status) => { e.preventDefault(); e.currentTarget.classList.remove('drag-over'); const id = e.dataTransfer.getData('text/plain'); if(id) onDropStatus(id, status); };
-
-    return (
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
-        {columns.map(col => (
-          <div key={col} onDragOver={onDragOver} onDragLeave={onDragLeave} onDrop={(e)=>onDrop(e,col)} className="glass-effect rounded-2xl p-4 min-h-[260px]">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">{col}</h3>
-              <span className="text-xs text-slate-500 dark:text-slate-400">{byStatus(col).length}</span>
-            </div>
-            <div className="space-y-3">
-              {byStatus(col).map(p => (
-                <div key={p.id} draggable onDragStart={(e)=>onDragStart(e,p.id)} className="p-3 bg-white/70 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm cursor-grab active:cursor-grabbing">
-                  <div className="text-sm font-semibold text-slate-800 dark:text-white mb-1 line-clamp-2">{p.title}</div>
-                  <div className="text-[11px] text-slate-500 dark:text-slate-400 mb-2">{p.collaborators?.join(', ')}</div>
-                  <div className="flex items-center justify-end gap-2 opacity-90">
-                    <button onClick={()=>onEdit(p)} className="text-slate-400 hover:text-emerald-600"><i className="fa-solid fa-pen"></i></button>
-                    <button onClick={()=>onDelete(p.id)} className="text-slate-400 hover:text-red-600"><i className="fa-solid fa-trash"></i></button>
-                  </div>
-                </div>
-              ))}
-            </div>
+                {form.submissions.length === 0 && <p className="text-xs text-slate-400 italic">No submissions tracked yet.</p>}
+             </div>
           </div>
-        ))}
-      </div>
+
+          {/* Actions */}
+          <div className="pt-4 flex justify-end gap-3 border-t border-slate-100 dark:border-slate-800">
+             <button onClick={onClose} className="px-5 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium transition">Cancel</button>
+             <button onClick={handleSave} className="px-5 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 font-medium shadow-md transition">Save Paper</button>
+          </div>
+        </div>
+      </Modal>
     );
   }
 
-  // --- Mount ---
   const root = ReactDOM.createRoot(document.getElementById('root'));
-  root.render(<App/>);
+  root.render(<App />);
 </script>
 </body>
 </html>
