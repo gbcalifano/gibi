@@ -1,542 +1,995 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Research Tracker v2</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js" defer></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" defer></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js" defer></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: { sans: ['Inter', 'sans-serif'] },
-          colors: {
-            surface: { 50: '#f9fafb', 100: '#f3f4f6', 200: '#e5e7eb', 800: '#1f2937', 900: '#111827' },
-            brand: { light: '#2563eb', DEFAULT: '#3b82f6', dark: '#1d4ed8' } // Professional Blue
-          }
-        }
-      }
-    };
-  </script>
+  <title>Working papers</title>
+  <meta name="description" content="A minimal research tracker for working papers (GitHub-backed)." />
+  <link rel="stylesheet" href="style.css">
+
   <style>
-    body { background-color: #f9fafb; color: #111827; }
-    html.dark body { background-color: #0f172a; color: #f3f4f6; }
-    .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
-    .custom-scroll::-webkit-scrollbar-track { background: transparent; }
-    .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-    html.dark .custom-scroll::-webkit-scrollbar-thumb { background: #334155; }
-    .card-hover { transition: all 0.2s ease-in-out; }
-    .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+    /* Minimal additions, aligned with califano.xyz */
+
+    .muted { opacity: 0.75; }
+    .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+    .row > * { flex: 0 0 auto; }
+
+    input[type="text"], input[type="password"], input[type="date"], select, textarea {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 16px;
+      line-height: 18px;
+      padding: 8px 10px;
+      border: 1px solid #000;
+      background: transparent;
+      color: inherit;
+      width: 100%;
+      max-width: 100%;
+    }
+
+    textarea {
+      font-size: 23px;
+      line-height: 26px;
+      min-height: 130px;
+      resize: vertical;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      input[type="text"], input[type="password"], input[type="date"], select, textarea {
+        border-color: #fff;
+      }
+    }
+
+    .panel {
+      margin: 40px 0;
+      border-top: 1px solid silver;
+      padding-top: 20px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .panel { border-color: #fff; }
+    }
+
+    .small { font-size: 16px; line-height: 18px; }
+    .tiny  { font-size: 14px; line-height: 16px; }
+
+    .pill {
+      display: inline-block;
+      border: 1px solid #000;
+      padding: 2px 8px;
+      font-size: 14px;
+      line-height: 16px;
+      margin-right: 6px;
+      margin-top: 6px;
+      white-space: nowrap;
+    }
+    @media (prefers-color-scheme: dark) {
+      .pill { border-color: #fff; }
+    }
+
+    .actions-inline button { margin: 0 8px 0 0; }
+    .actions-inline button:last-child { margin-right: 0; }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 767px) {
+      .two-col { grid-template-columns: 1fr; }
+    }
+
+    /* Modal (simple, no library) */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 999;
+    }
+    .modal {
+      background: #fff;
+      color: #000;
+      width: 100%;
+      max-width: 900px;
+      border: 1px solid #000;
+      padding: 18px;
+      max-height: 90vh;
+      overflow: auto;
+    }
+    @media (prefers-color-scheme: dark) {
+      .modal { background: #1e1e1e; color: #dedede; border-color: #fff; }
+    }
+    .modal h2 { margin-top: 0; }
+    .modal-backdrop.open { display: flex; }
+
+    .toast {
+      position: fixed;
+      bottom: 18px;
+      right: 18px;
+      border: 1px solid #000;
+      background: #fff;
+      padding: 10px 12px;
+      font-size: 16px;
+      line-height: 18px;
+      display: none;
+      z-index: 1000;
+    }
+    @media (prefers-color-scheme: dark) {
+      .toast { background: #1e1e1e; color: #dedede; border-color: #fff; }
+    }
+    .toast.show { display: block; }
+
+    /* Make the table a bit more “tracker-like” while staying minimal */
+    .papers-table td { padding: 10px 6px 10px 0; }
+    .title-cell a { font-weight: 700; }
   </style>
 </head>
+
 <body>
-<div id="root"></div>
+<a class="skip" href="#main">Skip to main content</a>
 
-<script type="text/babel">
-  const { useState, useEffect, useMemo, useCallback, useRef } = React;
+<div id="main" role="main">
+  <header>
+    <h1 class="h1">Working papers</h1>
+  </header>
 
-  // --- CONFIGURATION ---
-  const GITHUB_OWNER = 'gbcalifano';
-  const GITHUB_REPO = 'private';
-  const GITHUB_DATA_PATH = 'papers.json';
-  const GITHUB_TOKEN_KEY = 'githubToken';
+  <!-- AUTH -->
+  <section id="auth" class="panel">
+    <h2>Access</h2>
 
-  // --- ICONS (SVG) ---
-  const Icons = {
-    Plus: () => <svg fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>,
-    Trash: () => <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>,
-    Edit: () => <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" /></svg>,
-    Search: () => <svg fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>,
-    Link: () => <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3 h-3"><path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" /></svg>,
-    Moon: () => <svg fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" /></svg>,
-    Sun: () => <svg fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" /></svg>,
-    Check: () => <svg fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-3 h-3"><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>,
-    History: () => <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>,
-    Refresh: () => <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" /></svg>,
-    Download: () => <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>,
-    Filter: () => <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z" /></svg>,
-  };
+    <div class="row">
+      <div style="flex: 1 1 320px; max-width: 520px;">
+        <label class="small" for="token">Token</label><br>
+        <input id="token" type="password" autocomplete="off" />
+      </div>
+      <div class="actions-inline" style="align-self: end;">
+        <button id="login">Access</button>
+        <button id="logout" class="hide">Log out</button>
+      </div>
+    </div>
+
+    <p class="tiny muted" id="authStatus"></p>
+  </section>
+
+  <!-- CONTROLS + STATS -->
+  <section id="dashboard" class="hide">
+    <section class="panel">
+      <h2>Overview</h2>
+
+      <!-- stats row uses your existing .stats from style.css -->
+      <div class="stats" aria-label="Key statistics">
+        <div class="stat-item">
+          <div id="stat-total" class="stat-number">0</div>
+          <div class="stat-label">Papers</div>
+        </div>
+        <div class="stat-item">
+          <div id="stat-active" class="stat-number">0</div>
+          <div class="stat-label">Active</div>
+        </div>
+        <div class="stat-item">
+          <div id="stat-med-active" class="stat-number">–</div>
+          <div class="stat-label">Median days active</div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <h3>Status breakdown</h3>
+          <table class="small" aria-label="Status breakdown">
+            <tbody id="statusBreakdown"></tbody>
+          </table>
+        </div>
+        <div>
+          <h3>Pipeline signals</h3>
+          <table class="small" aria-label="Pipeline signals">
+            <tbody>
+              <tr><td class="tiny muted">Median time to decision</td><td id="stat-med-decision">–</td></tr>
+              <tr><td class="tiny muted">Median days since update</td><td id="stat-med-updated">–</td></tr>
+              <tr><td class="tiny muted">Total submissions logged</td><td id="stat-submissions">0</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Tags / collaborators</h3>
+          <p class="tiny muted">Top tags and most frequent collaborators (from your entries).</p>
+          <div id="tagPills"></div>
+          <div style="margin-top: 10px;" id="collabPills"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Tracker</h2>
+
+      <div class="row" style="margin-bottom: 16px;">
+        <div style="flex: 1 1 260px;">
+          <label class="small" for="search">Search</label><br>
+          <input id="search" type="text" placeholder="Title, tags, collaborators…" />
+        </div>
+
+        <div style="flex: 0 0 240px;">
+          <label class="small" for="filter">Filter</label><br>
+          <select id="filter">
+            <option value="All">All</option>
+            <option value="Submitted">Submitted</option>
+            <option value="Under Revision">Under Revision</option>
+            <option value="Accepted">Accepted</option>
+            <option value="Rejected">Rejected</option>
+            <option value="Not Submitted">Not Submitted</option>
+          </select>
+        </div>
+
+        <div style="flex: 0 0 220px;">
+          <label class="small" for="sort">Sort</label><br>
+          <select id="sort">
+            <option value="updated">Recently updated</option>
+            <option value="created">Recently created</option>
+            <option value="title">Title (A–Z)</option>
+            <option value="status">Status</option>
+          </select>
+        </div>
+
+        <div class="actions-inline" style="align-self: end;">
+          <button id="newPaper">New paper</button>
+          <button id="refresh">Refresh</button>
+          <button id="export">Export JSON</button>
+        </div>
+      </div>
+
+      <div class="tiny muted" id="syncLine"></div>
+
+      <table class="papers-table" aria-label="Papers list">
+        <thead>
+          <tr>
+            <th scope="col">Status</th>
+            <th scope="col">Title</th>
+            <th scope="col">Last</th>
+            <th scope="col">Updated</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="papersTbody">
+          <tr><td colspan="5" class="muted">…</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </section>
+
+  <footer role="contentinfo">
+    <p><small>© Giovanbattista Califano</small></p>
+  </footer>
+</div>
+
+<!-- MODAL -->
+<div id="modalBackdrop" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Edit paper dialog">
+  <div class="modal">
+    <div class="row" style="justify-content: space-between; align-items: baseline;">
+      <h2 id="modalTitle">Edit paper</h2>
+      <div class="actions-inline">
+        <button id="modalClose">Close</button>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <label class="small" for="fTitle">Title</label><br>
+        <input id="fTitle" type="text" placeholder="Paper title">
+      </div>
+      <div>
+        <label class="small" for="fLinks">Links</label><br>
+        <input id="fLinks" type="text" placeholder="Comma-separated URLs (optional)">
+      </div>
+    </div>
+
+    <div class="two-col" style="margin-top: 12px;">
+      <div>
+        <label class="small" for="fCollaborators">Collaborators</label><br>
+        <input id="fCollaborators" type="text" placeholder="Name 1, Name 2">
+      </div>
+      <div>
+        <label class="small" for="fTags">Tags</label><br>
+        <input id="fTags" type="text" placeholder="AI, food, econometrics">
+      </div>
+    </div>
+
+    <div style="margin-top: 12px;">
+      <label class="small" for="fAbstract">Abstract / notes</label><br>
+      <textarea id="fAbstract" placeholder="Short abstract or internal notes…"></textarea>
+    </div>
+
+    <div class="panel" style="margin-top: 18px;">
+      <h3>Submission history</h3>
+      <div class="row" style="margin: 10px 0 14px;">
+        <div style="flex: 1 1 260px;">
+          <label class="small" for="subJournal">Journal / venue</label><br>
+          <input id="subJournal" type="text" placeholder="Journal name">
+        </div>
+        <div style="flex: 0 0 220px;">
+          <label class="small" for="subStatus">Status</label><br>
+          <select id="subStatus">
+            <option>Submitted</option>
+            <option>Under Revision</option>
+            <option>Accepted</option>
+            <option>Rejected</option>
+          </select>
+        </div>
+        <div style="flex: 0 0 180px;">
+          <label class="small" for="subDate">Date</label><br>
+          <input id="subDate" type="date">
+        </div>
+        <div class="actions-inline" style="align-self: end;">
+          <button id="addSubmission">Add</button>
+        </div>
+      </div>
+
+      <table class="small" aria-label="Submission history table">
+        <thead>
+          <tr>
+            <th scope="col">Venue</th>
+            <th scope="col">Status</th>
+            <th scope="col">Date</th>
+            <th scope="col">Remove</th>
+          </tr>
+        </thead>
+        <tbody id="subTbody">
+          <tr><td colspan="4" class="muted tiny">No submissions yet.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="row" style="justify-content: space-between; margin-top: 16px;">
+      <div class="actions-inline">
+        <button id="deletePaper">Delete</button>
+      </div>
+      <div class="actions-inline">
+        <button id="savePaper">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  // --- CONFIG (same intent as your v2 page) ---
+  const GITHUB_OWNER = "gbcalifano";
+  const GITHUB_REPO = "private";
+  const GITHUB_DATA_PATH = "papers.json";
+  const TOKEN_KEY = "githubToken";
+
+  const apiUrl = () => `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_DATA_PATH}`;
+
+  // --- DOM ---
+  const $ = (id) => document.getElementById(id);
+
+  const auth = $("auth");
+  const dashboard = $("dashboard");
+  const tokenInput = $("token");
+  const loginBtn = $("login");
+  const logoutBtn = $("logout");
+  const authStatus = $("authStatus");
+
+  const searchEl = $("search");
+  const filterEl = $("filter");
+  const sortEl = $("sort");
+
+  const newPaperBtn = $("newPaper");
+  const refreshBtn = $("refresh");
+  const exportBtn = $("export");
+  const syncLine = $("syncLine");
+  const papersTbody = $("papersTbody");
+
+  const statTotal = $("stat-total");
+  const statActive = $("stat-active");
+  const statMedActive = $("stat-med-active");
+  const statusBreakdown = $("statusBreakdown");
+  const statMedDecision = $("stat-med-decision");
+  const statMedUpdated = $("stat-med-updated");
+  const statSubmissions = $("stat-submissions");
+  const tagPills = $("tagPills");
+  const collabPills = $("collabPills");
+
+  const modalBackdrop = $("modalBackdrop");
+  const modalTitle = $("modalTitle");
+  const modalClose = $("modalClose");
+
+  const fTitle = $("fTitle");
+  const fAbstract = $("fAbstract");
+  const fCollaborators = $("fCollaborators");
+  const fTags = $("fTags");
+  const fLinks = $("fLinks");
+
+  const subJournal = $("subJournal");
+  const subStatus = $("subStatus");
+  const subDate = $("subDate");
+  const addSubmission = $("addSubmission");
+  const subTbody = $("subTbody");
+
+  const deletePaperBtn = $("deletePaper");
+  const savePaperBtn = $("savePaper");
+
+  const toast = $("toast");
+
+  // --- STATE ---
+  let token = sessionStorage.getItem(TOKEN_KEY) || "";
+  let fileSha = null;
+  let papers = [];
+  let editing = null; // paper object being edited
 
   // --- HELPERS ---
   const uid = () => `id_${Math.random().toString(36).slice(2)}_${Date.now()}`;
-  const todayISO = () => new Date().toISOString().split('T')[0];
-  const fmtDate = (d) => d ? new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: '2-digit' }) : '';
-  const daysBetween = (d1, d2) => Math.ceil(Math.abs(new Date(d2) - new Date(d1)) / (1000 * 60 * 60 * 24));
+  const todayISO = () => new Date().toISOString().slice(0,10);
 
-  const StatusColors = {
-    'Accepted': 'bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-900/40 dark:text-emerald-300 dark:border-emerald-800',
-    'Under Revision': 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-900/40 dark:text-amber-300 dark:border-amber-800',
-    'Submitted': 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:border-blue-800',
-    'Rejected': 'bg-rose-100 text-rose-800 border-rose-200 dark:bg-rose-900/40 dark:text-rose-300 dark:border-rose-800',
-    'Not Submitted': 'bg-slate-100 text-slate-600 border-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700'
+  const safeJSON = (s) => {
+    try { return JSON.parse(s); } catch { return null; }
   };
 
-  // --- COMPONENTS ---
-
-  const Toast = ({ message, type, onClose }) => {
-    useEffect(() => { const t = setTimeout(onClose, 3000); return () => clearTimeout(t); }, [onClose]);
-    const bg = type === 'error' ? 'bg-red-500' : 'bg-slate-800 dark:bg-white';
-    const text = type === 'error' ? 'text-white' : 'text-white dark:text-slate-900';
-    return (
-      <div className={`fixed bottom-6 right-6 z-50 px-4 py-3 rounded shadow-lg flex items-center gap-3 animate-bounce-in ${bg} ${text}`}>
-        <span className="font-medium text-sm">{message}</span>
-      </div>
-    );
+  const fmtDate = (iso) => {
+    if (!iso) return "";
+    const d = new Date(iso);
+    if (Number.isNaN(+d)) return "";
+    return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "2-digit" });
   };
 
-  const Modal = ({ title, onClose, children, maxWidth = "max-w-2xl" }) => (
-    <div className="fixed inset-0 z-40 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={onClose}>
-      <div className={`bg-white dark:bg-slate-900 rounded-xl shadow-2xl w-full ${maxWidth} max-h-[90vh] overflow-hidden flex flex-col`} onClick={e => e.stopPropagation()}>
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800">
-          <h2 className="text-lg font-bold text-slate-900 dark:text-white">{title}</h2>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><Icons.Plus className="rotate-45" /></button>
-        </div>
-        <div className="overflow-y-auto p-6 custom-scroll">{children}</div>
-      </div>
-    </div>
-  );
+  const daysBetween = (a, b) => {
+    if (!a || !b) return null;
+    const d1 = new Date(a);
+    const d2 = new Date(b);
+    if (Number.isNaN(+d1) || Number.isNaN(+d2)) return null;
+    return Math.ceil((d2 - d1) / (1000 * 60 * 60 * 24));
+  };
 
-  const StatusBadge = ({ status }) => (
-    <span className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full border ${StatusColors[status] || StatusColors['Not Submitted']}`}>
-      {status}
-    </span>
-  );
+  const median = (arr) => {
+    const a = arr.filter(v => typeof v === "number" && isFinite(v)).sort((x,y)=>x-y);
+    if (!a.length) return null;
+    const mid = Math.floor(a.length / 2);
+    return a.length % 2 ? a[mid] : (a[mid-1] + a[mid]) / 2;
+  };
 
-  // --- MAIN APP ---
+  const lastStatus = (p) => {
+    const subs = Array.isArray(p.submissions) ? p.submissions : [];
+    if (!subs.length) return "Not Submitted";
+    return subs[subs.length - 1].status || "Not Submitted";
+  };
 
-  function App() {
-    const [token, setToken] = useState(sessionStorage.getItem(GITHUB_TOKEN_KEY));
-    
-    if (!token) return <AuthScreen onLogin={t => { sessionStorage.setItem(GITHUB_TOKEN_KEY, t); setToken(t); }} />;
-    return <Dashboard token={token} onLogout={() => { sessionStorage.removeItem(GITHUB_TOKEN_KEY); setToken(null); }} />;
+  const firstSubmissionDate = (p) => {
+    const subs = Array.isArray(p.submissions) ? p.submissions : [];
+    if (!subs.length) return null;
+    // earliest date among submissions with date
+    const dates = subs.map(s => s.date).filter(Boolean).sort();
+    return dates[0] || null;
+  };
+
+  const lastSubmission = (p) => {
+    const subs = Array.isArray(p.submissions) ? p.submissions : [];
+    return subs.length ? subs[subs.length - 1] : null;
+  };
+
+  const lastTouched = (p) => p.updatedAt || p.createdAt || null;
+
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2400);
   }
 
-  function AuthScreen({ onLogin }) {
-    const [val, setVal] = useState('');
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-950 p-4">
-        <div className="w-full max-w-md bg-white dark:bg-slate-900 p-8 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-800 text-center">
-          <div className="mb-6 flex justify-center"><div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-300"><i className="fa-solid fa-lock text-xl"></i></div></div>
-          <h1 className="text-2xl font-bold mb-2 dark:text-white">Research Tracker</h1>
-          <p className="text-slate-500 dark:text-slate-400 text-sm mb-6">Enter your GitHub Personal Access Token</p>
-          <form onSubmit={e => { e.preventDefault(); if(val.trim()) onLogin(val); }}>
-            <input type="password" value={val} onChange={e => setVal(e.target.value)} className="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none mb-4" placeholder="github_pat_..." autoFocus />
-            <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition">Access Dashboard</button>
-          </form>
-        </div>
-      </div>
-    );
+  function setSync(msg) {
+    syncLine.textContent = msg || "";
   }
 
-  function Dashboard({ token, onLogout }) {
-    // State
-    const [papers, setPapers] = useState([]);
-    const [fileSha, setFileSha] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [syncing, setSyncing] = useState(false);
-    const [toast, setToast] = useState(null);
-    
-    // UI State
-    const [sidebarOpen, setSidebarOpen] = useState(true); // Default open on desktop
-    const [filterStatus, setFilterStatus] = useState('All');
-    const [search, setSearch] = useState('');
-    const [sortBy, setSortBy] = useState('updated'); // updated, title, status
-    const [editingPaper, setEditingPaper] = useState(null); // Paper obj or null
-    const [deleteConfirm, setDeleteConfirm] = useState(null); // ID
+  // --- GITHUB IO ---
+  function headers() {
+    return {
+      "Authorization": `token ${token}`,
+      "Accept": "application/vnd.github.v3+json"
+    };
+  }
 
-    // Data Fetching
-    const api = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_DATA_PATH}`;
-    const headers = useMemo(() => ({ 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }), [token]);
+  async function loadData() {
+    setSync("Loading…");
+    try {
+      const res = await fetch(apiUrl(), { headers: headers() });
+      if (res.status === 404) {
+        fileSha = null;
+        papers = [];
+        setSync("No papers.json found (will be created on first save).");
+        renderAll();
+        return;
+      }
+      if (!res.ok) throw new Error("Fetch failed");
+      const data = await res.json();
+      fileSha = data.sha;
 
-    const loadData = useCallback(async () => {
-      setLoading(true);
-      try {
-        const res = await fetch(api, { headers });
-        if (res.status === 404) { setPapers([]); return; }
-        if (!res.ok) throw new Error('Failed to fetch');
-        const data = await res.json();
-        setFileSha(data.sha);
-        const content = JSON.parse(atob(data.content));
-        // Normalize data
-        setPapers(content.map(p => ({ ...p, submissions: p.submissions || [], links: p.links || [] })));
-      } catch (err) {
-        setToast({ msg: 'Error loading data. Check token/internet.', type: 'error' });
-      } finally { setLoading(false); }
-    }, [api, headers]);
+      const decoded = atob(data.content || "");
+      const parsed = safeJSON(decoded);
+      papers = Array.isArray(parsed) ? parsed : [];
 
-    useEffect(() => { loadData(); }, [loadData]);
+      // Normalize
+      papers = papers.map(p => ({
+        id: p.id || uid(),
+        title: p.title || "",
+        abstract: p.abstract || "",
+        collaborators: Array.isArray(p.collaborators) ? p.collaborators : [],
+        tags: Array.isArray(p.tags) ? p.tags : [],
+        links: Array.isArray(p.links) ? p.links : [],
+        submissions: Array.isArray(p.submissions) ? p.submissions : [],
+        createdAt: p.createdAt || null,
+        updatedAt: p.updatedAt || null
+      }));
 
-    const saveData = async (newPapers) => {
-      setSyncing(true);
-      setPapers(newPapers); // Optimistic update
-      try {
-        const content = btoa(JSON.stringify(newPapers, null, 2));
-        const body = { message: 'Update papers [v2]', content, sha: fileSha };
-        const res = await fetch(api, { method: 'PUT', headers, body: JSON.stringify(body) });
-        if (!res.ok) throw new Error('Save failed');
-        const data = await res.json();
-        setFileSha(data.content.sha);
-        setToast({ msg: 'Saved successfully', type: 'success' });
-      } catch (err) {
-        setToast({ msg: 'Sync failed! Changes local only.', type: 'error' });
-      } finally { setSyncing(false); }
+      setSync("Loaded.");
+      renderAll();
+    } catch (e) {
+      setSync("Error loading. Check token / permissions / connectivity.");
+    }
+  }
+
+  async function saveData(nextPapers) {
+    setSync("Saving…");
+    papers = nextPapers;
+
+    try {
+      const payload = btoa(JSON.stringify(papers, null, 2));
+      const body = {
+        message: "Update papers",
+        content: payload,
+        sha: fileSha || undefined
+      };
+
+      const res = await fetch(apiUrl(), {
+        method: "PUT",
+        headers: { ...headers(), "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+
+      if (!res.ok) throw new Error("Save failed");
+      const data = await res.json();
+      fileSha = data.content && data.content.sha ? data.content.sha : fileSha;
+
+      setSync("Saved.");
+      showToast("Saved");
+      renderAll();
+    } catch (e) {
+      setSync("Sync failed. Your in-memory changes are not persisted.");
+      showToast("Sync failed");
+    }
+  }
+
+  // --- AUTH FLOW ---
+  function updateAuthUI() {
+    const ok = !!token;
+    dashboard.classList.toggle("hide", !ok);
+    logoutBtn.classList.toggle("hide", !ok);
+    loginBtn.disabled = ok;
+    tokenInput.disabled = ok;
+    authStatus.textContent = ok ? "Token loaded for this session." : "";
+  }
+
+  loginBtn.addEventListener("click", async () => {
+    const t = tokenInput.value.trim();
+    if (!t) return;
+    token = t;
+    sessionStorage.setItem(TOKEN_KEY, token);
+    tokenInput.value = "";
+    updateAuthUI();
+    await loadData();
+  });
+
+  logoutBtn.addEventListener("click", () => {
+    token = "";
+    sessionStorage.removeItem(TOKEN_KEY);
+    fileSha = null;
+    papers = [];
+    updateAuthUI();
+    papersTbody.innerHTML = `<tr><td colspan="5" class="muted">…</td></tr>`;
+    setSync("");
+  });
+
+  // --- DERIVED VIEW ---
+  function computeStats(all) {
+    const counts = {
+      "All": all.length,
+      "Submitted": 0,
+      "Under Revision": 0,
+      "Accepted": 0,
+      "Rejected": 0,
+      "Not Submitted": 0
     };
 
-    // Actions
-    const handleSavePaper = (paper) => {
+    let totalSubmissions = 0;
+
+    const activeDays = [];
+    const decisionDays = [];
+    const daysSinceUpdate = [];
+
+    const tagCounts = new Map();
+    const collabCounts = new Map();
+
+    const today = todayISO();
+
+    all.forEach(p => {
+      const st = lastStatus(p);
+      counts[st] = (counts[st] || 0) + 1;
+
+      const subs = Array.isArray(p.submissions) ? p.submissions : [];
+      totalSubmissions += subs.length;
+
+      const fst = firstSubmissionDate(p);
+      if (fst && (st === "Submitted" || st === "Under Revision")) {
+        const d = daysBetween(fst, today);
+        if (typeof d === "number") activeDays.push(d);
+      }
+
+      if (fst && (st === "Accepted" || st === "Rejected")) {
+        // decision date = date of last submission entry (often the decision update)
+        const lst = lastSubmission(p);
+        const decisionDate = (lst && lst.date) ? lst.date : null;
+        const d = daysBetween(fst, decisionDate || today);
+        if (typeof d === "number") decisionDays.push(d);
+      }
+
+      const touched = lastTouched(p);
+      if (touched) {
+        const d = daysBetween(touched.slice(0,10), today);
+        if (typeof d === "number") daysSinceUpdate.push(d);
+      }
+
+      (p.tags || []).forEach(t => {
+        const k = String(t).trim();
+        if (!k) return;
+        tagCounts.set(k, (tagCounts.get(k) || 0) + 1);
+      });
+
+      (p.collaborators || []).forEach(c => {
+        const k = String(c).trim();
+        if (!k) return;
+        collabCounts.set(k, (collabCounts.get(k) || 0) + 1);
+      });
+    });
+
+    const active = (counts["Submitted"] || 0) + (counts["Under Revision"] || 0);
+
+    return {
+      counts,
+      active,
+      totalSubmissions,
+      medActiveDays: median(activeDays),
+      medDecisionDays: median(decisionDays),
+      medDaysSinceUpdate: median(daysSinceUpdate),
+      topTags: [...tagCounts.entries()].sort((a,b)=>b[1]-a[1]).slice(0, 10),
+      topCollabs: [...collabCounts.entries()].sort((a,b)=>b[1]-a[1]).slice(0, 10)
+    };
+  }
+
+  function statusLabel(st) {
+    // keep minimal
+    return st;
+  }
+
+  function fmtDays(d) {
+    if (d === null || d === undefined) return "–";
+    if (!isFinite(d)) return "–";
+    const rounded = Math.round(d);
+    return String(rounded);
+  }
+
+  function renderStats() {
+    const s = computeStats(papers);
+
+    statTotal.textContent = String(s.counts["All"] || 0);
+    statActive.textContent = String(s.active || 0);
+    statMedActive.textContent = s.medActiveDays == null ? "–" : fmtDays(s.medActiveDays);
+
+    statMedDecision.textContent = s.medDecisionDays == null ? "–" : (fmtDays(s.medDecisionDays) + " days");
+    statMedUpdated.textContent = s.medDaysSinceUpdate == null ? "–" : (fmtDays(s.medDaysSinceUpdate) + " days");
+    statSubmissions.textContent = String(s.totalSubmissions || 0);
+
+    // Breakdown table
+    const order = ["Submitted","Under Revision","Accepted","Rejected","Not Submitted"];
+    statusBreakdown.innerHTML = order.map(k => {
+      const v = s.counts[k] || 0;
+      return `<tr><td class="tiny muted">${statusLabel(k)}</td><td>${v}</td></tr>`;
+    }).join("");
+
+    // Pills
+    const mkPills = (entries) => entries.map(([k,v]) => `<span class="pill">${escapeHTML(k)} <span class="muted">(${v})</span></span>`).join("");
+    tagPills.innerHTML = s.topTags.length ? mkPills(s.topTags) : `<span class="tiny muted">No tags yet.</span>`;
+    collabPills.innerHTML = s.topCollabs.length ? mkPills(s.topCollabs) : `<span class="tiny muted">No collaborators yet.</span>`;
+  }
+
+  function escapeHTML(str) {
+    return String(str)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  function matchQuery(p, q) {
+    if (!q) return true;
+    q = q.toLowerCase();
+    const inTitle = (p.title || "").toLowerCase().includes(q);
+    const inTags = (p.tags || []).some(t => String(t).toLowerCase().includes(q));
+    const inCollabs = (p.collaborators || []).some(c => String(c).toLowerCase().includes(q));
+    return inTitle || inTags || inCollabs;
+  }
+
+  function sortKeyStatus(st) {
+    const order = { "Under Revision": 1, "Submitted": 2, "Not Submitted": 3, "Accepted": 4, "Rejected": 5 };
+    return order[st] || 99;
+  }
+
+  function renderTable() {
+    const q = searchEl.value.trim();
+    const f = filterEl.value;
+    const s = sortEl.value;
+
+    let list = papers.slice();
+
+    if (f !== "All") {
+      list = list.filter(p => lastStatus(p) === f);
+    }
+    if (q) {
+      list = list.filter(p => matchQuery(p, q));
+    }
+
+    list.sort((a,b) => {
+      if (s === "title") return (a.title || "").localeCompare(b.title || "");
+      if (s === "created") return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
+      if (s === "status") return sortKeyStatus(lastStatus(a)) - sortKeyStatus(lastStatus(b));
+      // updated default
+      return new Date(b.updatedAt || b.createdAt || 0) - new Date(a.updatedAt || a.createdAt || 0);
+    });
+
+    if (!list.length) {
+      papersTbody.innerHTML = `<tr><td colspan="5" class="muted">No papers found.</td></tr>`;
+      return;
+    }
+
+    papersTbody.innerHTML = list.map(p => {
+      const st = lastStatus(p);
+      const last = lastSubmission(p);
+      const venue = last ? (last.journal || "") : "";
+      const lastLine = last ? `${escapeHTML(venue)}<br><span class="tiny muted">${escapeHTML(fmtDate(last.date))}</span>` : `<span class="tiny muted">—</span>`;
+      const upd = lastTouched(p) ? fmtDate(lastTouched(p).slice(0,10)) : "—";
+
+      return `
+        <tr>
+          <td>${escapeHTML(st)}</td>
+          <td class="title-cell">
+            <a href="#" data-edit="${escapeHTML(p.id)}">${escapeHTML(p.title || "(untitled)")}</a>
+            ${renderMiniMeta(p)}
+          </td>
+          <td>${lastLine}</td>
+          <td>${escapeHTML(upd)}</td>
+          <td>
+            <button data-quick="Submitted" data-id="${escapeHTML(p.id)}">Submit</button>
+            <button data-quick="Under Revision" data-id="${escapeHTML(p.id)}">Revise</button>
+            <button data-quick="Accepted" data-id="${escapeHTML(p.id)}">Accept</button>
+            <button data-quick="Rejected" data-id="${escapeHTML(p.id)}">Reject</button>
+          </td>
+        </tr>
+      `;
+    }).join("");
+  }
+
+  function renderMiniMeta(p) {
+    const collabs = (p.collaborators || []).filter(Boolean);
+    const tags = (p.tags || []).filter(Boolean);
+
+    let html = "";
+    if (collabs.length) html += `<div class="tiny muted">${escapeHTML(collabs.join(", "))}</div>`;
+    if (tags.length) html += `<div class="tiny muted">${escapeHTML(tags.join(" · "))}</div>`;
+    return html ? `<div style="margin-top: 6px;">${html}</div>` : "";
+  }
+
+  function renderAll() {
+    renderStats();
+    renderTable();
+  }
+
+  // --- MODAL CRUD ---
+  function openModal(paper) {
+    editing = paper;
+
+    modalTitle.textContent = paper && paper.id ? "Edit paper" : "New paper";
+    fTitle.value = paper.title || "";
+    fAbstract.value = paper.abstract || "";
+    fCollaborators.value = (paper.collaborators || []).join(", ");
+    fTags.value = (paper.tags || []).join(", ");
+    fLinks.value = (paper.links || []).map(x => (x && x.url) ? x.url : String(x || "")).filter(Boolean).join(", ");
+
+    subJournal.value = "";
+    subStatus.value = "Submitted";
+    subDate.value = todayISO();
+
+    renderSubTable();
+
+    modalBackdrop.classList.add("open");
+    fTitle.focus();
+  }
+
+  function closeModal() {
+    modalBackdrop.classList.remove("open");
+    editing = null;
+  }
+
+  function renderSubTable() {
+    const subs = (editing && Array.isArray(editing.submissions)) ? editing.submissions : [];
+    if (!subs.length) {
+      subTbody.innerHTML = `<tr><td colspan="4" class="muted tiny">No submissions yet.</td></tr>`;
+      return;
+    }
+    subTbody.innerHTML = subs.map((s, i) => `
+      <tr>
+        <td>${escapeHTML(s.journal || "")}</td>
+        <td>${escapeHTML(s.status || "")}</td>
+        <td>${escapeHTML(fmtDate(s.date) || "")}</td>
+        <td><button data-rmsub="${i}">Remove</button></td>
+      </tr>
+    `).join("");
+  }
+
+  function normalizeCSV(str) {
+    return str.split(",").map(x => x.trim()).filter(Boolean);
+  }
+
+  function normalizeLinks(str) {
+    const urls = normalizeCSV(str);
+    return urls.map(u => ({ url: u }));
+  }
+
+  function upsertPaperFromModal() {
+    const now = new Date().toISOString();
+
+    const base = editing && editing.id ? editing : { id: uid(), createdAt: now };
+    const next = {
+      ...base,
+      title: fTitle.value.trim(),
+      abstract: fAbstract.value.trim(),
+      collaborators: normalizeCSV(fCollaborators.value),
+      tags: normalizeCSV(fTags.value),
+      links: normalizeLinks(fLinks.value),
+      submissions: Array.isArray(base.submissions) ? base.submissions : [],
+      updatedAt: now
+    };
+
+    // Upsert into list
+    const exists = papers.some(p => p.id === next.id);
+    const nextPapers = exists
+      ? papers.map(p => p.id === next.id ? next : p)
+      : [next, ...papers];
+
+    return { next, nextPapers };
+  }
+
+  // --- EVENTS ---
+  modalClose.addEventListener("click", closeModal);
+  modalBackdrop.addEventListener("click", (e) => {
+    if (e.target === modalBackdrop) closeModal();
+  });
+
+  addSubmission.addEventListener("click", () => {
+    if (!editing) return;
+    const j = subJournal.value.trim();
+    if (!j) { showToast("Add a journal/venue"); return; }
+    const st = subStatus.value;
+    const dt = subDate.value || todayISO();
+
+    editing.submissions = Array.isArray(editing.submissions) ? editing.submissions : [];
+    editing.submissions.push({ journal: j, status: st, date: dt });
+
+    subJournal.value = "";
+    renderSubTable();
+  });
+
+  subTbody.addEventListener("click", (e) => {
+    const btn = e.target.closest("button");
+    if (!btn || !editing) return;
+    const idx = btn.getAttribute("data-rmsub");
+    if (idx === null) return;
+    const i = parseInt(idx, 10);
+    if (!isFinite(i)) return;
+    editing.submissions = (editing.submissions || []).filter((_, k) => k !== i);
+    renderSubTable();
+  });
+
+  savePaperBtn.addEventListener("click", async () => {
+    if (!fTitle.value.trim()) { showToast("Title required"); return; }
+    const { next, nextPapers } = upsertPaperFromModal();
+    closeModal();
+    await saveData(nextPapers);
+  });
+
+  deletePaperBtn.addEventListener("click", async () => {
+    if (!editing || !editing.id) { closeModal(); return; }
+    const ok = confirm("Delete this paper? This cannot be undone.");
+    if (!ok) return;
+    const id = editing.id;
+    closeModal();
+    await saveData(papers.filter(p => p.id !== id));
+  });
+
+  newPaperBtn.addEventListener("click", () => openModal({
+    id: null,
+    title: "",
+    abstract: "",
+    collaborators: [],
+    tags: [],
+    links: [],
+    submissions: [],
+    createdAt: null,
+    updatedAt: null
+  }));
+
+  refreshBtn.addEventListener("click", loadData);
+
+  exportBtn.addEventListener("click", () => {
+    const blob = new Blob([JSON.stringify(papers, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "papers-export.json";
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast("Exported");
+  });
+
+  searchEl.addEventListener("input", renderTable);
+  filterEl.addEventListener("change", renderTable);
+  sortEl.addEventListener("change", renderTable);
+
+  papersTbody.addEventListener("click", async (e) => {
+    const edit = e.target.closest("a[data-edit]");
+    if (edit) {
+      e.preventDefault();
+      const id = edit.getAttribute("data-edit");
+      const p = papers.find(x => x.id === id);
+      if (p) openModal(JSON.parse(JSON.stringify(p))); // clone
+      return;
+    }
+
+    const qb = e.target.closest("button[data-quick]");
+    if (qb) {
+      const id = qb.getAttribute("data-id");
+      const st = qb.getAttribute("data-quick");
+      const p = papers.find(x => x.id === id);
+      if (!p) return;
+
       const now = new Date().toISOString();
-      let updated;
-      if (papers.find(p => p.id === paper.id)) {
-        updated = papers.map(p => p.id === paper.id ? { ...paper, updatedAt: now } : p);
-      } else {
-        updated = [{ ...paper, id: uid(), createdAt: now, updatedAt: now }, ...papers];
-      }
-      saveData(updated);
-      setEditingPaper(null);
-    };
+      const last = lastSubmission(p);
+      const journal = last && last.journal ? last.journal : "Unknown Journal";
 
-    const handleDelete = (id) => {
-      saveData(papers.filter(p => p.id !== id));
-      setDeleteConfirm(null);
-    };
+      const updated = {
+        ...p,
+        submissions: [...(p.submissions || []), { journal, status: st, date: todayISO() }],
+        updatedAt: now
+      };
 
-    // Derived State
-    const processedPapers = useMemo(() => {
-      let res = papers;
-      if (filterStatus !== 'All') res = res.filter(p => {
-        const last = p.submissions.length ? p.submissions[p.submissions.length-1].status : 'Not Submitted';
-        return last === filterStatus;
-      });
-      if (search) {
-        const q = search.toLowerCase();
-        res = res.filter(p => p.title.toLowerCase().includes(q) || (p.tags||[]).some(t=>t.toLowerCase().includes(q)) || (p.collaborators||[]).some(c=>c.toLowerCase().includes(q)));
-      }
-      res.sort((a, b) => {
-        if (sortBy === 'title') return a.title.localeCompare(b.title);
-        const dateA = new Date(a.updatedAt || a.createdAt);
-        const dateB = new Date(b.updatedAt || b.createdAt);
-        return dateB - dateA;
-      });
-      return res;
-    }, [papers, filterStatus, search, sortBy]);
+      await saveData(papers.map(x => x.id === id ? updated : x));
+      return;
+    }
+  });
 
-    const stats = useMemo(() => {
-      const counts = { total: papers.length, accepted: 0, underReview: 0 };
-      papers.forEach(p => {
-        const last = p.submissions.length ? p.submissions[p.submissions.length-1].status : 'Not Submitted';
-        if (last === 'Accepted') counts.accepted++;
-        if (['Submitted', 'Under Revision'].includes(last)) counts.underReview++;
-      });
-      return counts;
-    }, [papers]);
-
-    // Theme
-    const [dark, setDark] = useState(localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches));
-    useEffect(() => {
-      if (dark) document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');
-      localStorage.theme = dark ? 'dark' : 'light';
-    }, [dark]);
-
-    if (loading) return <div className="min-h-screen flex items-center justify-center text-slate-400"><i className="fa-solid fa-circle-notch fa-spin text-3xl"></i></div>;
-
-    return (
-      <div className="flex min-h-screen">
-        {/* Sidebar */}
-        <aside className={`fixed inset-y-0 left-0 z-30 w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 transform transition-transform duration-300 lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-          <div className="h-full flex flex-col p-6">
-            <h1 className="text-xl font-bold tracking-tight mb-8 flex items-center gap-2 dark:text-white">
-              <span className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center text-sm"><i className="fa-solid fa-paper-plane"></i></span>
-              Tracker
-            </h1>
-
-            {/* Global Stats */}
-            <div className="grid grid-cols-2 gap-3 mb-8">
-              <div className="p-3 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-900">
-                <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{stats.underReview}</div>
-                <div className="text-[10px] uppercase font-semibold text-slate-500 dark:text-slate-400">Reviewing</div>
-              </div>
-              <div className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-900">
-                <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{stats.accepted}</div>
-                <div className="text-[10px] uppercase font-semibold text-slate-500 dark:text-slate-400">Accepted</div>
-              </div>
-            </div>
-
-            {/* Navigation */}
-            <nav className="space-y-1 flex-1">
-              <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Filters</div>
-              {['All', 'Submitted', 'Under Revision', 'Accepted', 'Rejected', 'Not Submitted'].map(s => (
-                <button key={s} onClick={() => setFilterStatus(s)} className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition ${filterStatus === s ? 'bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50'}`}>
-                  {s}
-                </button>
-              ))}
-            </nav>
-
-            <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-              <button onClick={() => setDark(!dark)} className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-white transition">
-                {dark ? <Icons.Sun/> : <Icons.Moon/>}
-              </button>
-              <button onClick={onLogout} className="text-xs font-medium text-slate-400 hover:text-red-500">Log Out</button>
-            </div>
-          </div>
-        </aside>
-
-        {/* Main Content */}
-        <main className={`flex-1 transition-all duration-300 lg:ml-64 p-4 lg:p-8`}>
-          {/* Header */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-            <div className="relative flex-1 max-w-lg">
-              <Icons.Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-              <input type="text" placeholder="Search papers..." value={search} onChange={e => setSearch(e.target.value)} 
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white dark:bg-slate-800 border-none shadow-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500" />
-            </div>
-            <div className="flex items-center gap-3">
-              <select value={sortBy} onChange={e => setSortBy(e.target.value)} className="bg-white dark:bg-slate-800 border-none shadow-sm rounded-lg py-2.5 px-3 text-sm text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-blue-500 cursor-pointer">
-                <option value="updated">Recently Updated</option>
-                <option value="title">Title (A-Z)</option>
-              </select>
-              <button onClick={() => setEditingPaper({ title: '', submissions: [], links: [], collaborators: [], tags: [] })} 
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-lg text-sm font-medium shadow-sm flex items-center gap-2 transition">
-                <Icons.Plus /> New Paper
-              </button>
-            </div>
-          </div>
-
-          {/* Paper Grid */}
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {processedPapers.map(paper => (
-              <PaperCard 
-                key={paper.id} 
-                paper={paper} 
-                onEdit={() => setEditingPaper(paper)} 
-                onDelete={() => setDeleteConfirm(paper.id)}
-                onUpdateStatus={(newSub) => {
-                   const updatedSubs = [...paper.submissions, newSub];
-                   handleSavePaper({ ...paper, submissions: updatedSubs });
-                }}
-              />
-            ))}
-          </div>
-
-          {processedPapers.length === 0 && (
-            <div className="text-center py-20">
-              <div className="inline-block p-4 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 mb-4"><Icons.Filter /></div>
-              <h3 className="text-lg font-medium text-slate-900 dark:text-white">No papers found</h3>
-              <p className="text-slate-500 dark:text-slate-400">Try adjusting your search or filters.</p>
-            </div>
-          )}
-        </main>
-
-        {/* Modals & Overlays */}
-        {editingPaper && (
-          <EditorModal 
-            paper={editingPaper} 
-            onClose={() => setEditingPaper(null)} 
-            onSave={handleSavePaper} 
-          />
-        )}
-
-        {deleteConfirm && (
-          <Modal title="Delete Paper" onClose={() => setDeleteConfirm(null)} maxWidth="max-w-sm">
-            <p className="text-slate-600 dark:text-slate-300 mb-6">Are you sure you want to delete this paper? This cannot be undone.</p>
-            <div className="flex justify-end gap-3">
-              <button onClick={() => setDeleteConfirm(null)} className="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg">Cancel</button>
-              <button onClick={() => handleDelete(deleteConfirm)} className="px-4 py-2 text-sm font-medium bg-red-600 text-white rounded-lg hover:bg-red-700">Delete</button>
-            </div>
-          </Modal>
-        )}
-
-        {/* Toast */}
-        {toast && <Toast message={toast.msg} type={toast.type} onClose={() => setToast(null)} />}
-        
-        {/* Sync Indicator */}
-        <div className={`fixed bottom-4 left-4 lg:left-72 text-xs font-medium text-slate-400 flex items-center gap-2 transition-opacity ${syncing ? 'opacity-100' : 'opacity-0'}`}>
-          <i className="fa-solid fa-rotate fa-spin"></i> Saving...
-        </div>
-      </div>
-    );
+  // --- INIT ---
+  function init() {
+    updateAuthUI();
+    if (token) {
+      loadData();
+    } else {
+      tokenInput.focus();
+    }
   }
 
-  // --- SUB-COMPONENTS ---
+  init();
 
-  function PaperCard({ paper, onEdit, onDelete, onUpdateStatus }) {
-    const lastSub = paper.submissions.length ? paper.submissions[paper.submissions.length-1] : null;
-    const status = lastSub ? lastSub.status : 'Not Submitted';
-    const journal = lastSub ? lastSub.journal : '';
-
-    // Quick Update State
-    const [showQuick, setShowQuick] = useState(false);
-    const [quickJournal, setQuickJournal] = useState('');
-    
-    const handleQuickSubmit = (newStatus) => {
-      onUpdateStatus({ 
-        journal: quickJournal || (lastSub?.journal) || 'Unknown Journal', 
-        status: newStatus, 
-        date: todayISO() 
-      });
-      setShowQuick(false); setQuickJournal('');
-    };
-
-    return (
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 card-hover flex flex-col h-full relative group">
-        
-        {/* Header: Status & Actions */}
-        <div className="flex justify-between items-start mb-3">
-          <StatusBadge status={status} />
-          <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-            <button onClick={onEdit} className="p-1.5 text-slate-400 hover:text-blue-600 rounded bg-slate-50 dark:bg-slate-800"><Icons.Edit/></button>
-            <button onClick={onDelete} className="p-1.5 text-slate-400 hover:text-red-600 rounded bg-slate-50 dark:bg-slate-800"><Icons.Trash/></button>
-          </div>
-        </div>
-
-        {/* Content */}
-        <div className="flex-1">
-          <h3 className="font-bold text-slate-900 dark:text-white leading-tight mb-2">{paper.title}</h3>
-          
-          <div className="text-sm text-slate-500 dark:text-slate-400 mb-3 line-clamp-2">
-             {paper.collaborators && paper.collaborators.length > 0 && <span className="mr-2 text-slate-800 dark:text-slate-200"><i className="fa-solid fa-user-group text-xs mr-1"></i> {paper.collaborators.join(', ')}</span>}
-             {paper.abstract}
-          </div>
-
-          {/* Timeline Node Visualization */}
-          {lastSub && (
-             <div className="flex items-center gap-3 mt-4 text-xs bg-slate-50 dark:bg-slate-800/50 p-2 rounded-lg">
-                <div className={`w-2 h-2 rounded-full ${status === 'Accepted' ? 'bg-emerald-500' : status === 'Rejected' ? 'bg-red-500' : 'bg-blue-500'}`}></div>
-                <div className="flex-1">
-                  <div className="font-medium text-slate-700 dark:text-slate-200">{journal}</div>
-                  <div className="text-slate-400">{fmtDate(lastSub.date)}</div>
-                </div>
-                {status === 'Accepted' && paper.submissions.length > 1 && (
-                   <div className="text-emerald-600 font-semibold">{daysBetween(paper.submissions[0].date, lastSub.date)} days</div>
-                )}
-             </div>
-          )}
-        </div>
-
-        {/* Footer: Quick Actions */}
-        <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
-           {!showQuick ? (
-              <button onClick={() => setShowQuick(true)} className="w-full text-center text-xs font-semibold text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 py-2 rounded-lg transition">
-                Update Status
-              </button>
-           ) : (
-              <div className="bg-slate-50 dark:bg-slate-800 p-2 rounded-lg animate-fade-in">
-                 <input 
-                    type="text" 
-                    placeholder={lastSub?.journal || "Journal Name"} 
-                    value={quickJournal} 
-                    onChange={e => setQuickJournal(e.target.value)}
-                    className="w-full text-xs p-1.5 mb-2 rounded border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700"
-                    autoFocus
-                 />
-                 <div className="grid grid-cols-3 gap-1">
-                    <button onClick={() => handleQuickSubmit('Submitted')} className="text-[10px] bg-blue-100 text-blue-700 py-1 rounded hover:bg-blue-200">Submit</button>
-                    <button onClick={() => handleQuickSubmit('Rejected')} className="text-[10px] bg-red-100 text-red-700 py-1 rounded hover:bg-red-200">Reject</button>
-                    <button onClick={() => handleQuickSubmit('Accepted')} className="text-[10px] bg-emerald-100 text-emerald-700 py-1 rounded hover:bg-emerald-200">Accept</button>
-                 </div>
-                 <button onClick={() => setShowQuick(false)} className="w-full text-[10px] text-slate-400 mt-1 hover:text-slate-600">Cancel</button>
-              </div>
-           )}
-        </div>
-      </div>
-    );
-  }
-
-  function EditorModal({ paper, onClose, onSave }) {
-    // Local state needed for form fields
-    const [form, setForm] = useState({
-      title: paper.title || '',
-      abstract: paper.abstract || '',
-      collaborators: (paper.collaborators || []).join(', '),
-      tags: (paper.tags || []).join(', '),
-      links: paper.links || [],
-      submissions: paper.submissions || []
-    });
-
-    const handleChange = (f, v) => setForm(prev => ({ ...prev, [f]: v }));
-    
-    // Submissions Handling
-    const addSub = () => setForm(p => ({ ...p, submissions: [...p.submissions, { journal: '', status: 'Submitted', date: todayISO() }] }));
-    const updateSub = (i, k, v) => setForm(p => {
-       const subs = [...p.submissions]; subs[i][k] = v; return { ...p, submissions: subs };
-    });
-    const removeSub = (i) => setForm(p => ({ ...p, submissions: p.submissions.filter((_, idx) => idx !== i) }));
-
-    const handleSave = () => {
-       onSave({
-         ...paper,
-         title: form.title,
-         abstract: form.abstract,
-         collaborators: form.collaborators.split(',').map(s=>s.trim()).filter(Boolean),
-         tags: form.tags.split(',').map(s=>s.trim()).filter(Boolean),
-         links: form.links.filter(l => l.url),
-         submissions: form.submissions.filter(s => s.journal)
-       });
-    };
-
-    return (
-      <Modal title={paper.id ? "Edit Paper" : "Add Paper"} onClose={onClose}>
-        <div className="space-y-5">
-          {/* Main Info */}
-          <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Title</label>
-            <input value={form.title} onChange={e => handleChange('title', e.target.value)} className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Paper Title" />
-          </div>
-          
-          <div className="grid grid-cols-2 gap-4">
-             <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Collaborators</label>
-                <input value={form.collaborators} onChange={e => handleChange('collaborators', e.target.value)} className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 dark:text-white text-sm" placeholder="Name 1, Name 2" />
-             </div>
-             <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Tags</label>
-                <input value={form.tags} onChange={e => handleChange('tags', e.target.value)} className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 dark:text-white text-sm" placeholder="Econ, Labor, Micro" />
-             </div>
-          </div>
-
-          <div>
-             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Abstract</label>
-             <textarea rows="3" value={form.abstract} onChange={e => handleChange('abstract', e.target.value)} className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 dark:text-white text-sm" placeholder="Brief summary..."></textarea>
-          </div>
-
-          {/* Submission History Section */}
-          <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-700">
-             <div className="flex justify-between items-center mb-3">
-                <h3 className="text-sm font-bold text-slate-700 dark:text-slate-300">Submission History</h3>
-                <button onClick={addSub} className="text-xs bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 px-2 py-1 rounded hover:bg-slate-50">Add</button>
-             </div>
-             <div className="space-y-2">
-                {form.submissions.map((sub, i) => (
-                   <div key={i} className="flex gap-2 items-center">
-                      <input value={sub.journal} onChange={e => updateSub(i, 'journal', e.target.value)} placeholder="Journal" className="flex-1 text-sm px-2 py-1.5 rounded border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 dark:text-white" />
-                      <select value={sub.status} onChange={e => updateSub(i, 'status', e.target.value)} className="text-sm px-2 py-1.5 rounded border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 dark:text-white">
-                         {['Submitted', 'Under Revision', 'Accepted', 'Rejected'].map(o => <option key={o}>{o}</option>)}
-                      </select>
-                      <input type="date" value={sub.date} onChange={e => updateSub(i, 'date', e.target.value)} className="text-sm px-2 py-1.5 rounded border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 dark:text-white w-32" />
-                      <button onClick={() => removeSub(i)} className="text-slate-400 hover:text-red-500"><Icons.Trash /></button>
-                   </div>
-                ))}
-                {form.submissions.length === 0 && <p className="text-xs text-slate-400 italic">No submissions tracked yet.</p>}
-             </div>
-          </div>
-
-          {/* Actions */}
-          <div className="pt-4 flex justify-end gap-3 border-t border-slate-100 dark:border-slate-800">
-             <button onClick={onClose} className="px-5 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium transition">Cancel</button>
-             <button onClick={handleSave} className="px-5 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 font-medium shadow-md transition">Save Paper</button>
-          </div>
-        </div>
-      </Modal>
-    );
-  }
-
-  const root = ReactDOM.createRoot(document.getElementById('root'));
-  root.render(<App />);
+})();
 </script>
 </body>
 </html>
