@@ -8,9 +8,9 @@
   <link rel="stylesheet" href="style.css">
 
   <style>
-    /* Minimal additions, aligned with califano.xyz */
+    /* Working papers tracker — minimal brutalist, aligned with califano.xyz */
 
-    .muted { opacity: 0.75; }
+    .muted { opacity: 0.60; }
     .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
     .row > * { flex: 0 0 auto; }
 
@@ -24,12 +24,16 @@
       color: inherit;
       width: 100%;
       max-width: 100%;
+      transition: border-color 0.12s;
     }
-
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-width: 2px;
+    }
     textarea {
-      font-size: 23px;
-      line-height: 26px;
-      min-height: 130px;
+      font-size: 18px;
+      line-height: 24px;
+      min-height: 110px;
       resize: vertical;
     }
 
@@ -44,30 +48,28 @@
       border-top: 1px solid silver;
       padding-top: 20px;
     }
-
     @media (prefers-color-scheme: dark) {
       .panel { border-color: #fff; }
     }
 
     .small { font-size: 16px; line-height: 18px; }
-    .tiny  { font-size: 14px; line-height: 16px; }
+    .tiny  { font-size: 13px; line-height: 15px; }
 
+    /* Tag / collab pills */
     .pill {
       display: inline-block;
-      border: 1px solid #000;
-      padding: 2px 8px;
-      font-size: 14px;
+      border: 1px solid currentColor;
+      padding: 2px 7px;
+      font-size: 13px;
       line-height: 16px;
-      margin-right: 6px;
-      margin-top: 6px;
+      margin-right: 5px;
+      margin-top: 5px;
       white-space: nowrap;
-    }
-    @media (prefers-color-scheme: dark) {
-      .pill { border-color: #fff; }
+      opacity: 0.7;
     }
 
-    .actions-inline button { margin: 0 8px 0 0; }
-    .actions-inline button:last-child { margin-right: 0; }
+    .actions-inline { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    .actions-inline button { margin: 0; }
 
     .two-col {
       display: grid;
@@ -78,11 +80,85 @@
       .two-col { grid-template-columns: 1fr; }
     }
 
-    /* Modal (simple, no library) */
+    /* Status badges */
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      line-height: 13px;
+      padding: 3px 7px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      border: 1.5px solid transparent;
+    }
+    .badge-submitted { border-color: #0050cc; color: #0050cc; }
+    .badge-revision  { border-color: #884400; color: #884400; }
+    .badge-accepted  { border-color: #006622; color: #006622; }
+    .badge-rejected  { border-color: #880000; color: #880000; }
+    .badge-none      { border-color: #aaa;    color: #999; }
+    @media (prefers-color-scheme: dark) {
+      .badge-submitted { border-color: #6699ff; color: #6699ff; }
+      .badge-revision  { border-color: #ffcc44; color: #ffcc44; }
+      .badge-accepted  { border-color: #44dd77; color: #44dd77; }
+      .badge-rejected  { border-color: #ff6655; color: #ff6655; }
+      .badge-none      { border-color: #555;    color: #888; }
+    }
+
+    /* Papers table */
+    .papers-table { margin-top: 16px; }
+    .papers-table td { padding: 12px 8px 12px 0; vertical-align: top; }
+    .papers-table td:first-child { padding-left: 0; width: 120px; }
+    .papers-table tbody tr { border-bottom: 1px solid #eee; transition: background 0.08s; }
+    .papers-table tbody tr:last-child { border-bottom: none; }
+    .papers-table tbody tr:hover { background: rgba(0,0,0,0.025); }
+    @media (prefers-color-scheme: dark) {
+      .papers-table tbody tr { border-color: #2d2d2d; }
+      .papers-table tbody tr:hover { background: rgba(255,255,255,0.04); }
+    }
+
+    .title-cell a {
+      font-weight: 700;
+      font-size: 17px;
+      line-height: 21px;
+      color: inherit;
+      text-decoration: none;
+    }
+    .title-cell a:hover { text-decoration: underline; }
+
+    /* Days-in-flight chip */
+    .days-chip {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 1px 5px;
+      background: #f0f0f0;
+      color: #666;
+      margin-left: 8px;
+      vertical-align: middle;
+      letter-spacing: 0.03em;
+    }
+    @media (prefers-color-scheme: dark) {
+      .days-chip { background: #2a2a2a; color: #999; }
+    }
+
+    /* Quick action buttons — compact */
+    .quick-btn {
+      font-size: 12px !important;
+      line-height: 14px !important;
+      padding: 3px 7px !important;
+      margin: 0 !important;
+    }
+
+    /* Auth section collapse once logged in */
+    #auth.collapsed h2 { display: none; }
+    #auth.collapsed { margin: 16px 0; padding-top: 12px; }
+
+    /* Modal */
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.55);
+      background: rgba(0,0,0,0.48);
       display: none;
       align-items: center;
       justify-content: center;
@@ -93,38 +169,79 @@
       background: #fff;
       color: #000;
       width: 100%;
-      max-width: 900px;
-      border: 1px solid #000;
-      padding: 18px;
+      max-width: 860px;
+      border: 2px solid #000;
+      padding: 24px;
       max-height: 90vh;
-      overflow: auto;
+      overflow-y: auto;
     }
     @media (prefers-color-scheme: dark) {
       .modal { background: #1e1e1e; color: #dedede; border-color: #fff; }
     }
-    .modal h2 { margin-top: 0; }
     .modal-backdrop.open { display: flex; }
 
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 14px;
+      margin-bottom: 20px;
+    }
+    @media (prefers-color-scheme: dark) {
+      .modal-header { border-color: #333; }
+    }
+    .modal-header h2 { margin: 0; font-size: 26px; line-height: 30px; }
+
+    .sub-table td { padding: 6px 8px 6px 0; font-size: 15px; }
+    .sub-table thead th { font-size: 13px; }
+
+    /* Toast — slides up */
     .toast {
       position: fixed;
-      bottom: 18px;
-      right: 18px;
-      border: 1px solid #000;
+      bottom: 20px;
+      right: 20px;
+      border: 1.5px solid #000;
       background: #fff;
-      padding: 10px 12px;
-      font-size: 16px;
+      padding: 10px 16px;
+      font-size: 14px;
       line-height: 18px;
-      display: none;
       z-index: 1000;
+      transform: translateY(12px);
+      opacity: 0;
+      transition: transform 0.16s ease, opacity 0.16s ease;
+      pointer-events: none;
     }
     @media (prefers-color-scheme: dark) {
       .toast { background: #1e1e1e; color: #dedede; border-color: #fff; }
     }
-    .toast.show { display: block; }
+    .toast.show { transform: translateY(0); opacity: 1; }
 
-    /* Make the table a bit more “tracker-like” while staying minimal */
-    .papers-table td { padding: 10px 6px 10px 0; }
-    .title-cell a { font-weight: 700; }
+    /* Sync line */
+    #syncLine { font-size: 13px; margin-bottom: 8px; min-height: 16px; }
+
+    /* Kbd hint */
+    .kbd-hint { font-size: 12px; opacity: 0.45; }
+    kbd {
+      display: inline-block;
+      border: 1px solid currentColor;
+      border-radius: 2px;
+      padding: 0 3px;
+      font-family: inherit;
+      font-size: 11px;
+    }
+
+    /* Empty state */
+    .empty-state {
+      padding: 48px 0;
+      text-align: center;
+      font-size: 17px;
+      opacity: 0.4;
+    }
+
+    /* Stat breakdown table */
+    .stat-breakdown { margin: 12px 0 0; }
+    .stat-breakdown td { padding: 4px 8px 4px 0; font-size: 15px; }
   </style>
 </head>
 
@@ -178,7 +295,7 @@
       <div class="two-col">
         <div>
           <h3>Status breakdown</h3>
-          <table class="small" aria-label="Status breakdown">
+          <table class="small stat-breakdown" aria-label="Status breakdown">
             <tbody id="statusBreakdown"></tbody>
           </table>
         </div>
@@ -201,7 +318,7 @@
     </section>
 
     <section class="panel">
-      <h2>Tracker</h2>
+      <h2>Tracker <span class="kbd-hint"><kbd>N</kbd> new</span></h2>
 
       <div class="row" style="margin-bottom: 16px;">
         <div style="flex: 1 1 260px;">
@@ -243,15 +360,15 @@
       <table class="papers-table" aria-label="Papers list">
         <thead>
           <tr>
-            <th scope="col">Status</th>
-            <th scope="col">Title</th>
-            <th scope="col">Last</th>
-            <th scope="col">Updated</th>
-            <th scope="col">Actions</th>
+            <th scope="col" style="width:120px">Status</th>
+            <th scope="col">Title &amp; details</th>
+            <th scope="col" style="width:160px">Last venue</th>
+            <th scope="col" style="width:90px">Updated</th>
+            <th scope="col" style="width:200px">Quick actions</th>
           </tr>
         </thead>
         <tbody id="papersTbody">
-          <tr><td colspan="5" class="muted">…</td></tr>
+          <tr><td colspan="5"><div class="empty-state">Authenticate to load papers.</div></td></tr>
         </tbody>
       </table>
     </section>
@@ -324,7 +441,7 @@
         </div>
       </div>
 
-      <table class="small" aria-label="Submission history table">
+      <table class="small sub-table" aria-label="Submission history table">
         <thead>
           <tr>
             <th scope="col">Venue</th>
@@ -478,8 +595,9 @@
     setTimeout(() => toast.classList.remove("show"), 2400);
   }
 
-  function setSync(msg) {
+  function setSync(msg, state) {
     syncLine.textContent = msg || "";
+    syncLine.className = state || "";
   }
 
   // --- GITHUB IO ---
@@ -491,13 +609,13 @@
   }
 
   async function loadData() {
-    setSync("Loading…");
+    setSync("Loading…", "busy");
     try {
       const res = await fetch(apiUrl(), { headers: headers() });
       if (res.status === 404) {
         fileSha = null;
         papers = [];
-        setSync("No papers.json found (will be created on first save).");
+        setSync("No papers.json found — will be created on first save.", "");
         renderAll();
         return;
       }
@@ -522,15 +640,15 @@
         updatedAt: p.updatedAt || null
       }));
 
-      setSync("Loaded.");
+      setSync("Loaded.", "ok");
       renderAll();
     } catch (e) {
-      setSync("Error loading. Check token / permissions / connectivity.");
+      setSync("Error loading. Check token / permissions / connectivity.", "err");
     }
   }
 
   async function saveData(nextPapers) {
-    setSync("Saving…");
+    setSync("Saving…", "busy");
     papers = nextPapers;
 
     try {
@@ -551,11 +669,11 @@
       const data = await res.json();
       fileSha = data.content && data.content.sha ? data.content.sha : fileSha;
 
-      setSync("Saved.");
+      setSync("Saved.", "ok");
       showToast("Saved");
       renderAll();
     } catch (e) {
-      setSync("Sync failed. Your in-memory changes are not persisted.");
+      setSync("Sync failed. Changes not persisted.", "err");
       showToast("Sync failed");
     }
   }
@@ -567,7 +685,8 @@
     logoutBtn.classList.toggle("hide", !ok);
     loginBtn.disabled = ok;
     tokenInput.disabled = ok;
-    authStatus.textContent = ok ? "Token loaded for this session." : "";
+    authStatus.textContent = ok ? "Token active for this session." : "";
+    auth.classList.toggle("collapsed", ok);
   }
 
   loginBtn.addEventListener("click", async () => {
@@ -586,7 +705,7 @@
     fileSha = null;
     papers = [];
     updateAuthUI();
-    papersTbody.innerHTML = `<tr><td colspan="5" class="muted">…</td></tr>`;
+    papersTbody.innerHTML = `<tr><td colspan="5"><div class="empty-state">Authenticate to load papers.</div></td></tr>`;
     setSync("");
   });
 
@@ -711,6 +830,34 @@
       .replaceAll("'", "&#039;");
   }
 
+  function statusBadge(st) {
+    const cls = {
+      "Submitted":     "badge-submitted",
+      "Under Revision":"badge-revision",
+      "Accepted":      "badge-accepted",
+      "Rejected":      "badge-rejected",
+      "Not Submitted": "badge-none"
+    }[st] || "badge-none";
+    const label = {
+      "Submitted":     "Submitted",
+      "Under Revision":"Revision",
+      "Accepted":      "Accepted",
+      "Rejected":      "Rejected",
+      "Not Submitted": "Draft"
+    }[st] || st;
+    return `<span class="badge ${cls}">${escapeHTML(label)}</span>`;
+  }
+
+  function renderDaysChip(p, st) {
+    if (st !== "Submitted" && st !== "Under Revision") return "";
+    const fst = firstSubmissionDate(p);
+    if (!fst) return "";
+    const today = todayISO();
+    const d = daysBetween(fst, today);
+    if (d === null) return "";
+    return `<br><span class="days-chip">${d}d</span>`;
+  }
+
   function matchQuery(p, q) {
     if (!q) return true;
     q = q.toLowerCase();
@@ -748,7 +895,7 @@
     });
 
     if (!list.length) {
-      papersTbody.innerHTML = `<tr><td colspan="5" class="muted">No papers found.</td></tr>`;
+      papersTbody.innerHTML = `<tr><td colspan="5"><div class="empty-state">No papers found.</div></td></tr>`;
       return;
     }
 
@@ -756,23 +903,28 @@
       const st = lastStatus(p);
       const last = lastSubmission(p);
       const venue = last ? (last.journal || "") : "";
-      const lastLine = last ? `${escapeHTML(venue)}<br><span class="tiny muted">${escapeHTML(fmtDate(last.date))}</span>` : `<span class="tiny muted">—</span>`;
+      const lastLine = last
+        ? `<span style="font-size:14px">${escapeHTML(venue)}</span><br><span class="tiny muted">${escapeHTML(fmtDate(last.date))}</span>`
+        : `<span class="tiny muted">—</span>`;
       const upd = lastTouched(p) ? fmtDate(lastTouched(p).slice(0,10)) : "—";
+      const daysChip = renderDaysChip(p, st);
 
       return `
         <tr>
-          <td>${escapeHTML(st)}</td>
+          <td>${statusBadge(st)}${daysChip}</td>
           <td class="title-cell">
             <a href="#" data-edit="${escapeHTML(p.id)}">${escapeHTML(p.title || "(untitled)")}</a>
             ${renderMiniMeta(p)}
           </td>
           <td>${lastLine}</td>
-          <td>${escapeHTML(upd)}</td>
+          <td><span class="tiny muted">${escapeHTML(upd)}</span></td>
           <td>
-            <button data-quick="Submitted" data-id="${escapeHTML(p.id)}">Submit</button>
-            <button data-quick="Under Revision" data-id="${escapeHTML(p.id)}">Revise</button>
-            <button data-quick="Accepted" data-id="${escapeHTML(p.id)}">Accept</button>
-            <button data-quick="Rejected" data-id="${escapeHTML(p.id)}">Reject</button>
+            <div class="actions-inline" style="flex-wrap:wrap;gap:4px;">
+              <button class="quick-btn" data-quick="Submitted" data-id="${escapeHTML(p.id)}">Submit</button>
+              <button class="quick-btn" data-quick="Under Revision" data-id="${escapeHTML(p.id)}">Revise</button>
+              <button class="quick-btn" data-quick="Accepted" data-id="${escapeHTML(p.id)}">Accept</button>
+              <button class="quick-btn" data-quick="Rejected" data-id="${escapeHTML(p.id)}">Reject</button>
+            </div>
           </td>
         </tr>
       `;
@@ -978,8 +1130,31 @@
   });
 
   // --- INIT ---
+  function updateAuthCollapse() {
+    const ok = !!token;
+    auth.classList.toggle("collapsed", ok);
+  }
+
+  // Keyboard shortcuts
+  document.addEventListener("keydown", (e) => {
+    // N = new paper (when dashboard is visible, modal not open, not in input)
+    if (e.key === "n" || e.key === "N") {
+      const tag = document.activeElement.tagName.toLowerCase();
+      if (tag === "input" || tag === "textarea" || tag === "select") return;
+      if (modalBackdrop.classList.contains("open")) return;
+      if (dashboard.classList.contains("hide")) return;
+      e.preventDefault();
+      newPaperBtn.click();
+    }
+    // Escape = close modal
+    if (e.key === "Escape" && modalBackdrop.classList.contains("open")) {
+      closeModal();
+    }
+  });
+
   function init() {
     updateAuthUI();
+    updateAuthCollapse();
     if (token) {
       loadData();
     } else {
