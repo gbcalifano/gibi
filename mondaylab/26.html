@@ -3,11 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monday Lab 2026 | Califano (1995)</title>
+    <title>Monday Lab 2026 | Giovanbattista Califano</title>
     <meta name="description" content="Monday Lab 2026 — laboratorio di marketing agroalimentare di Giovanbattista Califano, Università degli Studi di Napoli Federico II.">
     <meta name="author" content="Giovanbattista Califano">
-    <link rel="canonical" href="https://califano.xyz/mondaylab/26">
+    <link rel="canonical" href="https://califano.xyz/mondaylab/26.html">
     <link rel="stylesheet" href="../style.css">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Monday Lab 2026 | Giovanbattista Califano">
+    <meta property="og:description" content="Follow the progress, materials, and rankings of the 2026 edition of Monday Lab, the agrifood marketing laboratory.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://califano.xyz/mondaylab/26.html">
+    <meta property="og:image" content="https://califano.xyz/img/giovanbattista-califano.webp">
 
     <link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAYCAMAAAArvOYAAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAlQTFRFAAAA////////c3ilYwAAAAN0Uk5T//8A18oNQQAAADlJREFUeNpiYEACTCAApcBMJgYMEbAQSASqgwEqiqIGrBVNhIkBWReKlQhAtAiKq4eRLnQRdAAQYADPTQIdKuL1zAAAAABJRU5ErkJggg==" type="image/png">
 
@@ -51,22 +58,16 @@
             margin: 18px 0 0 0;
         }
         .news-box {
-            border-left: 3px solid #000;
+            border-left: 3px solid var(--text-color);
             padding: 12px 16px;
             margin: 30px 0;
             font-size: 23px;
             line-height: 28px;
         }
-        @media (prefers-color-scheme: dark) {
-            .news-box { border-color: #dedede; }
-        }
         hr.lab-divider {
             border: none;
-            border-top: 1px solid silver;
+            border-top: 1px solid var(--border-color);
             margin: 50px 0 0 0;
-        }
-        @media (prefers-color-scheme: dark) {
-            hr.lab-divider { border-color: #555; }
         }
         /* Override pub-icon column rule for ranking table */
         .ranking td:first-of-type {
@@ -89,14 +90,21 @@
 
     <div id="main" role="main">
         <header>
-            <p><a href="../index.html">Home</a> / <a href="../mondaylab/mondaylab.html">Monday Lab</a> / 2026</p>
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <ol>
+                    <li><a href="../index.html">Home</a></li>
+                    <li>Teaching</li>
+                    <li><a href="mondaylab.html">Monday Lab</a></li>
+                    <li>2026</li>
+                </ol>
+            </nav>
             <h1 class="h1">Monday Lab</h1>
         </header>
 
         <section aria-labelledby="news">
-            <h2 id="news" class="hide">News</h2>
+            <h2 id="news" class="visually-hidden">News</h2>
             <div class="news-box" role="note">
-                Parte la nuova edizione del Monday Lab! Siamo prontə?
+                Parte la nuova edizione del Monday Lab! Siamo prontə? 🚀
             </div>
         </section>
 
@@ -104,7 +112,7 @@
             <h2 id="classifica">Classifica</h2>
             <p class="lab-meta">Aggiornata il __/__/____</p>
             <table class="ranking">
-                <caption class="hide">Classifica Monday Lab 2026</caption>
+                <caption class="visually-hidden">Classifica Monday Lab 2026</caption>
                 <thead>
                     <tr>
                         <th scope="col">#</th>
@@ -114,258 +122,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!--
-                    <tr>
-                        <td>1</td>
-                        <td>MacroLab</td>
-                        <td>910</td>
-                        <td>&#x1F44B; &#x1F913; &#x1F3A8; &#x1F0CF; &#x1F978; &#x1F41C; &#x1F4CA; &#x1F485; &#x1F1EC;&#x1F1E7; &#x1F3C6;</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Vegbutcher&rsquo;s</td>
-                        <td>725</td>
-                        <td>&#x1F44B; &#x26CF;&#xFE0F; &#x1F5DE;&#xFE0F; &#x1F40C; &#x1F41C; &#x1F485; &#x1F1EC;&#x1F1E7; &#x1F1EC;&#x1F1E7; &#x1F3A4;</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>Morsi&amp;Bocconi</td>
-                        <td>670</td>
-                        <td>&#x1F44B; &#x1F913; &#x1F3A8; &#x1F9D1;&#x200D;&#x1F373; &#x26BD; &#x1F58C;&#xFE0F; &#x1F9D0; &#x1F485; &#x1F485; &#x1F1EC;&#x1F1E7;</td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>Colour Bakery</td>
-                        <td>575</td>
-                        <td>&#x1F9D1;&#x200D;&#x1F373; &#x1F41C; &#x1F308; &#x1F370; &#x1F485; &#x1F1EC;&#x1F1E7;</td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td>Pastamente</td>
-                        <td>525</td>
-                        <td>&#x1F44B; &#x1F9D1;&#x200D;&#x1F373; &#x1F41C; &#x1F485; &#x1F485; &#x1F1EC;&#x1F1E7; &#x1F1EC;&#x1F1E7;</td>
-                    </tr>
-                    <tr>
-                        <td>6</td>
-                        <td>Giro di Vite</td>
-                        <td>500</td>
-                        <td>&#x1F44B; &#x1F3A8; &#x1F5DE;&#xFE0F; &#x1F5BC;&#xFE0F; &#x1F41C; &#x1F485; &#x1F485; &#x1F1EC;&#x1F1E7;</td>
-                    </tr>
-                    <tr>
-                        <td>7</td>
-                        <td>Synesth&eacute;sia</td>
-                        <td>475</td>
-                        <td>&#x1F44B; &#x1F3AF; &#x1F913; &#x1F41C; &#x2753; &#x1F485; &#x1F485; &#x1F1EC;&#x1F1E7;</td>
-                    </tr>
-                    <tr>
-                        <td>8</td>
-                        <td>Blend Coffee</td>
-                        <td>375</td>
-                        <td>&#x1F44B; &#x1F30F; &#x1F3A8; &#x1F5DE;&#xFE0F; &#x1F41C; &#x2753; &#x1F485; &#x1F485;</td>
-                    </tr>
-                    <tr>
-                        <td>9</td>
-                        <td>Protein Fonz Cream</td>
-                        <td>280</td>
-                        <td>&#x1F44B; &#x1F5DE;&#xFE0F; &#x1F9D1;&#x200D;&#x1F373; &#x1F41C; &#x2753; &#x1F485;</td>
-                    </tr>
-                    -->
+                    <!-- To be populated during the course -->
                 </tbody>
             </table>
         </section>
-<!--
-        <hr class="lab-divider">
-
-        <section aria-labelledby="lab7">
-            <h2 id="lab7">Lab 7 &mdash; Grand Finale &#x1F3C6;</h2>
-            <p>Dovete convincere la giuria a finanziare la vostra impresa con 250 XP.</p>
-            <p>Avrete 5 minuti per presentare il vostro progetto, supportati da una presentazione PowerPoint ben fatta e visivamente accattivante.</p>
-            <p>&#x1F3AF; Obiettivo? Farli innamorare della vostra idea. Raccontatela con passione, usate lo storytelling, mostrate i dati raccolti nell&rsquo;indagine, colpite con insight, creativit&agrave; e coerenza.</p>
-            <p>&#x1F4AC; Alla fine dei 5 minuti, la giuria potr&agrave; farvi qualche domanda: siate pronti a difendere le vostre scelte!</p>
-            <p>&#x1F3AC; It&rsquo;s showtime. In bocca al lupo, protagonisti del marketing!</p>
-            <p class="lab-meta">La presentazione finale sarà lunedì 12 Maggio dalle 14:00.</p>
-
-            <p class="lab-section-label">Presentazioni finali</p>
-            <p><a href="https://docs.google.com/folderview?id=1T0Rm569r9hqneNbwr0N7KMd56JMMFJ9v">Cartella Drive &mdash; Monday Lab 2025 Final</a></p>
-
-            <p class="lab-section-label">Bonus</p>
-            <ul class="bonus-list">
-                <li>&#x1F3C6; Premio della giuria &mdash; <span class="xp">+250 XP</span></li>
-                <li>&#x1F3A4; Carisma (all&rsquo;esposizione pi&ugrave; coinvolgente) &mdash; <span class="xp">+200 XP</span></li>
-                <li>&#x1F1EC;&#x1F1E7; International (presentazione in inglese; esposizione in inglese: moltiplicatore &times;2) &mdash; <span class="xp">+100 XP</span></li>
-                <li>&#x1F485; Coerenza (la presentazione finale &egrave; in linea con la brand identity) &mdash; <span class="xp">+50 XP</span></li>
-            </ul>
-        </section>
-
-        <hr class="lab-divider">
-
-        <section aria-labelledby="lab6">
-            <h2 id="lab6">Lab 6 &mdash; Big Data &#x1F4CA;</h2>
-            <p class="lab-meta">Obiettivo trisettimanale</p>
-            <p>Svolgere una ricerca di marketing dalla A alla Z: idea, stesura del questionario, raccolta dei dati, analisi dei dati, presentazione dei risultati.</p>
-
-            <p class="lab-section-label">Classwork</p>
-            <p>Le imprese cominciano a strutturare il questionario usando <a href="https://docs.google.com/forms/create">Google Moduli</a>.</p>
-
-            <p class="lab-section-label">Homework</p>
-            <ul>
-                <li>Completare il questionario</li>
-                <li>Raccogliere i dati</li>
-                <li>Analizzarli</li>
-                <li>Preparare il report</li>
-            </ul>
-
-            <p class="lab-section-label">FAQ</p>
-            <dl class="faq">
-                <dt>Q: Quanti questionari dobbiamo raccogliere?</dt>
-                <dd>A: Pi&ugrave; sono, meglio &egrave;! Facciamo tipo 20 a dipendente.</dd>
-                <dt>Q: Possiamo compilare ripetutamente il nostro questionario?</dt>
-                <dd>A: No.</dd>
-                <dt>Q: Abbiamo serie difficolt&agrave; con i numeri, come facciamo?</dt>
-                <dd>A: I grafici mostrano come riprodurli in Excel. In caso di difficolt&agrave; insormontabili potete fare un salto alla sezione di economia in via Universit&agrave; 96 (mandatemi prima una mail).</dd>
-            </dl>
-
-            <p class="lab-section-label">Bonus e malus trisettimanali</p>
-            <ul class="bonus-list">
-                <li>&#x1F4CA; Excel (al report migliore) &mdash; <span class="xp">+150 XP</span></li>
-                <li>&#x1F9D0; Fancy (analisi sofisticatissime con test statistici) &mdash; <span class="xp">+125 XP</span></li>
-                <li>&#x1F370; Pasticcier&#x259; (ai migliori grafici in generale) &mdash; <span class="xp">+100 XP</span></li>
-                <li>&#x1F485; Coerenza (il report &egrave; presentato in linea con la brand identity) &mdash; <span class="xp">+50 XP</span></li>
-                <li>&#x1F34C; Pasticcion&#x259; (ops) &mdash; <span class="xp-neg">&minus;15 XP</span></li>
-            </ul>
-
-            <p class="deadline">Consegna: <a href="https://docs.google.com/forms/d/e/1FAIpQLSck8Porrg0SLUo72GRy65-rqNJHAXG6Ntt3BXBNMFDvLupl9w/viewform?usp=header">Homework 6</a> entro il 04/05/2025</p>
-        </section>
-
-        <hr class="lab-divider">
-
-        <section aria-labelledby="lab5">
-            <h2 id="lab5">Lab 5 &mdash; Brandstorming &#x1F3A8;</h2>
-            <p class="lab-meta">Obiettivo settimanale</p>
-            <p>Definire la brand identity dell&rsquo;impresa.</p>
-
-            <p class="lab-section-label">Classwork</p>
-            <p>Ci prepariamo alla nostra ricerca di mercato con un esempio.</p>
-
-            <p class="lab-section-label">Homework</p>
-            <p>Definire la brand identity dell&rsquo;impresa con un <strong>brand book</strong> (esempi a tonnellate sull&rsquo;internet, <a href="https://creative.starbucks.com">qui quello di Starbucks niente male</a>).</p>
-            <p>I brand book definiscono in modo preciso i parametri con cui un brand deve essere rappresentato in ogni punto di contatto. Mantengono la coerenza del brand a tutti i livelli, contribuendo a costruire fiducia e riconoscibilit&agrave; presso il pubblico. Tutto ci&ograve; si traduce in maggiori ricavi e maggiore fedelt&agrave; da parte dei clienti! Nota bene: se avevate intenzione di cambiare il nome della vostra impresa, &egrave; il momento giusto per farlo!</p>
-            <p>Il brand book generalmente include:</p>
-            <ul>
-                <li><strong>Logo</strong> &mdash; indicazioni sull&rsquo;uso corretto, versioni accettabili, colori, dimensioni e varianti</li>
-                <li><strong>Colori</strong> &mdash; i colori istituzionali del brand, primari e di accento</li>
-                <li><strong>Tipografia</strong> &mdash; i font del brand, con indicazioni su dimensioni e modalit&agrave; d&rsquo;uso</li>
-                <li><strong>Elementi grafici</strong> &mdash; forme, illustrazioni e altri elementi visivi dell&rsquo;identit&agrave;</li>
-                <li><strong>Fotografia</strong> &mdash; stile fotografico e dove reperire le immagini</li>
-                <li><strong>Mission e valori</strong> &mdash; la filosofia del brand e il motivo per cui l&rsquo;azienda esiste</li>
-                <li><strong>Voce e tono</strong> &mdash; parole e frasi da usare o evitare, e il tono di voce da adottare</li>
-            </ul>
-            <p>Strumenti consigliati: <a href="https://www.canva.com">Canva</a> (versione pi&ugrave; &ldquo;creativa&rdquo; di PowerPoint), <a href="https://coolors.co">Coolors</a> (per le palette di colori).</p>
-
-            <p class="lab-section-label">Bonus e malus settimanali</p>
-            <ul class="bonus-list">
-                <li>&#x1F308; Tutto torna (brand identity pi&ugrave; coerente) &mdash; <span class="xp">+150 XP</span></li>
-                <li>&#x1F41C; Perfezionista (c&rsquo;&egrave; foto/render/illustrazione fatta da IA del core product) &mdash; <span class="xp">+100 XP</span></li>
-                <li>&#x26BD; Fantasista (miglior nome) &mdash; <span class="xp">+75 XP</span></li>
-                <li>&#x1F58C;&#xFE0F; Artista (miglior logo) &mdash; <span class="xp">+75 XP</span></li>
-                <li>&#x2753; Chi l&rsquo;ha visto? (manca logo, font o palette) &mdash; <span class="xp-neg">&minus;25 XP</span></li>
-            </ul>
-
-            <p class="deadline">Consegna: <a href="https://docs.google.com/forms/d/e/1FAIpQLSfC59Tttvgufl-BIaIJlP2pF-Mvy3vzBDZx_PWC8MxNtgQrQg/viewform?usp=header">Homework 5</a> entro il 13/04/2025</p>
-        </section>
-
-        <hr class="lab-divider">
-
-        <section aria-labelledby="lab4">
-            <h2 id="lab4">Lab 4 &mdash; Know Your People &#x1F9E0;</h2>
-            <p class="lab-meta">Obiettivo settimanale</p>
-            <p>Definire il proprio pubblico di riferimento.</p>
-
-            <p class="lab-section-label">Classwork</p>
-            <p>Ogni team riflette:</p>
-            <ul>
-                <li>Chi &egrave; il nostro cliente ideale?</li>
-                <li>Costruzione di almeno due <strong>Buyer Persona</strong> per l&rsquo;impresa: nome, et&agrave;, bisogni, preferenze, abitudini di acquisto</li>
-                <li>Condivisione e confronto delle Buyer Persona tra i gruppi + Premio del pubblico</li>
-            </ul>
-
-            <p class="lab-section-label">Homework</p>
-            <p>Attivit&agrave; propedeutica al Lab 5: definire il prodotto o servizio di punta dell&rsquo;impresa (<strong>core product</strong>). Devono essere idee specifiche: qual &egrave; il cuore della vostra offerta? I prodotti/servizi selezionati saranno il focus della vostra ricerca di mercato&hellip; choose wisely.</p>
-
-            <p class="lab-section-label">Bonus e malus settimanali</p>
-            <ul class="bonus-list">
-                <li>&#x1F978; Tesla, Nikola (al core product pi&ugrave; innovativo) &mdash; <span class="xp">+150 XP</span></li>
-                <li>&#x1F5BC;&#xFE0F; Monna Lisa (miglior ritratto della Buyer Persona, votato dal pubblico) &mdash; <span class="xp">+100 XP</span></li>
-                <li>&#x1F9D1;&#x200D;&#x1F373; Let &lsquo;em cook (premio midterm al potenziale ancora inespresso e alle medaglie di legno&hellip; forza, siamo ancora a met&agrave;!) &mdash; <span class="xp">+75 XP</span></li>
-            </ul>
-
-            <p class="deadline">Consegna: <a href="https://docs.google.com/forms/d/e/1FAIpQLSfb5zhrRVBhsMTOvZuAyM6Z7i_oNnCMgwYbMOJzFXTKkuchAA/viewform?usp=header">Homework 4</a> entro il 06/04/2025</p>
-        </section>
-
-        <hr class="lab-divider">
-
-        <section aria-labelledby="lab3">
-            <h2 id="lab3">Lab 3 &mdash; Explorer &#x1F30E;</h2>
-            <p class="lab-meta">Obiettivo settimanale</p>
-            <p>Analizzare se stessi e l&rsquo;ambiente esterno per chiarire il proprio vantaggio competitivo.</p>
-
-            <p class="lab-section-label">Classwork</p>
-            <p>&ldquo;Conosci te stesso&rdquo;: ogni team compila una analisi SWOT della propria impresa, prestando particolare attenzione a quali debolezze dei concorrenti possono essere trasformate in un vantaggio competitivo.</p>
-
-            <p class="lab-section-label">Homework</p>
-            <p>&ldquo;Conosci il mondo&rdquo;: ogni team dovr&agrave; raccontare il contesto in cui la propria impresa si sta muovendo, analizzando in modo narrativo e visivo i seguenti due livelli:</p>
-            <ul>
-                <li><strong>Microambiente</strong> &mdash; clienti (cosa si aspettano), concorrenti (come condizionano le scelte), fornitori (materie prime e partner), collaborazioni</li>
-                <li><strong>Macroambiente</strong> &mdash; tendenze sociali, tecnologiche, ambientali, culturali o economiche che influenzano l&rsquo;idea; opportunit&agrave; o minacce</li>
-            </ul>
-            <p>I team possono usare immagini, screenshot di articoli, post social, dati (es. Google Trends), foto di prodotti o luoghi: l&rsquo;obiettivo &egrave; rappresentare visivamente il contesto, non scrivere un testo lungo.</p>
-
-            <p class="lab-section-label">Bonus e malus settimanali</p>
-            <ul class="bonus-list">
-                <li>&#x1F30F; Marco Polo (miglior report) &mdash; <span class="xp">+100 XP</span></li>
-                <li>&#x1F5DE;&#xFE0F; Fact Checker (report ben documentato e supportato dai dati) &mdash; <span class="xp">+30 XP</span></li>
-                <li>&#x1F3A8; Graphic Designer (estetica del report gradevole e funzionale) &mdash; <span class="xp">+20 XP</span></li>
-                <li>&#x1F40C; Lumachina (ultimi a consegnare il report) &mdash; <span class="xp-neg">&minus;5 XP</span></li>
-                <li>&#x1F0CF; &ldquo;Viviamo in una societ&agrave;&rdquo; (troppe frasi fatte, generiche, non supportate dai dati) &mdash; <span class="xp-neg">&minus;10 XP</span></li>
-            </ul>
-
-            <p class="deadline">Consegna: <a href="https://docs.google.com/forms/d/e/1FAIpQLScMJCd62h-GyLug8Rfz9EdgpaYTx5gFKbUbRxdQ5jiE4K0h7w/viewform?usp=header">Homework 3</a> entro il 30/03/2025</p>
-        </section>
-
-        <hr class="lab-divider">
-
-        <section aria-labelledby="lab2">
-            <h2 id="lab2">Lab 2 &mdash; Totally Spies &#x1F977;</h2>
-            <p class="lab-meta">Obiettivo settimanale</p>
-            <p>Identificare i concorrenti del proprio settore e analizzarli per affinare la propria strategia.</p>
-
-            <p class="lab-section-label">Classwork</p>
-            <p>&ldquo;Chi sono i nostri rivali?&rdquo;: ogni team individua almeno 2 concorrenti reali nel proprio mercato e compila una tabella con nome, cosa offre e perch&eacute; &egrave; un competitor. Discussione e confronto tra gruppi.</p>
-
-            <p class="lab-section-label">Homework</p>
-            <p>Scegliere due concorrenti principali e analizzarne:</p>
-            <ul>
-                <li>Punti di forza (cosa fanno bene, perch&eacute; i clienti li scelgono)</li>
-                <li>Punti di debolezza (cosa non funziona o viene criticato nelle recensioni)</li>
-                <li>Opportunit&agrave; (cosa potrebbero migliorare, trend emergenti nel settore)</li>
-                <li>Minacce (cosa potrebbe danneggiarli, nuove tendenze che li penalizzano)</li>
-            </ul>
-            <p>Basarsi su recensioni online (es. Google Maps, Tripadvisor, TheFork), siti web, social media, men&ugrave;/listini prezzi, contenuti promozionali.</p>
-
-            <p class="lab-section-label">Bonus e malus settimanali</p>
-            <ul class="bonus-list">
-                <li>&#x26CF;&#xFE0F; In miniera (miglior report sulla concorrenza) &mdash; <span class="xp">+100 XP</span></li>
-                <li>&#x1F913; Nerd (alle prime tre imprese che consegnano l&rsquo;Homework 2) &mdash; <span class="xp">+50 XP</span></li>
-                <li>&#x1F503; Ctrl+C, Ctrl+V (solo recensioni, niente riflessioni) &mdash; <span class="xp-neg">&minus;15 XP</span></li>
-            </ul>
-
-            <p class="deadline">Consegna: <a href="https://docs.google.com/forms/d/e/1FAIpQLScgYW_XY5PBENQLBCDTR79ikHHVAT4oWttkymmsJVwHzFdFFA/viewform?usp=header">Homework 2</a> entro il 23/03/2025</p>
-        </section>
--->
+        
         <hr class="lab-divider">
 
         <section aria-labelledby="lab1">
-            <h2 id="lab1">Lab 1 &mdash; Startup &#x1F680;</h2>
+            <h2 id="lab1">Lab 1 &mdash; Startup 🚀</h2>
             <p class="lab-meta">Obiettivo settimanale</p>
             <p>Creazione dei team e selezione dell&rsquo;idea d&rsquo;impresa.</p>
 
@@ -382,16 +147,16 @@
 
             <p class="lab-section-label">Bonus e malus settimanali</p>
             <ul class="bonus-list">
-                <li>&#x1F3AF; Idea (miglior value proposition) &mdash; <span class="xp">+100 XP</span></li>
-                <li>&#x1F44B; Benvenut&#x259; (iscrizione Monday Lab) &mdash; <span class="xp">+50 XP</span></li>
-                <li>&#x1F697; Elon Musk (il nome dell&rsquo;azienda contiene una &ldquo;X&rdquo;) &mdash; <span class="xp-neg">&minus;15 XP</span></li>
+                <li>🎯 Idea (miglior value proposition) &mdash; <span class="xp">+100 XP</span></li>
+                <li>👋 Benvenutə (iscrizione Monday Lab) &mdash; <span class="xp">+50 XP</span></li>
+                <li>🏎️ Elon Musk (il nome dell&rsquo;azienda contiene una &ldquo;X&rdquo;) &mdash; <span class="xp-neg">&minus;15 XP</span></li>
             </ul>
 
             <p class="deadline">Consegna: <a href="https://docs.google.com/forms/d/e/1FAIpQLSddll6xYr7sWWT_07BrDmzAJgTODk1gLcJSHwh7uXN-brdDDA/viewform?usp=header">Homework 1</a> entro il 22/03/2026</p>
         </section>
 
         <footer role="contentinfo">
-            <p><small>&copy; Giovanbattista Califano 2026</small></p>
+            <p><small>© Giovanbattista Califano 2026</small></p>
             <p><small><a href="mailto:info@califano.xyz">info@califano.xyz</a></small></p>
         </footer>
     </div>

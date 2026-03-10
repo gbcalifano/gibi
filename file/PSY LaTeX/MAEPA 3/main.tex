@@ -1,0 +1,350 @@
+\documentclass{beamer}
+\usetheme{default}
+\usecolortheme{seahorse}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{natbib}
+\usepackage[italian]{babel}
+\usepackage{hyphenat}
+\hyphenation{mate-mati-ca recu-perare}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows.meta,positioning}
+
+\title[Lezione 3]{Variabili Latenti: Riflessive o Formative?}
+\subtitle{Master Avanzato in Economia e Politica Agraria}
+\author{Giovanbattista Califano}
+\date[Portici, 24/04/2026]{Scale Attitudinali per lo Studio \\ delle Preferenze del Consumatore \\24 e 27 Aprile 2026}
+\institute[UNINA]{Università degli Studi di Napoli Federico II, giovanbattista.califano@unina.it}
+
+\AtBeginSection[]
+{
+  \begin{frame}<beamer>
+    \frametitle{Passiamo a...}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}{Tabella di marcia}
+    \begin{center}
+        \begin{tabular}{|l|l|c|}
+        \hline
+        20/04 e 23/04 &  Hello, Psychometrics! & $\checkmark$ \\
+        \hline
+        24/04 & Affidabilità e Validità di una Misura & $\checkmark$ \\
+        \hline
+       24/04 e 27/04 & Variabili Latenti: Riflessive o Formative? & $\bigcirc$ \\
+        \hline
+        30/04 e 07/05 & Modelli ad Equazioni Strutturali & $\bigcirc$ \\
+        \hline
+        \end{tabular}
+    \end{center}
+\vspace{0.1cm}
+\footnotesize
+Riferimenti consigliati: \\
+\begin{itemize}
+    \item Capitoli 4 e 7 da \cite{jhangiani2019research}
+    \item Capitoli 7, 10 e 14 da \cite{olivero2022psicologia}
+    \item Capitolo 12 da \cite{mehmetoglu2022applied}
+\end{itemize}
+\scriptsize
+\bibliographystyle{apalike}
+\bibliography{text}
+\end{frame}
+
+\section{Breve recap}
+\begin{frame}{Breve recap}
+    Abbiamo già visto come spesso desideriamo studiare dei concetti che non sono \textit{direttamente osservabili e misurabili}. \\
+    \vspace{1em}
+    Attraverso le tecniche di \textit{scaling}, però, possiamo misurare i \textit{riflessi} (o \textit{manifestazioni}) del costrutto che ci interessa studiare.
+\end{frame}
+
+\begin{frame}{Breve recap}
+  \begin{block}{Ad esempio}
+    Le persone più neofobiche rispetto alle tecnologie alimentari tenderanno a concordare con queste affermazioni (proprio perché più neofobiche!)
+  \end{block}
+  \vspace{0.3cm}
+  \footnotesize
+  \begin{tabular}{l l}
+    \textbf{FTNS 1:} & Non ho ragione di provare cibi altamente tecnologici \\
+    & perché quelli che mangio sono già abbastanza buoni \\
+    \textbf{FTNS 2:} & Le nuove tecnologie alimentari sono qualcosa di cui \\
+    & sono incerto \\
+    \textbf{FTNS 3:} & I nuovi prodotti alimentari non sono più salutari dei \\ 
+    & cibi tradizionali \\
+    \textbf{(...)}
+  \end{tabular}
+  \vspace{0.2cm}
+  \begin{center}
+    \footnotesize
+    \begin{tabular}{ccccc}
+      \toprule
+      \textit{Fortemente} & \textit{In disaccordo} & \textit{Né d'accordo} & \textit{D'accordo} & \textit{Fortemente} \\
+      \textit{in disaccordo} &  & \textit{né in disaccordo} &  & \textit{d'accordo} \\
+      \midrule
+      1 & 2 & 3 & 4 & 5 \\
+      \bottomrule
+    \end{tabular}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Breve recap... e un problema?}
+    I punteggi assegnati alle risposte ad ogni item si possono quindi aggregare, tramite somma o media. Il punteggio aggregato rappresenta, in questo caso, il livello di neofobia verso le tecnologie alimentari del partecipante.\\
+    Questo approccio classico è ancora ampiamente utilizzato in letteratura, ma presenta almeno un problema... \\
+    \pause
+    \vspace{1em}
+    \textbf{Assume che gli item utilizzati per il punteggio aggregato siano una misurazione perfetta del costrutto:} \\
+    \[
+    FTN_i = \frac{\sum_{j=1}^{k} FTNS_{ij}}{k}
+    \]
+    \small
+    In questa media degli item:
+    \begin{itemize}
+        \item Non è previsto un errore
+        \item Gli item hanno lo stesso peso nel punteggio aggregato
+        \item FTN è trattata come \textit{conseguenza} delle risposte agli item della scala, ma il rapporto causale dovrebbe essere invertito
+    \end{itemize}
+\end{frame}
+
+\section{Le variabili latenti}
+\begin{frame}{Cosa vogliamo}
+\[
+\begin{aligned}
+FTNS_1 &= \lambda_1 \cdot FTN + \varepsilon_1 \\
+FTNS_2 &= \lambda_2 \cdot FTN + \varepsilon_2 \\
+FTNS_3 &= \lambda_3 \cdot FTN + \varepsilon_3 \\
+FTNS_4 &= \lambda_4 \cdot FTN + \varepsilon_4 \\
+&\vdots \\
+FTNS_k &= \lambda_k \cdot FTN + \varepsilon_k
+\end{aligned}
+\]
+\begin{itemize}
+  \item La direzione di causalità è dal costrutto ($FTN$) ai singoli item/indicatori $FTNS_j$, $j=1,\dots,k$.
+  \item Le variabili osservate $FTNS_j$ sono manifestazioni del costrutto, ciascuna soggetta a errore di misurazione $\varepsilon_j$, $j=1,\dots,k$.
+  \item I coefficienti $\lambda_j$ sono i factor loadings che misurano l’associazione fra il fattore latente $FTN$ e l’item $j$.
+\end{itemize}
+\end{frame}
+
+\tikzset{
+  lv/.style = {draw=blue!80, fill=blue!10, very thick, ellipse, minimum height=1cm, minimum width=2cm, align=center}, 
+  mv/.style = {draw=blue!80, fill=blue!10, very thick, rectangle, minimum height=0.5cm, minimum width=1cm, align=center}, 
+  ev/.style = {draw=blue!80, fill=blue!10, very thick, circle, minimum size=0.6cm, inner sep=1pt, align=center}, 
+  arrow/.style = {thick, ->, >=Stealth}
+}
+
+\begin{frame}{In linguaggio SEM}
+    \centering
+    \begin{tikzpicture}[node distance=0.8cm and 2.2cm, auto]
+        \node[mv] (i1) {FTNS 1};
+        \node[mv, below=of i1] (i2) {FTNS 2};
+        \node[mv, below=of i2] (i3) {FTNS 3};
+        \node[mv, below=of i3] (i4) {FTNS 4};
+        \node[mv, below=of i4] (ik) {FTNS k};
+        \node[ev, left=of i1] (e1) {$\varepsilon_1$};
+        \node[ev, left=of i2] (e2) {$\varepsilon_2$};
+        \node[ev, left=of i3] (e3) {$\varepsilon_3$};
+        \node[ev, left=of i4] (e4) {$\varepsilon_4$};
+        \node[ev, left=of ik] (ek) {$\varepsilon_k$};
+        \node[lv, right=of i3] (FTN) {Food Technology \\ Neophobia};
+        \draw[arrow] (FTN) -- (i1);
+        \draw[arrow] (FTN) -- (i2);
+        \draw[arrow] (FTN) -- (i3);
+        \draw[arrow] (FTN) -- (i4);
+        \draw[arrow] (FTN) -- (ik);
+        \draw[arrow] (e1) -- (i1);
+        \draw[arrow] (e2) -- (i2);
+        \draw[arrow] (e3) -- (i3);
+        \draw[arrow] (e4) -- (i4);
+        \draw[arrow] (ek) -- (ik);
+        \draw[loosely dotted, very thick] (i4) -- (ik);
+        \draw[loosely dotted, very thick] (e4) -- (ek);
+    \end{tikzpicture}
+\end{frame}
+
+\tikzset{
+  lv/.style = {draw=blue!80, fill=blue!10, very thick, ellipse, minimum height=0.6cm, minimum width=1.2cm, align=center},
+  mv/.style = {draw=blue!80, fill=blue!10, very thick, rectangle, minimum height=0.4cm, minimum width=0.8cm, align=center},
+  arrow/.style = {thick, ->, >=Stealth}
+}
+
+\begin{frame}{In linguaggio SEM}
+  \centering
+  \begin{tabular}{@{}c l@{}}
+    % Rettangoli e quadrati
+    \tikz[baseline=-0.5ex] \node[mv] {}; 
+    &
+    Variabili manifeste/osservate \\[1em]
+    % Cerchi ed ellissi
+    \tikz[baseline=-0.5ex] \node[lv] {};
+    &
+    Variabili latenti/non osservate \\[1em]
+    % Frecce unidirezionali
+    \tikz[baseline=-0.5ex] \begin{tikzpicture}
+      \draw[arrow] (0,0) -- (0.8,0);
+    \end{tikzpicture}
+    &
+    Relazioni causali
+  \end{tabular}
+\end{frame}
+
+\begin{frame}{Variabili latenti: Riflessive vs Formative}
+    \begin{block}{Costrutti riflessivi}
+        Fino ad ora abbiamo parlato di variabili latenti \textbf{riflessive}: si riferiscono ai concetti teorici non osservabili (come atteggiamenti, emozioni, ecc.) che si presuppone esistano a prescindere dall'indagine scientifica.
+    \end{block}
+    Ma non tutte le variabili latenti sono riflessive in natura... \\
+    \pause
+    \begin{block}{Costrutti formativi}
+        I costrutti \textbf{formativi} \textit{emergono} dalla realtà come variabili di sintesi ottenute da una combinazione lineare di più variabili osservate. Non sono mai fenomeni naturali, ma costruzioni artificiali per raggiungere determinati scopi (come gli indici di qualità, soddisfazione, ecc.)
+    \end{block} 
+\end{frame}
+
+\section{I costrutti riflessivi}
+\begin{frame}{Variabili latenti riflessive}
+    \begin{columns}
+    \column{0.5\textwidth}
+    \[
+    \begin{aligned}
+    x_1 &= \lambda_1 \cdot \eta + \varepsilon_1 \\
+    x_2 &= \lambda_2 \cdot \eta + \varepsilon_2 \\
+    x_3 &= \lambda_3 \cdot \eta + \varepsilon_3 \\
+    \end{aligned}
+    \]
+    \column{0.5\textwidth}
+    \begin{tikzpicture}
+        \node[lv] (l) {$\eta$};
+        \node[mv, left=of l] (x2) {$x_2$};
+        \node[mv, above=of x2] (x1) {$x_1$};
+        \node[mv, below=of x2] (x3) {$x_3$};
+        \draw[arrow] (l) -- (x1);
+        \draw[arrow] (l) -- (x2);
+        \draw[arrow] (l) -- (x3);
+    \end{tikzpicture}
+    \end{columns}
+    \vspace{1em}
+    \pause
+    \begin{itemize}
+        \item Variazioni nella variabile latente $\eta$ si manifestano in cambiamenti in \textbf{ogni} variabile osservata $x$.
+        \item La direzione di causalità è dal costrutto agli indicatori.
+        \item Ogni variabile osservata è trattata come una manifestazione, afflitta da un errore specifico, della variabile latente.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Variabili latenti riflessive}
+    \begin{columns}
+    \column{0.5\textwidth}
+    \[
+    \begin{aligned}
+    x_1 &= \lambda_1 \cdot \eta + \varepsilon_1 \\
+    x_2 &= \lambda_2 \cdot \eta + \varepsilon_2 \\
+    x_3 &= \lambda_3 \cdot \eta + \varepsilon_3 \\
+    \end{aligned}
+    \]
+    \column{0.5\textwidth}
+    \begin{tikzpicture}
+        \node[lv] (l) {$\eta$};
+        \node[mv, left=of l] (x2) {$x_2$};
+        \node[mv, above=of x2] (x1) {$x_1$};
+        \node[mv, below=of x2] (x3) {$x_3$};
+        \draw[arrow] (l) -- (x1);
+        \draw[arrow] (l) -- (x2);
+        \draw[arrow] (l) -- (x3);
+    \end{tikzpicture}
+    \end{columns}
+    \vspace{1em}
+    \pause
+    \small
+    \begin{itemize}
+        \item Gli indicatori della variabile latente riflessiva sono \textit{intercambiali} e ci aspettiamo un'elevata correlazione tra di essi, poiché dovrebbero essere tutti delle buone approssimazioni del costrutto latente.
+        \item Non possiamo assegnare un valore alla variabile latente, ma possiamo studiarne le relazioni con altre variabili latenti o manifeste.
+        \item Gli errori di misurazione $\varepsilon$ permettono di tenere conto della parte di variabilità degli indicatori non spiegata dal fattore latente. 
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Confirmatory Factor Analysis (CFA)}
+    L'\textbf{analisi fattoriale confermativa} consente di verificare se la struttura fattoriale \textit{riflessiva} ipotizzata trova riscontro nei dati osservati, permettendo così ai ricercatori di validare le ipotesi sulle relazioni tra le variabili osservate e uno o più fattori latenti.\\
+    \pause
+    \vspace{1em}
+    Si utilizzano diversi indici per valutare la bontà di adattamento di una CFA, tra i più comuni: \\
+    \vspace{0.5em}
+    \resizebox{\textwidth}{!}{
+    \begin{tabular}{ll} 
+        \toprule
+        \textbf{Fit Index} & \textbf{Valore Desiderato} \\
+        \midrule
+        $\chi^2$ (Chi-quadro) & Prossimo allo $0$ \\
+        CFI (Comparative Fit Index) & $> 0.95$ (buono), $> 0.90$ (accettabile) \\
+        TLI (Tucker-Lewis Index) & $> 0.95$ (buono), $> 0.90$ (accettabile) \\
+        RMSEA (Root Mean Square Error of Approximation) & $< 0.05$ (buono), $< 0.08$ (accettabile) \\
+        SRMR (Standardized Root Mean Square Residual) & $< 0.08$ \\
+        \bottomrule
+    \end{tabular}
+    }
+\end{frame}
+
+\section{I costrutti formativi}
+\begin{frame}{Variabili latenti formative}
+        \begin{columns}
+    \column{0.5\textwidth}
+    \[
+    \eta = \sum_{j=1}^{J} w_{j} \cdot x_{j}
+    \]
+    \column{0.5\textwidth}
+    \begin{tikzpicture}
+        \node[lv] (l) {$\eta$};
+        \node[mv, left=of l] (x2) {$x_2$};
+        \node[mv, above=of x2] (x1) {$x_1$};
+        \node[mv, below=of x2] (x3) {$x_3$};
+        \draw[arrow] (x1) -- (l);
+        \draw[arrow] (x2) -- (l);
+        \draw[arrow] (x3) -- (l);
+    \end{tikzpicture}
+    \end{columns}
+    \vspace{1em}
+    \pause
+    \small
+    \begin{itemize}
+        \item La relazione tra variabili manifeste e latenti non è da intendere come causale, ma piuttosto come prescrittiva.
+        \item Queste variabili latenti sono \textbf{formate} dalle variabili manifeste, quindi la loro definizione dipende dagli indicatori utilizzati.
+        \item Gli indicatori sono ingredienti specifici: non sono intercambiabili e non ci aspettiamo un'elevata correlazione tra di essi: se cambiamo indicatori, cambia il senso stesso della variabile latente formativa.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Esempi di costrutti formativi}
+\begin{block}{Status socioeconomico (SES)}
+    \begin{enumerate}
+        \item Reddito
+        \item Livello di istruzione
+        \item Occupazione
+    \end{enumerate}
+\end{block}
+\begin{block}{Qualità del servizio alberghiero}
+    \begin{enumerate}
+        \item Cortesia del personale
+        \item Pulizia della camera
+        \item Qualità della colazione
+        \item Efficienza del check-in
+    \end{enumerate}
+\end{block}
+\small
+\begin{itemize}
+    \item Se cambiano gli indicatori, cambia la definizione del costrutto.
+    \item Gli indicatori non sono necessariamente intercorrelati.
+\end{itemize}
+\end{frame}
+
+\section{Stata}
+\begin{frame}{clear all ;)}
+    Esercizio 1 \\
+    \texttt{. webuse set data.califano.xyz} \\
+    \texttt{. webuse masteristi} \\
+    \vspace{1em}
+    Esercizio 2 \\
+    \texttt{. webuse mamme, clear}
+\end{frame}
+
+\end{document}

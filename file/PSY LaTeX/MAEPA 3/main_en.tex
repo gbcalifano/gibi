@@ -1,0 +1,349 @@
+\documentclass{beamer}
+\usetheme{default}
+\usecolortheme{seahorse}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{natbib}
+\usepackage[english]{babel}
+\usepackage{hyphenat}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows.meta,positioning}
+
+\title[Lecture 3]{Latent Variables: Reflective or Formative?}
+\subtitle{Advanced Master in Agricultural Economics and Policy}
+\author{Giovanbattista Califano}
+\date[Portici, 24/04/2026]{Attitudinal Scales for the Study \\ of Consumer Preferences \\ April 24 and 27, 2026}
+\institute[UNINA]{University of Naples Federico II, giovanbattista.califano@unina.it}
+
+\AtBeginSection[]
+{
+  \begin{frame}<beamer>
+    \frametitle{Moving on to...}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}{Roadmap}
+    \begin{center}
+        \begin{tabular}{|l|l|c|}
+        \hline
+        20/04 and 23/04 &  Hello, Psychometrics! & $\checkmark$ \\
+        \hline
+        24/04 & Reliability and Validity of a Measure & $\checkmark$ \\
+        \hline
+       24/04 and 27/04 & Latent Variables: Reflective or Formative? & $\bigcirc$ \\
+        \hline
+        30/04 and 07/05 & Structural Equation Models & $\bigcirc$ \\
+        \hline
+        \end{tabular}
+    \end{center}
+\vspace{0.1cm}
+\footnotesize
+Recommended references: \\
+\begin{itemize}
+    \item Chapters 4 and 7 from \cite{jhangiani2019research}
+    \item Chapters 7, 10 and 14 from \cite{olivero2022psicologia}
+    \item Chapter 12 from \cite{mehmetoglu2022applied}
+\end{itemize}
+\scriptsize
+\bibliographystyle{apalike}
+\bibliography{text}
+\end{frame}
+
+\section{Quick recap}
+\begin{frame}{Quick recap}
+    We have already seen how we often wish to study concepts that are not \textit{directly observable and measurable}. \\
+    \vspace{1em}
+    Through \textit{scaling} techniques, however, we can measure the \textit{reflections} (or \textit{manifestations}) of the construct we are interested in studying.
+\end{frame}
+
+\begin{frame}{Quick recap}
+  \begin{block}{For example}
+    People who are more neophobic toward food technologies will tend to agree with these statements (precisely because they are more neophobic!)
+  \end{block}
+  \vspace{0.3cm}
+  \footnotesize
+  \begin{tabular}{l l}
+    \textbf{FTNS 1:} & I have no reason to try high-tech foods \\
+    & because the ones I eat are already good enough \\
+    \textbf{FTNS 2:} & New food technologies are something about which \\
+    & I am uncertain \\
+    \textbf{FTNS 3:} & New food products are not healthier than \\ 
+    & traditional foods \\
+    \textbf{(...)}
+  \end{tabular}
+  \vspace{0.2cm}
+  \begin{center}
+    \footnotesize
+    \begin{tabular}{ccccc}
+      \toprule
+      \textit{Strongly} & \textit{Disagree} & \textit{Neither agree} & \textit{Agree} & \textit{Strongly} \\
+      \textit{disagree} &  & \textit{nor disagree} &  & \textit{agree} \\
+      \midrule
+      1 & 2 & 3 & 4 & 5 \\
+      \bottomrule
+    \end{tabular}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Quick recap... and a problem?}
+    The scores assigned to the responses for each item can then be aggregated, via sum or mean. The aggregate score represents, in this case, the participant's level of food technology neophobia.\\
+    This classic approach is still widely used in the literature, but it presents at least one problem... \\
+    \pause
+    \vspace{1em}
+    \textbf{It assumes that the items used for the aggregate score are a perfect measurement of the construct:} \\
+    \[
+    FTN_i = \frac{\sum_{j=1}^{k} FTNS_{ij}}{k}
+    \]
+    \small
+    In this mean of the items:
+    \begin{itemize}
+        \item No error is expected
+        \item The items have the same weight in the aggregate score
+        \item FTN is treated as a \textit{consequence} of the responses to the scale items, but the causal relationship should be reversed
+    \end{itemize}
+\end{frame}
+
+\section{Latent variables}
+\begin{frame}{What we want}
+\[
+\begin{aligned}
+FTNS_1 &= \lambda_1 \cdot FTN + \varepsilon_1 \\
+FTNS_2 &= \lambda_2 \cdot FTN + \varepsilon_2 \\
+FTNS_3 &= \lambda_3 \cdot FTN + \varepsilon_3 \\
+FTNS_4 &= \lambda_4 \cdot FTN + \varepsilon_4 \\
+&\vdots \\
+FTNS_k &= \lambda_k \cdot FTN + \varepsilon_k
+\end{aligned}
+\]
+\begin{itemize}
+  \item The direction of causality is from the construct ($FTN$) to the individual items/indicators $FTNS_j$, $j=1,\dots,k$.
+  \item The observed variables $FTNS_j$ are manifestations of the construct, each subject to measurement error $\varepsilon_j$, $j=1,\dots,k$.
+  \item The coefficients $\lambda_j$ are the factor loadings that measure the association between the latent factor $FTN$ and item $j$.
+\end{itemize}
+\end{frame}
+
+\tikzset{
+  lv/.style = {draw=blue!80, fill=blue!10, very thick, ellipse, minimum height=1cm, minimum width=2cm, align=center}, 
+  mv/.style = {draw=blue!80, fill=blue!10, very thick, rectangle, minimum height=0.5cm, minimum width=1cm, align=center}, 
+  ev/.style = {draw=blue!80, fill=blue!10, very thick, circle, minimum size=0.6cm, inner sep=1pt, align=center}, 
+  arrow/.style = {thick, ->, >=Stealth}
+}
+
+\begin{frame}{In SEM language}
+    \centering
+    \begin{tikzpicture}[node distance=0.8cm and 2.2cm, auto]
+        \node[mv] (i1) {FTNS 1};
+        \node[mv, below=of i1] (i2) {FTNS 2};
+        \node[mv, below=of i2] (i3) {FTNS 3};
+        \node[mv, below=of i3] (i4) {FTNS 4};
+        \node[mv, below=of i4] (ik) {FTNS k};
+        \node[ev, left=of i1] (e1) {$\varepsilon_1$};
+        \node[ev, left=of i2] (e2) {$\varepsilon_2$};
+        \node[ev, left=of i3] (e3) {$\varepsilon_3$};
+        \node[ev, left=of i4] (e4) {$\varepsilon_4$};
+        \node[ev, left=of ik] (ek) {$\varepsilon_k$};
+        \node[lv, right=of i3] (FTN) {Food Technology \\ Neophobia};
+        \draw[arrow] (FTN) -- (i1);
+        \draw[arrow] (FTN) -- (i2);
+        \draw[arrow] (FTN) -- (i3);
+        \draw[arrow] (FTN) -- (i4);
+        \draw[arrow] (FTN) -- (ik);
+        \draw[arrow] (e1) -- (i1);
+        \draw[arrow] (e2) -- (i2);
+        \draw[arrow] (e3) -- (i3);
+        \draw[arrow] (e4) -- (i4);
+        \draw[arrow] (ek) -- (ik);
+        \draw[loosely dotted, very thick] (i4) -- (ik);
+        \draw[loosely dotted, very thick] (e4) -- (ek);
+    \end{tikzpicture}
+\end{frame}
+
+\tikzset{
+  lv/.style = {draw=blue!80, fill=blue!10, very thick, ellipse, minimum height=0.6cm, minimum width=1.2cm, align=center},
+  mv/.style = {draw=blue!80, fill=blue!10, very thick, rectangle, minimum height=0.4cm, minimum width=0.8cm, align=center},
+  arrow/.style = {thick, ->, >=Stealth}
+}
+
+\begin{frame}{In SEM language}
+  \centering
+  \begin{tabular}{@{}c l@{}}
+    % Rettangoli e quadrati
+    \tikz[baseline=-0.5ex] \node[mv] {}; 
+    &
+    Manifest/observed variables \\[1em]
+    % Cerchi ed ellissi
+    \tikz[baseline=-0.5ex] \node[lv] {};
+    &
+    Latent/unobserved variables \\[1em]
+    % Frecce unidirezionali
+    \tikz[baseline=-0.5ex] \begin{tikzpicture}
+      \draw[arrow] (0,0) -- (0.8,0);
+    \end{tikzpicture}
+    &
+    Causal relationships
+  \end{tabular}
+\end{frame}
+
+\begin{frame}{Latent variables: Reflective vs Formative}
+    \begin{block}{Reflective constructs}
+        So far we have talked about \textbf{reflective} latent variables: they refer to unobservable theoretical concepts (such as attitudes, emotions, etc.) that are assumed to exist regardless of scientific investigation.
+    \end{block}
+    But not all latent variables are reflective in nature... \\
+    \pause
+    \begin{block}{Formative constructs}
+        \textbf{Formative} constructs \textit{emerge} from reality as synthesis variables obtained from a linear combination of multiple observed variables. They are never natural phenomena, but artificial constructions to achieve certain goals (such as indices of quality, satisfaction, etc.)
+    \end{block} 
+\end{frame}
+
+\section{Reflective constructs}
+\begin{frame}{Reflective latent variables}
+    \begin{columns}
+    \column{0.5\textwidth}
+    \[
+    \begin{aligned}
+    x_1 &= \lambda_1 \cdot \eta + \varepsilon_1 \\
+    x_2 &= \lambda_2 \cdot \eta + \varepsilon_2 \\
+    x_3 &= \lambda_3 \cdot \eta + \varepsilon_3 \\
+    \end{aligned}
+    \]
+    \column{0.5\textwidth}
+    \begin{tikzpicture}
+        \node[lv] (l) {$\eta$};
+        \node[mv, left=of l] (x2) {$x_2$};
+        \node[mv, above=of x2] (x1) {$x_1$};
+        \node[mv, below=of x2] (x3) {$x_3$};
+        \draw[arrow] (l) -- (x1);
+        \draw[arrow] (l) -- (x2);
+        \draw[arrow] (l) -- (x3);
+    \end{tikzpicture}
+    \end{columns}
+    \vspace{1em}
+    \pause
+    \begin{itemize}
+        \item Variations in the latent variable $\eta$ manifest as changes in \textbf{every} observed variable $x$.
+        \item The direction of causality is from the construct to the indicators.
+        \item Each observed variable is treated as a manifestation, afflicted by a specific error, of the latent variable.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Reflective latent variables}
+    \begin{columns}
+    \column{0.5\textwidth}
+    \[
+    \begin{aligned}
+    x_1 &= \lambda_1 \cdot \eta + \varepsilon_1 \\
+    x_2 &= \lambda_2 \cdot \eta + \varepsilon_2 \\
+    x_3 &= \lambda_3 \cdot \eta + \varepsilon_3 \\
+    \end{aligned}
+    \]
+    \column{0.5\textwidth}
+    \begin{tikzpicture}
+        \node[lv] (l) {$\eta$};
+        \node[mv, left=of l] (x2) {$x_2$};
+        \node[mv, above=of x2] (x1) {$x_1$};
+        \node[mv, below=of x2] (x3) {$x_3$};
+        \draw[arrow] (l) -- (x1);
+        \draw[arrow] (l) -- (x2);
+        \draw[arrow] (l) -- (x3);
+    \end{tikzpicture}
+    \end{columns}
+    \vspace{1em}
+    \pause
+    \small
+    \begin{itemize}
+        \item The indicators of the reflective latent variable are \textit{interchangeable} and we expect a high correlation among them, as they should all be good approximations of the latent construct.
+        \item We cannot assign a value to the latent variable, but we can study its relationships with other latent or manifest variables.
+        \item Measurement errors $\varepsilon$ allow for accounting for the part of the indicators' variability not explained by the latent factor. 
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Confirmatory Factor Analysis (CFA)}
+    \textbf{Confirmatory factor analysis} allows for verifying whether the hypothesized \textit{reflective} factor structure is supported by the observed data, thus allowing researchers to validate hypotheses about the relationships between observed variables and one or more latent factors.\\
+    \pause
+    \vspace{1em}
+    Various indices are used to evaluate the goodness-of-fit of a CFA, among the most common: \\
+    \vspace{0.5em}
+    \resizebox{\textwidth}{!}{
+    \begin{tabular}{ll} 
+        \toprule
+        \textbf{Fit Index} & \textbf{Desired Value} \\
+        \midrule
+        $\chi^2$ (Chi-square) & Close to $0$ \\
+        CFI (Comparative Fit Index) & $> 0.95$ (good), $> 0.90$ (acceptable) \\
+        TLI (Tucker-Lewis Index) & $> 0.95$ (good), $> 0.90$ (acceptable) \\
+        RMSEA (Root Mean Square Error of Approximation) & $< 0.05$ (good), $< 0.08$ (acceptable) \\
+        SRMR (Standardized Root Mean Square Residual) & $< 0.08$ \\
+        \bottomrule
+    \end{tabular}
+    }
+\end{frame}
+
+\section{Formative constructs}
+\begin{frame}{Formative latent variables}
+        \begin{columns}
+    \column{0.5\textwidth}
+    \[
+    \eta = \sum_{j=1}^{J} w_{j} \cdot x_{j}
+    \]
+    \column{0.5\textwidth}
+    \begin{tikzpicture}
+        \node[lv] (l) {$\eta$};
+        \node[mv, left=of l] (x2) {$x_2$};
+        \node[mv, above=of x2] (x1) {$x_1$};
+        \node[mv, below=of x2] (x3) {$x_3$};
+        \draw[arrow] (x1) -- (l);
+        \draw[arrow] (x2) -- (l);
+        \draw[arrow] (x3) -- (l);
+    \end{tikzpicture}
+    \end{columns}
+    \vspace{1em}
+    \pause
+    \small
+    \begin{itemize}
+        \item The relationship between manifest and latent variables is not to be understood as causal, but rather as prescriptive.
+        \item These latent variables are \textbf{formed} by the manifest variables, so their definition depends on the indicators used.
+        \item Indicators are specific ingredients: they are not interchangeable and we do not expect a high correlation among them: if we change indicators, the very meaning of the formative latent variable changes.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Examples of formative constructs}
+\begin{block}{Socioeconomic status (SES)}
+    \begin{enumerate}
+        \item Income
+        \item Education level
+        \item Occupation
+    \end{enumerate}
+\end{block}
+\begin{block}{Hotel service quality}
+    \begin{enumerate}
+        \item Staff courtesy
+        \item Room cleanliness
+        \item Breakfast quality
+        \item Check-in efficiency
+    \end{enumerate}
+\end{block}
+\small
+\begin{itemize}
+    \item If the indicators change, the definition of the construct changes.
+    \item Indicators are not necessarily intercorrelated.
+\end{itemize}
+\end{frame}
+
+\section{Stata}
+\begin{frame}{clear all ;)}
+    Exercise 1 \\
+    \texttt{. webuse set data.califano.xyz} \\
+    \texttt{. webuse masteristi} \\
+    \vspace{1em}
+    Exercise 2 \\
+    \texttt{. webuse mamme, clear}
+\end{frame}
+
+\end{document}

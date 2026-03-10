@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research Survey | Giovanbattista Califano</title>
+    <meta name="description" content="Participate in behavioral science and consumer research surveys conducted by Giovanbattista Califano.">
+    <meta name="author" content="Giovanbattista Califano">
+    <link rel="canonical" href="https://califano.xyz/fiori.html">
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Research Survey | Giovanbattista Califano">
+    <meta property="og:description" content="Help contribute to scientific research on consumer behavior and food innovation by participating in our current surveys.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://califano.xyz/fiori.html">
+    <meta property="og:image" content="https://califano.xyz/img/cursor.png">
+    
+    <link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAYCAMAAAArvOYAAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAlQTFRFAAAA////////c3ilYwAAAAN0Uk5T//8A18oNQQAAADlJREFUeNpiYEACTCAApcBMJgYMEbAQSASqgwEqiqIGrBVNhIkBWReKlQhAtAiKq4eRLnQRdAAQYADPTQIdKuL1zAAAAABJRU5ErkJggg==" type="image/png">
+
+    <!-- GoatCounter Analytics -->
+    <script data-goatcounter="https://califano.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            padding: 40px 20px;
+        }
+        button {
+            padding: 16px 32px;
+            font-size: 24px;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div id="main" role="main">
+        <div class="container">
+            <h1 class="h1">Ciao 👋, grazie per la tua partecipazione!</h1>
+            <p>Clicca sul pulsante qui sotto per iniziare a compilare il questionario.</p>
+            <button id="startButton">Inizia</button>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const urls = [
+                'https://forms.gle/bKBjvPik5oyjcjNz7',
+                'https://forms.gle/MMhqDP9H4vw8v5348',
+                'https://forms.gle/s94FE8kY3nmmAsXb8'
+            ];
+
+            const startButton = document.getElementById('startButton');
+            if (startButton) {
+                startButton.addEventListener('click', () => {
+                    const randomIndex = Math.floor(Math.random() * urls.length);
+                    window.open(urls[randomIndex], '_blank');
+                });
+            }
+        })();
+    </script>
+</body>
+</html>

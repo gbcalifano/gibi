@@ -1,0 +1,334 @@
+\documentclass{beamer}
+\usetheme{default}
+\usecolortheme{seahorse}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{natbib}
+\usepackage[italian]{babel}
+\usepackage{hyphenat}
+\hyphenation{mate-mati-ca recu-perare}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows.meta,positioning}
+
+\title[Lezione 2]{Affidabilità e Validità di una Misura}
+\subtitle{Master Avanzato in Economia e Politica Agraria}
+\author{Giovanbattista Califano}
+\date[Portici, 24/04/2025]{Scale Attitudinali per lo Studio \\ delle Preferenze del Consumatore \\ 24 Aprile 2026}
+\institute[UNINA]{Università degli Studi di Napoli Federico II, giovanbattista.califano@unina.it}
+
+\AtBeginSection[]
+{
+  \begin{frame}<beamer>
+    \frametitle{Passiamo a...}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}{Tabella di marcia}
+    \begin{center}
+        \begin{tabular}{|l|l|c|}
+        \hline
+        20/04 e 23/04 &  Hello, Psychometrics! & $\checkmark$ \\
+        \hline
+        24/04 & Affidabilità e Validità di una Misura & $\bigcirc$ \\
+        \hline
+        24/04 e 27/04 & Variabili Latenti: Riflessive o Formative? & $\bigcirc$ \\
+        \hline
+        30/04 e 07/05 & Modelli ad Equazioni Strutturali & $\bigcirc$ \\
+        \hline
+        \end{tabular}
+    \end{center}
+\vspace{0.1cm}
+\footnotesize
+Riferimenti consigliati: \\
+\begin{itemize}
+    \item Capitoli 4 e 7 da \cite{jhangiani2019research}
+    \item Capitoli 7, 10 e 14 da \cite{olivero2022psicologia}
+    \item Capitolo 12 da \cite{mehmetoglu2022applied}
+\end{itemize}
+\scriptsize
+\bibliographystyle{apalike}
+\bibliography{text}
+\end{frame}
+
+\begin{frame}{Nelle puntate precendenti...}
+\begin{block}{Cosa intendiamo per misurazione?}
+    Assegnazione \textit{sitematica} di un punteggio a delle entità (individui, oggetti, eventi...), in modo tale che il punteggio rappresenti una caratteristica di quelle entità.
+\end{block}
+\pause
+\begin{itemize}
+    \item Ma come facciamo a sapere che quel punteggio rappresenta \textbf{davvero} la caratteristica che vogliamo studiare?
+    \item I ricercatori non lo danno per scontato...
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Esempio}
+\begin{block}{Il test di Califano per l'intelligenza}
+    Il test di Califano è stato messo a punto per misurare il quoziente intellettivo. Secondo il test, il QI di una persona è dato dal numero di lettere nel suo nome ($n$) moltiplicato per 20: \\
+    \[
+    QI = n \cdot 20
+    \]
+\end{block}
+\pause
+\begin{itemize}
+    \item Questo test è più \textbf{affidabile} della maggior parte dei test già esistenti per misurare il QI :)
+    \pause
+    \item Potrebbe essere poco \textbf{valido} :(
+\end{itemize}
+\end{frame}
+
+\section{Affidabilità (o \textit{reliability})}
+\begin{frame}{Affidabilità di una misura}
+    \begin{block}{L'affidabilità}
+        si riferisce al grado di \textbf{coerenza} (o \textit{consistency}) di una misura. La psicometria si concentra, in particolare, su tre tipologie di affidabilità:
+    \end{block}
+    \begin{enumerate}
+        \item Nel tempo (\textit{test-retest})
+        \item Tra ricercatori (\textit{inter-rater})
+        \item Tra item (\textit{internal})
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{L'affidabilità nel tempo}
+    \begin{block}{Test-Retest}
+        Se il costrutto misurato è ipotizzato essere coerente nel tempo, anche i punteggi dovrebbero esserlo. L'affidabilità nel tempo consiste nello studio della correlazione fra due distribuzioni di misura ottenute somministrando due volte lo stesso test allo stesso gruppo di soggetti dopo un certo intervallo di tempo.
+    \end{block}
+    \begin{block}{Esempio}
+        Se una persona è molto intelligente oggi, dovrebbe esserlo anche tra una settimana...
+    \end{block}
+\end{frame}
+
+\begin{frame}{L'affidabilità tra ricercatori}
+    \begin{block}{Inter-Rater}
+        Se diversi ricercatori utilizzano lo stesso sistema per assegnare dei punteggi, questi punteggi dovrebbero essere positivamente correlati tra loro.
+    \end{block}
+\end{frame}
+
+\begin{frame}{L'affidabilità tra item}
+    \begin{block}{Internal}
+        L'affidabilità interna è generalmente la più rilevante quando si utilizzano strumenti self-report, e si riferisce alla coerenza delle risposte degli intervistati ad una misura multi-item.
+    \end{block}
+\end{frame}
+
+\begin{frame}{L'affidabilità tra item}
+  \begin{block}{Food Technology Neophobia Scale (Cox \& Evans, 2008)}
+    La FTNS è uno strumento popolare per misurare la neofobia verso le tecnologie alimentari e si basa sulla scala di Likert.
+  \end{block}
+  \vspace{0.3cm}
+  \small
+  \begin{tabular}{l l}
+    \textbf{FTNS 1:} & Non ho ragione di provare cibi altamente tecnologici \\
+    & perché quelli che mangio sono già abbastanza buoni \\
+    \textbf{FTNS 2:} & Le nuove tecnologie alimentari sono qualcosa di cui \\
+    & sono incerto \\
+    \textbf{FTNS 3:} & I nuovi prodotti alimentari non sono più salutari dei \\ 
+    & cibi tradizionali \\
+    \textbf{(...)}
+  \end{tabular}
+  \vspace{0.2cm}
+  \begin{center}
+    \footnotesize
+    \begin{tabular}{ccccc}
+      \toprule
+      \textit{Fortemente} & \textit{In disaccordo} & \textit{Né d'accordo} & \textit{D'accordo} & \textit{Fortemente} \\
+      \textit{in disaccordo} &  & \textit{né in disaccordo} &  & \textit{d'accordo} \\
+      \midrule
+      $\bigcirc$ & $\bigcirc$ & $\bigcirc$ & $\bigcirc$ & $\bigcirc$ \\
+      \bottomrule
+    \end{tabular}
+  \end{center}
+\end{frame}
+
+\tikzset{
+  lv/.style = {draw=blue!80, fill=blue!10, very thick, ellipse, minimum height=1cm, minimum width=2cm, align=center}, mv/.style = {draw=blue!80, fill=blue!10, very thick, rectangle, minimum height=0.5cm, minimum width=1cm, align=center}, arrow/.style = {thick, ->, >=Stealth}
+}
+
+\begin{frame}{L'affidabilità tra item}
+    \centering
+    \begin{tikzpicture}[node distance=1cm, auto]
+        \node[mv] (i1) {FTNS 1};
+        \node[mv, below=of i1] (i2) {FTNS 2};
+        \node[mv, below=of i2] (i3) {FTNS 3};
+        \node[mv, below=of i3] (i4) {FTNS 4};
+        \node[mv, below=of i4] (ik) {FTNS k};
+        \node[lv, right=of i3] (FTN) {Food Technology \\ Neophobia};
+        \draw[arrow] (FTN) -- (i1);
+        \draw[arrow] (FTN) -- (i2);
+        \draw[arrow] (FTN) -- (i3);
+        \draw[arrow] (FTN) -- (i4);
+        \draw[arrow] (FTN) -- (ik);
+        \draw[loosely dotted, very thick] (i4) -- (ik);
+    \end{tikzpicture}
+\end{frame}
+
+\begin{frame}{L'affidabilità tra item}
+    La coerenza interna di una scala può essere misurata in diversi modi, ancora una volta basati sull'indice di correlazione. \\
+    \vspace{1em}
+    L'approccio più intuitivo è la correlazione \textit{split-half}:
+    \begin{enumerate}
+        \item Gli item della scala si dividono in due blocchi (es. pari e dispari);
+        \item Si aggregano i punteggi per i due blocchi, tramite somma o media;
+        \item Si calcola l'indice di correlazione tra i punteggi aggregati dei due blocchi.
+    \end{enumerate}
+    \centering
+    \vspace{1em}
+    \textit{Un coefficiente di correlazione split-half $r > .80$ è generalmente considerato un indicatore di buona coerenza interna.}
+\end{frame}
+
+\begin{frame}{L'affidabilità tra item}
+Un approccio più sofisticato e utilizzato è l'\textit{alpha di Cronbach}, definito come:
+\[
+\alpha = \frac{k}{k - 1} \left(1 - \frac{\sum_{i=1}^{k} \sigma^2_{Y_i}}{\sigma^2_X}\right)
+\]
+dove:
+\begin{itemize}
+    \item \(k\) è il numero di item che compongono la scala,
+    \item \(\sigma^2_{Y_i}\) è la varianza del singolo item \(i\),
+    \item \(\sigma^2_X\) è la varianza del punteggio totale (dato dalla somma di tutti gli item).
+\end{itemize}
+\vspace{1em}
+\centering
+\textit{Nella maggior parte dei casi, con \(\alpha > .70\) siamo soddisfatti.}
+\end{frame}
+
+\section{Validità (o \textit{validity})}
+\begin{frame}{Validità di una misura}
+    Abbiamo visto come il \textbf{Test di Califano} per il QI potrebbe godere di un buon grado di \textit{affidabilità} (es. Test-Retest). Cosa possiamo dire riguardo la \textit{validità}?
+\end{frame}
+
+\begin{frame}{Validità di una misura}
+    La validità ci dice quanto i punteggi di una misurazione rappresentano la caratteristica che dovrebbero rappresentare. \\
+    \vspace{1em}
+    Anche la validità viene suddivisa in diverse tipologie:
+    \begin{itemize}
+        \item Validità di facciata
+        \item Validità di contenuto
+        \item Validità di criterio
+        \item Validità discriminante
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Validità di facciata e di contenuto}
+    Sono le due tipologie di validità che non si stabiliscono con metodi quantitativi. La \textbf{validità di facciata} si riferisce al buon senso: ci vuole poco a dire che il numero di lettere contenute nel nome non ha niente a che fare con l'intelligenza. \\
+    \vspace{1em}
+    La \textbf{validità di contenuto}, invece, si riferisce a quanto la misura \textit{copre} il costrutto di interesse (es. componente di percezione del rischio e percezione di inutilità delle nuove tecnologie alimentari nella FTNS).
+\end{frame}
+
+\begin{frame}{Validità di criterio}
+    Un \textbf{criterio} può essere qualsiasi variabile che pensiamo debba essere correlata al costrutto che stiamo cercando di misurare: \\
+    \begin{itemize}
+        \item Validità concorrente: quando il criterio è misurato allo stesso tempo del costrutto;
+        \item Validità predittiva: quando il criterio è misurato dopo il costrutto;
+        \item Validità convergente: quando il criterio è una misura alternativa dello stesso costrutto.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Validità discriminante}
+    Si tratta del grado in cui i punteggi di una misura \textit{non} sono correlati con le misure di variabili che sono concettualmente distinte.
+\end{frame}
+
+\begin{frame}{Validità di criterio e discriminante}
+    \small
+    \begin{block}{Facciamo un esempio}
+    Immaginiamo di voler testare la validità di criterio e discriminante di una scala che misura l'autoefficacia nell'affrontare il master.
+        \begin{itemize}
+            \item \textbf{Validità concorrente}: l'autoefficacia nell'affrontare il master dovrebbe essere positivamente correlata con gli atteggiamenti verso Stata;
+            \item \textbf{Validità predittiva}: l'autoefficacia nell'affrontare il master dovrebbe essere in grado di predire la media dei voti ottenuti durante il master;
+            \item \textbf{Validità convergente}: se disponessimo di un'altra scala che misura la stessa autoefficacia, le due scale dovrebbero mostrare una correlazione positiva tra loro;
+            \item \textbf{Validità discriminante}: l'autoefficacia si riferisce alla fiducia nelle proprie capacità di affrontare compiti o situazioni specifiche, mentre l'autostima è una valutazione generale di sé. Le due misure, quindi, non dovrebbero risultare troppo correlate.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Riassumendo}
+\centering
+\begin{tabular}{ccc}
+     Affidabilità & $\equiv$ & Precisione \\
+     Validità & $\equiv$ & Accuratezza
+\end{tabular}
+\vspace{1em}
+\begin{center}
+\begin{tikzpicture}
+    % First target (High Accuracy, Low Precision)
+    \begin{scope}
+        \fill[blue!50] (0,0) circle (2);
+        \fill[white] (0,0) circle (1.5);
+        \fill[blue!50] (0,0) circle (1);
+        \fill[white] (0,0) circle (0.5);
+        \fill[blue!50] (0,0) circle (0.2);
+        \fill (0.6,0.4) circle (0.15);
+        \fill (-0.8,0.2) circle (0.15);
+        \fill (0.2,-0.2) circle (0.15);
+        \fill (-0.2,1.2) circle (0.15);
+        \node at (0,-2.5) {Accurato, Non preciso};
+    \end{scope}
+    \begin{scope}[xshift=5cm]
+        \fill[blue!50] (0,0) circle (2);
+        \fill[white] (0,0) circle (1.5);
+        \fill[blue!50] (0,0) circle (1);
+        \fill[white] (0,0) circle (0.5);
+        \fill[blue!50] (0,0) circle (0.2);
+        \fill (-1.2,1) circle (0.15);
+        \fill (-1,1.2) circle (0.15);
+        \fill (-1.1,1.4) circle (0.15);
+        \fill (-1,1) circle (0.15);
+        \node at (0,-2.5) {Non accurato, Preciso};
+    \end{scope}
+\end{tikzpicture}
+\end{center}
+\end{frame}
+
+\begin{frame}{Riassumendo}
+    \begin{itemize}
+        \item Misurare un costrutto psicologico richiede quattro passaggi fondamentali:
+        \begin{enumerate}
+            \item \textbf{Definizione concettuale}: chiarire cosa si intende per il costrutto;
+            \item \textbf{Definizione operativa}: tradurre il costrutto in qualcosa di osservabile e misurabile;
+            \item \textbf{Implementazione della misura}: scegliere o costruire lo strumento adeguato;
+            \item \textbf{Valutazione della misura}: testare lo strumento per verificarne validità e affidabilità.
+        \end{enumerate}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Riassumendo}
+    \textbf{1. Definizione concettuale}
+    \begin{itemize}
+        \item Serve una definizione chiara del costrutto.
+        \item Fondamentale consultare la letteratura scientifica.
+    \end{itemize}
+    \vspace{0.5em}
+    \textbf{2. Definizione operativa}
+    \begin{itemize}
+        \item Precisa \emph{come} il costrutto sarà misurato.
+        \item Possibili più definizioni operative per lo stesso costrutto.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Riassumendo}
+    \textbf{3. Implementare la misura}
+    \begin{itemize}
+        \item Usare uno strumento esistente: più rapido, già validato, confrontabile con altri studi.
+        \item Creare una nuova misura: solo se \emph{necessario}; attenzione alla semplicità, chiarezza e numero di item.
+    \end{itemize}
+    \vspace{0.5em}
+    \textbf{4. Valutare la misura}
+    \begin{itemize}
+        \item Test preliminare con alcuni partecipanti.
+        \item Verificare: chiarezza delle istruzioni, tempi, comprensibilità.
+        \item Raccogliere feedback per correggere eventuali problemi prima della raccolta dati.
+    \end{itemize}
+\end{frame}
+
+\section{Stata}
+\begin{frame}{clear all ;)}
+    \texttt{. webuse set data.califano.xyz} \\
+    \texttt{. webuse masteristi}
+\end{frame}
+
+\end{document}

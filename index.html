@@ -10,6 +10,11 @@
     <link rel="canonical" href="https://califano.xyz">
     <link rel="stylesheet" href="style.css">
     
+    <!-- Google Scholar -->
+    <meta name="citation_author" content="Califano, Giovanbattista">
+    <meta name="citation_publisher" content="University of Naples Federico II">
+    <meta name="citation_title" content="Giovanbattista Califano, Ph.D. – Behavioural Science & Food Innovation">
+    
     <!-- Open Graph -->
     <meta property="og:title" content="Giovanbattista Califano, Ph.D. – Behavioural Science & Food Innovation">
     <meta property="og:description" content="Explore research, teaching, and media coverage of Giovanbattista Califano, researcher in consumer behaviour and sustainable food systems.">
@@ -68,12 +73,12 @@
         </header>
 
         <section aria-labelledby="about">
-            <h2 id="about" class="hide">About</h2>
+            <h2 id="about" class="visually-hidden">About</h2>
             <p><strong>Giovanbattista Califano</strong>, Ph.D., is a behavioural scientist at the <a href="https://www.agraria.unina.it/en_GB/home">University of Naples Federico II</a>. He studies how sensory cues, information, and technology shape consumer acceptance and choice in food. His research contributes to the study of consumer behaviour in food innovation and related decision-making contexts.</p>
         </section>
 
         <section aria-labelledby="metrics">
-            <h2 id="metrics" class="hide">Research Metrics</h2>
+            <h2 id="metrics" class="visually-hidden">Research Metrics</h2>
             <div class="stats">
                 <div class="stat-item">
                     <div id="papers-count" class="stat-number" aria-live="polite">0</div>
@@ -92,7 +97,7 @@
         
         <section aria-labelledby="research">
             <div class="sketch" aria-hidden="true">
-              <img src="img/a.png" alt="">
+              <img src="img/a.png" alt="Pencil sketch icon">
             </div>
             <h2 id="research">Research</h2>
             <p>AI and food imagery, consumer choice modelling, sustainable food systems, crossmodal perception, applied statistics, experimental design.</p>
@@ -106,7 +111,7 @@
         
         <section aria-labelledby="teaching">
             <div class="sketch" aria-hidden="true">
-              <img src="img/folder.png" alt="">
+              <img src="img/folder.png" alt="Folder sketch icon">
             </div>
             <h2 id="teaching">Teaching</h2>
             <ul>
@@ -118,11 +123,11 @@
         
         <section aria-labelledby="media">
         <div class="sketch" aria-hidden="true">
-          <img src="img/world.png" alt="">
+          <img src="img/world.png" alt="World sketch icon">
         </div>
             <h2 id="media">In the news</h2>
             <table>
-                <caption class="hide">Selected media coverage of research</caption>
+                <caption class="visually-hidden">Selected media coverage of research</caption>
                 <thead>
                     <tr>
                         <th colspan="2" scope="col">Selected media coverage</th>
@@ -155,7 +160,7 @@
         
         <section aria-labelledby="links">
             <div class="sketch" aria-hidden="true">
-              <img src="img/cursor.png" alt="">
+              <img src="img/cursor.png" alt="Cursor sketch icon">
             </div>
             <h2 id="links">Links</h2>
             <ul>
@@ -232,7 +237,7 @@
                         return b - a; 
                     });
                     
-                    let html = '<table><caption class="hide">List of publications by year</caption><thead><tr><th colspan="2" scope="col">Publications</th><th scope="col">Year</th><th scope="col">Cited</th><th scope="col">Altmetric</th></tr></thead><tbody><tr><td colspan="5"></td></tr>';
+                    let html = '<table><caption class="visually-hidden">List of publications by year</caption><thead><tr><th colspan="2" scope="col">Publications</th><th scope="col">Year</th><th scope="col">Cited</th><th scope="col">Altmetric</th></tr></thead><tbody><tr><td colspan="5"></td></tr>';
                     
                     years.forEach(function(year) {
                         groupedByYear[year].forEach(function(work) {

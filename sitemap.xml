@@ -2,17 +2,42 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://califano.xyz/index.html</loc>
-    <lastmod>2026-01-11</lastmod>
+    <lastmod>2026-03-10</lastmod>
     <priority>1.00</priority>
   </url>
-   <url>
+  <url>
     <loc>https://califano.xyz/psy.html</loc>
-    <lastmod>2026-01-11</lastmod>
-    <priority>0.10</priority>
+    <lastmod>2026-03-10</lastmod>
+    <priority>0.80</priority>
   </url>
-   <url>
+  <url>
     <loc>https://califano.xyz/ri.html</loc>
-    <lastmod>2026-01-11</lastmod>
-    <priority>0.10</priority>
+    <lastmod>2026-03-10</lastmod>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://califano.xyz/working-papers.html</loc>
+    <lastmod>2026-03-10</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://califano.xyz/mondaylab/mondaylab.html</loc>
+    <lastmod>2026-03-10</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://califano.xyz/mondaylab/26.html</loc>
+    <lastmod>2026-03-10</lastmod>
+    <priority>0.60</priority>
+  </url>
+  <url>
+    <loc>https://califano.xyz/mondaylab/25.html</loc>
+    <lastmod>2026-03-10</lastmod>
+    <priority>0.50</priority>
+  </url>
+  <url>
+    <loc>https://califano.xyz/sasi.html</loc>
+    <lastmod>2026-03-10</lastmod>
+    <priority>0.40</priority>
   </url>
 </urlset>
