@@ -16,11 +16,6 @@
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://califano.xyz/working-papers.html</loc>
-    <lastmod>2026-03-10</lastmod>
-    <priority>0.70</priority>
-  </url>
-  <url>
     <loc>https://califano.xyz/mondaylab/mondaylab.html</loc>
     <lastmod>2026-03-10</lastmod>
     <priority>0.70</priority>
@@ -34,10 +29,5 @@
     <loc>https://califano.xyz/mondaylab/25.html</loc>
     <lastmod>2026-03-10</lastmod>
     <priority>0.50</priority>
-  </url>
-  <url>
-    <loc>https://califano.xyz/sasi.html</loc>
-    <lastmod>2026-03-10</lastmod>
-    <priority>0.40</priority>
   </url>
 </urlset>
