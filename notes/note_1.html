@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[1] The latent bias in latent class analysis</title>
+
+<link rel="stylesheet" href="../style.css">
+<link rel="icon" href="../img/favicon.png" type="image/png">
+
+<meta property="og:title" content="[1] The hidden bias in latent class analysis">
+<meta property="og:description" content="Linking latent classes to outcomes and predictors without quietly biasing your results — and how the step3 command fixes the problem.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://califano.xyz/notes/note_1.html">
+<meta property="og:image" content="https://califano.xyz/img/giovanbattista_califano.webp">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ScholarlyArticle",
+  "headline": "[1] The latent bias in latent class analysis",
+  "description": "Linking latent classes to outcomes and predictors without quietly biasing your results — and how the step3 command fixes the problem.",
+  "datePublished": "2026-03-15",
+  "author": [
+    { "@type": "Person", "name": "Giovanbattista Califano", "url": "https://califano.xyz" }
+  ],
+  "url": "https://califano.xyz/notes/note_1.html"
+}
+</script>
+
+<script data-goatcounter="https://califano.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+<div id="main">
+
+<nav class="breadcrumb" aria-label="breadcrumb">
+  <ol>
+    <li><a href="../index.html">Home</a></li>
+    <li><a href="../notes/index.html">Notes</a></li>
+    <li>[1] The latent bias in latent class analysis</li>
+  </ol>
+</nav>
+
+<h1 class="h1">[1] The latent bias in latent class analysis</h1>
+<p class="deck">After you fit a latent class model, linking the classes to outcomes is trickier than it looks. The standard approach biases your estimates toward zero — sometimes by 40% — and there is nothing in the output to warn you. Here is what goes wrong and how the <code>step3</code> command corrects it.</p>
+<p class="byline">Posted on March 15, 2026 by Giovanbattista Califano</p>
+
+<hr>
+
+<nav class="outline" aria-label="Article outline">
+  <ol>
+    <li><a href="#workflow">The three-step workflow</a></li>
+    <li><a href="#bias">The bias: class differences get diluted</a></li>
+    <li><a href="#error-matrix">The classification error matrix</a></li>
+    <li><a href="#fix">The fix: two bias-corrected methods</a></li>
+    <li><a href="#stata">Using <code>step3</code> in Stata</a></li>
+    <li><a href="#simulation">Simulation evidence</a></li>
+    <li><a href="#choosing">Choosing between methods</a></li>
+  </ol>
+</nav>
+
+<hr>
+
+<p>Latent class analysis is a method for discovering hidden subgroups of observations in your data. <em>Latent</em> means not directly observed: the classes are inferred from patterns in measured variables (such as survey responses, test items, behavioural indicators) rather than assigned by the researcher. Feed it enough items and it tells you that your sample breaks into — say — three distinct profiles, each with a characteristic response pattern.</p>
+
+<p>Once you have those classes, the natural next question is: <em>do they differ on some outcome I care about?</em> Or: <em>what predicts membership in each group?</em> The standard approach to answering these questions introduces a systematic bias that shrinks your estimates. Sometimes by 40%. And there is nothing in the output to warn you.</p>
+
+<p>Here is what goes wrong, why it matters, and how to fix it in Stata.</p>
+
+<h2 id="workflow">The three-step workflow</h2>
+
+<p>In Step 1, you estimate the latent class model using only the observed indicators — no external variables yet. The model returns <em>posterior probabilities</em> for every observation: one probability per class, summing to 1. If your model has two classes, person <em>i</em> might come out 85% likely to belong to Class 1 and 15% likely to belong to Class 2.</p>
+
+<p>In Step 2, you assign each person to their <em>modal</em> class — the one with the highest posterior. Person <em>i</em> at 85% / 15% gets hard-assigned to Class 1. An alternative is <em>proportional</em> assignment, where each person contributes fractionally to every class weighted by their posteriors; as we will see, this is biased too. In Step 3, you run a regression, ANOVA, or multinomial logit using these class labels as a variable.</p>
+
+<p>The problem is between Steps 2 and 3, wherein we treat the <em>latent</em> class variable as it was <em>observed</em>.</p>
+
+<div class="fig">
+<svg width="100%" viewBox="0 0 720 170" aria-label="Diagram of the three-step procedure">
+<defs>
+  <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M2 1L8 5L2 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+</defs>
+<rect x="10" y="42" width="190" height="82" fill="none" stroke="var(--text-color)" stroke-width="1.5"/>
+<rect x="246" y="42" width="190" height="82" fill="none" stroke="var(--border-color)" stroke-width="1"/>
+<rect x="482" y="42" width="228" height="82" fill="none" stroke="var(--border-color)" stroke-width="1"/>
+<text x="105" y="70" text-anchor="middle" font-size="22" font-weight="700">Step 1</text>
+<text x="105" y="92" text-anchor="middle" font-size="14" class="t-muted">Fit the mixture model</text>
+<text x="105" y="110" text-anchor="middle" font-size="14" class="t-muted">without external variables</text>
+<text x="105" y="28" text-anchor="middle" font-size="13" class="t-muted">Estimate class structure</text>
+<text x="341" y="70" text-anchor="middle" font-size="22" font-weight="700">Step 2</text>
+<text x="341" y="92" text-anchor="middle" font-size="14" class="t-muted">Assign each observation</text>
+<text x="341" y="110" text-anchor="middle" font-size="14" class="t-muted">to a class</text>
+<text x="341" y="28" text-anchor="middle" font-size="13" class="t-muted">Modal or proportional</text>
+<text x="596" y="70" text-anchor="middle" font-size="22" font-weight="700">Step 3</text>
+<text x="596" y="92" text-anchor="middle" font-size="14" class="t-muted">Relate classes to</text>
+<text x="596" y="110" text-anchor="middle" font-size="14" class="t-muted">covariates or outcomes</text>
+<text x="596" y="28" text-anchor="middle" font-size="13" class="t-muted">Regression / ANOVA</text>
+<rect x="191" y="59" width="64" height="48" fill="var(--bg-color)"/>
+<line x1="200" y1="83" x2="244" y2="83" stroke="var(--text-color)" stroke-width="1" fill="none" marker-end="url(#arr)"/>
+<text x="222" y="73" text-anchor="middle" font-size="12" class="t-muted">posterior</text>
+<text x="222" y="98" text-anchor="middle" font-size="12" class="t-muted">probs</text>
+<rect x="427" y="59" width="64" height="48" fill="var(--bg-color)"/>
+<line x1="436" y1="83" x2="480" y2="83" stroke="var(--text-color)" stroke-width="1" fill="none" marker-end="url(#arr)"/>
+<text x="458" y="73" text-anchor="middle" font-size="12" class="t-muted">class</text>
+<text x="458" y="98" text-anchor="middle" font-size="12" class="t-muted">labels</text>
+<text x="458" y="144" text-anchor="middle" font-size="13">↑</text>
+<text x="458" y="160" text-anchor="middle" font-size="13" class="t-muted">classification error enters here</text>
+</svg>
+<p class="fig-cap">Fig. 1 — Classification error enters between Steps 2 and 3, when uncertain membership is treated as certain.</p>
+</div>
+
+<hr>
+
+<h2 id="bias">The bias: class differences get diluted</h2>
+
+<p>When you assign someone to a class, you treat an uncertain membership as though it were known with certainty. People who truly belong to Class 1 get counted in Class 2, and vice versa. The groups look more similar than they actually are — and the estimated difference between them shrinks.</p>
+
+<div class="callout">
+  <strong>How large is the bias?</strong>
+  <p>Simulation studies show naive three-step estimates are typically 20–45% smaller than the truth — largest when classes overlap, smallest when they are cleanly separated.<sup><a href="#fn1" id="ref1" class="fn-ref">1</a></sup></p>
+</div>
+
+<p>The mechanism is easy to see. Suppose two equal-sized classes have true outcome means of 1 and 0, and 20% of observations land in the wrong class. The "Class 1" bucket now contains 80 genuine members (mean 1) and 20 interlopers from Class 2 (mean 0), giving a bucket average of <strong>0.80</strong>. By symmetry the "Class 2" bucket averages <strong>0.20</strong>, and the naive estimate of the group difference is 0.60 rather than the true 1.00.</p>
+
+<p>More generally, with a misclassification rate of ε (say, 20%), the naive estimator recovers only (1 − 2ε) of the true effect. At 10% error you keep 80% of the signal; at 30% error you keep only 40%. Models with moderate class overlap routinely sit between ε = 0.15 and ε = 0.30 — well within the range where the bias is practically meaningful.</p>
+
+<p><strong>A concrete example with real data.</strong> We model the height distribution of 4,071 high-school students as a two-class mixture, then ask whether those groups differ on a second outcome, <em>y</em>. The true difference is −0.50. After modal assignment, 82% of students land in the correct group — seemingly good. But the naive Step 3 estimate is only −0.34: a 33% underestimate, entirely due to the 18% who were misclassified.</p>
+
+<div class="fig">
+<img src="img/note1_fig2.png" alt="Horizontal bar chart comparing estimated group differences: true (−0.50), naive (−0.34), BCH (−0.47), and ML (−0.47)" style="width:100%;max-width:700px">
+<p class="fig-cap">Fig. 2 — The naive approach recovers only two-thirds of the true effect; both bias-corrected methods closely match the truth.</p>
+</div>
+
+<hr>
+
+<h2 id="error-matrix">The classification error matrix</h2>
+
+<p>Think of D as a receipt that summarises how much Step 2 distorted things. The entry in row <em>s</em>, column <em>t</em> is the probability of being assigned to class <em>t</em> when your true class is <em>s</em>. Diagonal entries capture correct classification; off-diagonal entries capture misclassification.</p>
+
+<p>Formally, D is an S × S matrix — for two classes, a 2 × 2 table. When classes are well separated, the diagonals approach 1 and the off-diagonals approach 0. When classes overlap, the off-diagonals grow, and so does the bias. The key point: you do not need to guess D. It can be computed directly from the posterior probabilities saved in Step 1, by averaging across observations within each true-class group.</p>
+
+<div class="fig">
+<svg width="100%" viewBox="0 0 720 210" aria-label="Classification error matrix comparison">
+<text x="200" y="22" text-anchor="middle" font-size="16" font-weight="700">Well-separated classes</text>
+<text x="200" y="40" text-anchor="middle" font-size="13" class="t-muted">Off-diagonals near zero</text>
+<text x="72" y="88" text-anchor="end" font-size="13" class="t-muted">True 1</text>
+<text x="72" y="148" text-anchor="end" font-size="13" class="t-muted">True 2</text>
+<text x="122" y="188" text-anchor="middle" font-size="13" class="t-muted">Pred. 1</text>
+<text x="228" y="188" text-anchor="middle" font-size="13" class="t-muted">Pred. 2</text>
+<rect x="78" y="58" width="88" height="52" class="cell-hi"/>
+<rect x="78" y="58" width="88" height="52" fill="none" stroke="var(--border-color)" stroke-width="1"/>
+<text x="122" y="89" text-anchor="middle" font-size="20" font-weight="700">0.94</text>
+<rect x="184" y="58" width="88" height="52" fill="none" stroke="var(--border-color)" stroke-width="1"/>
+<text x="228" y="89" text-anchor="middle" font-size="20" class="t-muted">0.06</text>
+<rect x="78" y="118" width="88" height="52" fill="none" stroke="var(--border-color)" stroke-width="1"/>
+<text x="122" y="149" text-anchor="middle" font-size="20" class="t-muted">0.05</text>
+<rect x="184" y="118" width="88" height="52" class="cell-hi"/>
+<rect x="184" y="118" width="88" height="52" fill="none" stroke="var(--border-color)" stroke-width="1"/>
+<text x="228" y="149" text-anchor="middle" font-size="20" font-weight="700">0.95</text>
+<line x1="360" y1="16" x2="360" y2="185" stroke="var(--border-color)" stroke-width="1" stroke-dasharray="4 3" fill="none"/>
+<text x="538" y="22" text-anchor="middle" font-size="16" font-weight="700">Overlapping classes</text>
+<text x="538" y="40" text-anchor="middle" font-size="13" class="t-muted">Large off-diagonals — more bias</text>
+<text x="408" y="88" text-anchor="end" font-size="13" class="t-muted">True 1</text>
+<text x="408" y="148" text-anchor="end" font-size="13" class="t-muted">True 2</text>
+<text x="458" y="188" text-anchor="middle" font-size="13" class="t-muted">Pred. 1</text>
+<text x="618" y="188" text-anchor="middle" font-size="13" class="t-muted">Pred. 2</text>
+<rect x="414" y="58" width="88" height="52" class="cell-hi"/>
+<rect x="414" y="58" width="88" height="52" fill="none" stroke="var(--border-color)" stroke-width="1"/>
+<text x="458" y="89" text-anchor="middle" font-size="20" font-weight="700">0.72</text>
+<rect x="574" y="58" width="88" height="52" fill="none" stroke="var(--text-color)" stroke-width="1.5"/>
+<text x="618" y="89" text-anchor="middle" font-size="20" font-weight="700">0.28</text>
+<rect x="414" y="118" width="88" height="52" fill="none" stroke="var(--text-color)" stroke-width="1.5"/>
+<text x="458" y="149" text-anchor="middle" font-size="20" font-weight="700">0.31</text>
+<rect x="574" y="118" width="88" height="52" class="cell-hi"/>
+<rect x="574" y="118" width="88" height="52" fill="none" stroke="var(--border-color)" stroke-width="1"/>
+<text x="618" y="149" text-anchor="middle" font-size="20" font-weight="700">0.69</text>
+</svg>
+<p class="fig-cap">Fig. 3 — Matrix D for two hypothetical models. Shaded cells are correct classifications (diagonal); heavy borders on the right highlight off-diagonal errors that amplify bias in Step 3.</p>
+</div>
+
+<p>Both bias-corrected methods use D, but in different ways.</p>
+
+<hr>
+
+<h2 id="fix">The fix: two bias-corrected methods</h2>
+
+<p><strong>BCH (Bolck–Croon–Hagenaars).</strong> BCH takes the <em>inverse</em> of D and uses it as a set of correction weights. The dataset is expanded into one row per class per observation, each row weighted by an entry of D⁻¹. A standard weighted regression on this expanded dataset recovers unbiased estimates without ever touching the mixture model again — class definitions from Step 1 stay frozen.</p>
+
+<p><strong>ML (maximum likelihood).</strong> ML re-estimates the mixture model in Step 3, but holds the entries of D fixed as constraints. This lets the model account for classification error while estimating the relationship with the external variable, and it reports class-specific variances that BCH does not provide. The trade-off: it assumes normality within classes, which BCH does not require.<sup><a href="#fn2" id="ref2" class="fn-ref">2</a></sup></p>
+
+<div class="callout">
+  <strong>When to use which</strong>
+  <p>Use BCH when normality within classes is uncertain, or when you want class definitions to stay fixed between steps. Use ML for categorical outcomes or when classes are well separated and distributional assumptions are plausible.</p>
+</div>
+
+<hr>
+
+<h2 id="stata">Using <code>step3</code> in Stata</h2>
+
+<p>The <code>step3</code> module implements both methods. The only prerequisite is that you have already estimated a mixture model — using Stata's <code>fmm</code> (finite mixture model) command or <code>gsem</code> — and saved the posterior probabilities with a common prefix, numbered sequentially from 1. That is the default format that Stata's <code>predict, classposteriorpr</code> produces.</p>
+
+<h3>Basic syntax</h3>
+
+<pre><code>step3 varlist [if] [in], pr(stub) lclass(newvar) ///
+    [bch outcome id(varname) eqvar base(#) rrr level(#) detail]</code></pre>
+
+<p>The <code>pr()</code> option supplies the prefix of your posterior probability variables. The <code>lclass()</code> option names a new variable that will store the modal class assignment. The <code>id()</code> option provides a unique person identifier — needed because <code>step3</code> internally expands the dataset to one row per class per person and uses <code>id()</code> to reassemble results.</p>
+
+<p><strong>Distal outcome — BCH.</strong> A <em>distal outcome</em> is a variable that class membership influences — something downstream of the classes, not a cause of them. Think of it as a consequence you want to compare across groups. After fitting a two-class Gaussian mixture model on height and saving posterior probabilities:</p>
+
+<pre><code>. fmm 2, nolog: regress height
+. predict cpost*, classposteriorpr
+. step3 y, pr(cpost) lclass(w) id(pid) outcome bch</code></pre>
+
+<p>The <code>outcome</code> option tells <code>step3</code> that <em>y</em> is influenced by class membership; <code>bch</code> selects the BCH estimator.</p>
+
+<pre><code>. step3 y, pr(cpost) lclass(w) id(pid) outcome bch</code></pre>
+<pre class="stata-log"><code>
+STEP3: Distal outcome analysis            Number of obs = 4,071
+
+BCH Mean estimation
+--------------------------------------------------------------
+             |      Coef.   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+y            |
+           w |
+          1  |   .4678218    .026197      .4164765     .519167
+          2  |  -.0066626    .028869     -.0632448    .0499196
+--------------------------------------------------------------
+Note: Linearized std. err.</code></pre>
+
+<p>These means — 0.47 and −0.01 — closely match the true population values (0.50 and 0.00). The naive estimate had produced a diluted difference of −0.34 instead of the true −0.50.</p>
+
+<p><strong>Distal outcome — ML.</strong> Drop the <code>bch</code> option to switch estimators. Adding <code>detail</code> prints a diagnostic table showing whether any observations changed class during re-estimation.</p>
+<pre><code>. step3 y, pr(cpost) lclass(w) outcome detail</code></pre>
+<pre class="stata-log"><code>
+Performing ML estimation...
+
+STEP3: Distal outcome analysis            Number of obs = 4,071
+
+ML Mean estimation
+--------------------------------------------------------------
+             |      Coef.   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+y            |
+           w |
+          1  |   .4674262    .026677      .4151401    .5197122
+          2  |  -.0061706   .0293066     -.0636105    .0512693
+--------------------------------------------------------------
+Note: Robust std. err.
+
+Class composition (%) before and after Step 3
+
+---------------------------------------------------
+       Class |     Step 1      Step 3 |     Change
+-------------+------------------------+------------
+           1 |      55.35       55.35 |      -0.00
+           2 |      44.65       44.65 |       0.00
+---------------------------------------------------
+
+Observations in Step 1 class moved to a different class in Step 3
+
++------------------------+
+|          n           % |
+|------------------------|
+|          1           0 |
++------------------------+
+Note: results might be inconsistent for % &gt; 20</code></pre>
+
+<p>The ML output also reports within-class variance estimates (<code>sigma2</code>). Add <code>eqvar</code> to constrain them equal across classes.</p>
+
+<p><strong>Covariate analysis.</strong> When you flip the causal direction — <em>y</em> predicts class membership rather than being predicted by it — drop the <code>outcome</code> option. The underlying model becomes a multinomial logit with the class indicator as the dependent variable.</p>
+
+<pre><code>. step3 y, pr(cpost) lclass(w) rrr</code></pre>
+<pre class="stata-log"><code>
+Performing ML estimation...
+
+STEP3: Covariate analysis                                  Number of obs = 4,071
+
+ML Multinomial logistic regression
+------------------------------------------------------------------------------
+             |        RRR   Std. Err.      z    P&gt;|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+1.w          |  (base outcome)
+-------------+----------------------------------------------------------------
+2.w          |
+           y |   .6170943    .031358    -9.50   0.000     .5585953    .6817196
+       _cons |   .9055532   .0439022    -2.05   0.041     .8234681    .9958206
+------------------------------------------------------------------------------
+Note: Robust std. err.</code></pre>
+
+<p>Postestimation commands — <code>pwcompare</code>, <code>margins</code>, <code>estimates store</code> — all work as expected after any <code>step3</code> call.</p>
+
+<hr>
+
+<h2 id="simulation">Simulation evidence</h2>
+
+<p>The bias isn't theoretical. Naive modal assignment loses between 45% and 65% of the true effect in simulations.</p>
+
+<p>A Monte Carlo study with nearly 5,000 replications tests performance across three latent classes with true outcome means of −2, 0, and +2. Each class is defined by six binary indicators — observed yes/no items, analogous to survey responses — with moderate overlap between class profiles. Four estimators are compared: hard (modal) assignment; soft (proportional) assignment, where each person contributes fractionally to every class weighted by their posteriors; and the two bias-corrected methods.</p>
+
+<div class="fig">
+<img src="img/note1_fig4.png" alt="Grouped bar chart of Monte Carlo simulation means by latent class and estimation method" style="width:100%;max-width:900px">
+<p class="fig-cap">Fig. 4 — Monte Carlo means across 4,986 replications. Both naive approaches substantially compress the class differences; BCH and ML recover the true separation closely.</p>
+</div>
+
+<p>For the extreme classes (true means ±2), hard assignment recovers only about ±1.1 and soft assignment only ±0.7. The BCH and ML estimates land near ±1.85 to ±1.96 — recovering over 90% of the true separation.<sup><a href="#fn3" id="ref3" class="fn-ref">3</a></sup></p>
+
+<hr>
+
+<h2 id="choosing">Choosing between methods</h2>
+
+<p>Three questions guide the choice:</p>
+<ol>
+  <li>Is your outcome continuous or categorical? BCH handles both; ML is generally better for categorical outcomes and covariates.</li>
+  <li>Are your classes well separated? If entropy is high, ML is more efficient.</li>
+  <li>Is normality within classes plausible? If not, BCH is the safer option.</li>
+</ol>
+
+<table class="methods-table">
+<thead>
+  <tr>
+    <th>Situation</th>
+    <th>Method</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td>Continuous distal outcome, normality uncertain</td>
+    <td><span class="badge badge-accepted">BCH</span>&nbsp; No distributional assumptions</td>
+  </tr>
+  <tr>
+    <td>Continuous distal outcome, classes well separated</td>
+    <td><span class="badge badge-accepted">ML</span>&nbsp; More efficient; reports within-class variances</td>
+  </tr>
+  <tr>
+    <td>Categorical outcome or covariate</td>
+    <td><span class="badge badge-accepted">ML</span>&nbsp; BCH can produce negative weights with sparse cells</td>
+  </tr>
+  <tr>
+    <td>Low entropy, need stable class definitions</td>
+    <td><span class="badge badge-accepted">BCH</span>&nbsp; Class composition does not shift in Step 3</td>
+  </tr>
+  <tr>
+    <td>Naive modal or proportional assignment</td>
+    <td><span class="badge badge-rejected">Avoid</span>&nbsp; Systematic downward bias, no correction</td>
+  </tr>
+</tbody>
+</table>
+
+<div class="callout">
+  <strong>The bottom line</strong>
+  <p>If you are linking latent classes to external variables, the naive three-step approach is almost certainly giving you shrunken estimates. Run <code>step3</code> instead.</p>
+</div>
+
+<div class="footnotes">
+  <ol>
+    <li id="fn1">Entropy is a summary of classification quality. High entropy means most posterior probabilities cluster near 0 or 1; low entropy means they spread across classes. The 20–45% bias range assumes moderate entropy — when entropy approaches 1 the bias is negligible. <a href="#ref1" aria-label="Back to text">↩</a></li>
+    <li id="fn2">The ML estimator assumes a normal distribution within each class for continuous outcomes. When this assumption fails — skewed or heavy-tailed outcomes, for example — BCH is the safer choice. <a href="#ref2" aria-label="Back to text">↩</a></li>
+    <li id="fn3">BCH can amplify variance when class separation is poor, because inverting D magnifies the off-diagonal entries. In extreme cases (near-singular D), the weights can also turn negative, producing numerically unstable estimates. If you observe implausible estimates or convergence warnings, switch to ML. <a href="#ref3" aria-label="Back to text">↩</a></li>
+  </ol>
+</div>
+
+<footer>
+  <p>Califano, G. &amp; Fabbricatore, R. (forthcoming). Relating latent class membership to covariates and outcomes: Two bias-adjusted methods in Stata. <em>The Stata Journal</em>.</p>
+</footer>
+
+</div>
+
+<script>
+document.querySelectorAll('pre:not(.stata-log)').forEach(function(pre) {
+    var btn = document.createElement('button');
+    btn.textContent = 'Copy';
+    btn.className = 'copy-btn';
+    btn.setAttribute('aria-label', 'Copy code');
+    btn.addEventListener('click', function() {
+        var text = (pre.querySelector('code') || pre).textContent;
+        navigator.clipboard.writeText(text).then(function() {
+            btn.textContent = 'Copied!';
+            setTimeout(function() { btn.textContent = 'Copy'; }, 1500);
+        }).catch(function() {
+            btn.textContent = 'Error';
+            setTimeout(function() { btn.textContent = 'Copy'; }, 1500);
+        });
+    });
+    pre.appendChild(btn);
+});
+</script>
+</body>
+</html>

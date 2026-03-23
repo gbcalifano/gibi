@@ -83,6 +83,45 @@
             font-size: 20px;
             margin: 4px 0 0 0;
         }
+
+        section.lab-expired { opacity: 0.45; }
+
+        .valutazione-hw {
+            margin: 30px 0 0 0;
+        }
+        .valutazione-hw summary {
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 0;
+            border-top: 1px solid var(--border-color);
+            user-select: none;
+        }
+        .valutazione-hw summary::-webkit-details-marker { display: none; }
+        .valutazione-hw summary::before {
+            content: '▶';
+            font-size: 12px;
+            transition: transform 0.15s ease;
+            display: inline-block;
+        }
+        .valutazione-hw[open] summary::before {
+            transform: rotate(90deg);
+        }
+        .valutazione-team {
+            margin: 14px 0 18px 20px;
+        }
+        .valutazione-team .team-name {
+            font-weight: 700;
+        }
+        .valutazione-team p {
+            margin: 4px 0 0 0;
+            font-size: 20px;
+            line-height: 28px;
+        }
     </style>
 </head>
 <body>
@@ -94,7 +133,7 @@
                 <ol>
                     <li><a href="../index.html">Home</a></li>
                     <li>Teaching</li>
-                    <li><a href="mondaylab.html">Monday Lab</a></li>
+                    <li><a href="index.html">Monday Lab</a></li>
                     <li>2026</li>
                 </ol>
             </nav>
@@ -104,13 +143,13 @@
         <section aria-labelledby="news">
             <h2 id="news" class="visually-hidden">News</h2>
             <div class="news-box" role="note">
-                Parte la nuova edizione del Monday Lab! Siamo prontə? 🚀
+                Chi ben comincia è a metà dell'opera... vero, Partenope?  🧜‍♀️
             </div>
         </section>
 
         <section aria-labelledby="classifica">
             <h2 id="classifica">Classifica</h2>
-            <p class="lab-meta">Aggiornata il __/__/____</p>
+            <p class="lab-meta">Aggiornata il 23/03/2026</p>
             <table class="ranking">
                 <caption class="visually-hidden">Classifica Monday Lab 2026</caption>
                 <thead>
@@ -122,14 +161,288 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- To be populated during the course -->
+
+                    <tr>
+                        <td>1</td>
+                        <td>Partenope Food Innovation</td>
+                        <td>150</td>
+                        <td>👋 🎯</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>AmorSì</td>
+                        <td>50</td>
+                        <td>👋</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Draft8</td>
+                        <td>50</td>
+                        <td>👋</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Maccarò Lab</td>
+                        <td>50</td>
+                        <td>👋</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>ReFood-Lab</td>
+                        <td>50</td>
+                        <td>👋</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Socialbite!</td>
+                        <td>50</td>
+                        <td>👋</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>VivaFruit</td>
+                        <td>50</td>
+                        <td>👋</td>
+                    </tr>
+
                 </tbody>
             </table>
+
         </section>
-        
+
+        <section aria-labelledby="valutazioni">
+            <h2 id="valutazioni">Feedback</h2>
+
+            <details class="valutazione-hw">
+                <summary>Homework 1 &mdash; Scheda aziendale</summary>
+
+                <div class="valutazione-team">
+                    <p><span class="team-name">Partenope Food Innovation</span> si aggiudica il bonus per la miglior value proposition. "Saje che Bbuon" risponde in modo preciso a tutti e tre gli assi del "Why Us?": il problema (niente mensa), il target (studenti e lavoratori), e la differenziazione dalla concorrenza (i pasti istantanei esistenti non offrono cucina autentica, né calore, né identità territoriale). Il canale (vending machine) è parte della proposta di valore: garantisce accessibilità senza rinunciare alla qualità. E il brand name fa già comunicazione. Ottimo lavoro 🧜‍♀️</p>
+                </div>
+
+                <div class="valutazione-team">
+                    <p><span class="team-name">VivaFruit</span> porta una soluzione concreta e originale: il Fruttino, succo di frutta liofilizzato in monoporzione, è immediato da capire e risponde a un bisogno reale di praticità. Il format liofilizzato è una scelta tecnica con una logica chiara di portabilità, shelf life, assenza di conservanti. Il passo successivo è rendere esplicito il posizionamento competitivo: rispetto a cosa si posiziona il Fruttino? Rispetto ai succhi confezionati (meno fresco, meno sano), ai frullati freschi (meno pratici, più costosi), agli integratori in polvere? Nominare il concorrente rende la proposta più tagliente.</p>
+                </div>
+
+                <div class="valutazione-team">
+                    <p><span class="team-name">Maccarò Lab</span> ha un'identità narrativa solida e un prodotto specifico (la frittata di pasta) che è già un elemento di differenziazione reale rispetto al fast food generico. Il posizionamento su Mergellina rafforza l'autenticità e il legame territoriale. La sfida è il passo in più: perché Maccarò Lab e non uno qualsiasi dei tanti locali di street food napoletano già presenti? Cosa rende la proposta non solo buona, ma difficile da replicare? La risposta potrebbe stare nella trasparenza della filiera, nella specializzazione sulla frittata di pasta come format unico, o in un elemento esperienziale ancora da definire. L'accenno alla GDO dovrebbe essere meno vago...</p>
+                </div>
+
+                <div class="valutazione-team">
+                    <p><span class="team-name">AmorSì</span> punta su una leva emotiva forte: la nostalgia del cibo fatto in casa, il sapore della domenica, la promessa di non dover scegliere tra comodità e autenticità. Il Cilento come origine è un asset reputazionale che pochi concorrenti possono rivendicare. Mancano però due elementi che trasformerebbero un'intuizione narrativa in una value proposition completa: qual è il prodotto esatto (pasta al ragù? secondi piatti pronti? conserve?) e rispetto a quali alternative si posiziona (piatti surgelati della GDO? gastronomie locali? sughi freschi in busta?). Rispondere a queste domande è il lavoro dei prossimi lab.</p>
+                </div>
+
+                <div class="valutazione-team">
+                    <p><span class="team-name">ReFood-Lab</span> lavora su un tema strutturalmente rilevante, ovvero la valorizzazione degli scarti alimentari, e propone un modello su due fronti: il consumatore finale (prodotti sani e naturali) e le aziende partner (soluzione per ridurre il food waste). Questa doppia proposta di valore è ambiziosa e originale. Il nodo da sciogliere è la concretezza del prodotto: al momento si capisce bene il perché e per chi, ma non ancora il cosa. Farine da scarti di lavorazione? Ingredienti funzionali? Snack? La scelta del prodotto specifico cambierà tutto: target, canale, concorrenti. Prima si decide, meglio è.</p>
+                </div>
+
+                <div class="valutazione-team">
+                    <p><span class="team-name">Socialbite!</span> ha identificato un bisogno reale e crescente: la solitudine, la difficoltà di creare connessioni autentiche. Ha anche scelto un contesto (Trastevere, aperitivo) con un potenziale alto. Il problema è che la value proposition attuale di "occasioni autentiche di incontro" descrive anche una qualsiasi enoteca, un pub con serata quiz, o un corso di cucina. Il lavoro da fare è definire il format esperienziale con precisione: cosa succede fisicamente dentro Socialbite che non succede altrove? Un meccanismo di gioco? Un modo strutturato di presentarsi? Quella risposta è il cuore della proposta di valore.</p>
+                </div>
+
+                <div class="valutazione-team">
+                    <p><span class="team-name">Draft8</span> intercetta una tendenza reale e documentata: la Gen Z beve meno, vuole esperienze sofisticate senza alcol, e non si accontenta della solita bibita gassata. L'idea di portare il sistema draft (velocità, consistenza, identità) al mondo dei fermentati e del kombucha è originale e ha senso industriale (meno vetro, meno spreco). Il posizionamento sulla penisola sorrentina gioca a favore: alta densità turistica, pubblico giovane internazionale già esposto a questi trend. La sfida è tenere il messaggio sul filo: "tutto alla spina" (tecnologia), "upgrade analcolico" (prodotto), "sostenibilità" (valori) sono tre angoli validi ma separati... il rischio è che il cliente esca senza aver capito cos'è Draft8, esattamente. Qual è il cuore della proposta? La tecnologia, il drink, o lo stile di vita?</p>
+                </div>
+
+            </details>
+        </section>
+
+        <!--
         <hr class="lab-divider">
 
-        <section aria-labelledby="lab1">
+        <section aria-labelledby="lab7" class="lab-active">
+            <h2 id="lab7">Lab 7 &mdash; Grand Finale 🏆</h2>
+            <p class="lab-meta">Obiettivo settimanale</p>
+            <p>Convincere la giuria a finanziare la vostra impresa con 250 XP.</p>
+
+            <p class="lab-section-label">Presentazione finale</p>
+            <p>Avete 5 minuti per presentare il vostro progetto con un PowerPoint ben fatto e visivamente accattivante. Usate lo storytelling, mostrate i dati raccolti nell&rsquo;indagine, colpite con insight, creatività e coerenza.</p>
+            <p>Alla fine dei 5 minuti, la giuria potrà farvi qualche domanda: siate pronti a difendere le vostre scelte. Preparate le slide, allenatevi con il discorso, e <strong>non leggete!</strong></p>
+
+            <p class="lab-section-label">Bonus e malus settimanali</p>
+            <ul class="bonus-list">
+                <li>🏆 Premio della giuria (al team che ha convinto di più) &mdash; <span class="xp">+250 XP</span></li>
+                <li>🎤 Carisma (all&rsquo;esposizione più coinvolgente) &mdash; <span class="xp">+200 XP</span></li>
+                <li>🇬🇧 International (la presentazione è in inglese; XP &times;2 se anche l&rsquo;esposizione è in inglese) &mdash; <span class="xp">+100 XP</span></li>
+                <li>💅 Coerenza (la presentazione finale è in linea con la brand identity) &mdash; <span class="xp">+50 XP</span></li>
+            </ul>
+
+            <p class="deadline">Presentazione: lunedì 18/05/2026 dalle 14:00</p>
+        </section>
+
+        <hr class="lab-divider">
+
+        <section aria-labelledby="lab6" class="lab-active">
+            <h2 id="lab6">Lab 6 &mdash; Big Data 📊</h2>
+            <p class="lab-meta">Obiettivo settimanale</p>
+            <p>Svolgere una ricerca di marketing dalla A alla Z: idea, stesura del questionario, raccolta dei dati, analisi dei dati, presentazione dei risultati.</p>
+
+            <p class="lab-section-label">Classwork</p>
+            <p>Le imprese cominciano a strutturare il questionario usando Google Moduli.</p>
+
+            <p class="lab-section-label">Homework</p>
+            <ul>
+                <li>Completare il questionario</li>
+                <li>Raccogliere i dati (più sono, meglio è &mdash; puntate a circa 20 risposte per componente del team)</li>
+                <li>Analizzarli e preparare il report</li>
+                <li>Presentare i risultati in modo visivo, coerente con la vostra brand identity</li>
+            </ul>
+
+            <p class="lab-section-label">Bonus e malus settimanali</p>
+            <ul class="bonus-list">
+                <li>📊 Excel (al report migliore) &mdash; <span class="xp">+150 XP</span></li>
+                <li>🧐 Fancy (analisi sofisticatissime con test statistici) &mdash; <span class="xp">+125 XP</span></li>
+                <li>🍰 Pasticcierə (ai migliori grafici) &mdash; <span class="xp">+100 XP</span></li>
+                <li>💅 Coerenza (il report è presentato in linea con la brand identity) &mdash; <span class="xp">+50 XP</span></li>
+                <li>🍌 Pasticcionə (ops) &mdash; <span class="xp-neg">&minus;15 XP</span></li>
+            </ul>
+
+            <p class="deadline">Consegna: Homework 6 entro il 17/05/2026</p>
+        </section>
+
+        <hr class="lab-divider">
+
+        <section aria-labelledby="lab5" class="lab-active">
+            <h2 id="lab5">Lab 5 &mdash; Brandstorming 🎨</h2>
+            <p class="lab-meta">Obiettivo settimanale</p>
+            <p>Definire la brand identity della propria impresa.</p>
+
+            <p class="lab-section-label">Classwork</p>
+            <p>Ci prepariamo alla ricerca di mercato con un esempio pratico e analizziamo le brand identity dei team.</p>
+
+            <p class="lab-section-label">Homework</p>
+            <p>Definire la brand identity dell&rsquo;impresa con un <strong>brand book</strong>. Il brand book deve includere:</p>
+            <ul>
+                <li>Logo</li>
+                <li>Colori</li>
+                <li>Tipografia</li>
+                <li>Elementi grafici</li>
+                <li>Fotografia</li>
+                <li>Mission e valori</li>
+                <li>Voce e tono</li>
+            </ul>
+            <p><em>Nota: è il momento giusto per cambiare il nome dell&rsquo;azienda se necessario.</em></p>
+
+            <p class="lab-section-label">Bonus e malus settimanali</p>
+            <ul class="bonus-list">
+                <li>🌈 Tutto torna (brand identity più coerente) &mdash; <span class="xp">+150 XP</span></li>
+                <li>🐜 Perfezionista (c&rsquo;è foto/render/illustrazione IA del core product) &mdash; <span class="xp">+100 XP</span></li>
+                <li>⚽ Fantasista (miglior nome) &mdash; <span class="xp">+75 XP</span></li>
+                <li>🖌️ Artista (miglior logo) &mdash; <span class="xp">+75 XP</span></li>
+                <li>❓ Chi l&rsquo;ha visto? (manca logo, font o palette) &mdash; <span class="xp-neg">&minus;25 XP</span></li>
+            </ul>
+
+            <p class="deadline">Consegna: Homework 5 entro il 26/04/2026</p>
+        </section>
+
+        <hr class="lab-divider">
+
+        <section aria-labelledby="lab4" class="lab-active">
+            <h2 id="lab4">Lab 4 &mdash; Know Your People 🧠</h2>
+            <p class="lab-meta">Obiettivo settimanale</p>
+            <p>Definire il proprio pubblico di riferimento.</p>
+
+            <p class="lab-section-label">Classwork</p>
+            <ul>
+                <li>"Chi è il nostro cliente ideale?": ogni team riflette sul proprio target</li>
+                <li>Costruzione di almeno due <strong>Buyer Persona</strong> per l&rsquo;impresa: nome, età, bisogni, preferenze, abitudini di acquisto</li>
+                <li>Condivisione e confronto tra i gruppi + Premio del pubblico</li>
+            </ul>
+
+            <p class="lab-section-label">Homework</p>
+            <p>Attività propedeutica al Lab 5: definire il prodotto o servizio di punta dell&rsquo;impresa (<strong>core product</strong>). Idee specifiche: qual è il cuore della vostra offerta? I prodotti/servizi selezionati saranno il focus della ricerca di mercato.</p>
+
+            <p class="lab-section-label">Bonus e malus settimanali</p>
+            <ul class="bonus-list">
+                <li>🥸 Tesla, Nikola (al core product più innovativo) &mdash; <span class="xp">+150 XP</span></li>
+                <li>🖼️ Monna Lisa (miglior ritratto della Buyer Persona, votato dal pubblico) &mdash; <span class="xp">+100 XP</span></li>
+                <li>🧑‍🍳 Let &lsquo;em cook (midterm al potenziale ancora inespresso) &mdash; <span class="xp">+75 XP</span></li>
+            </ul>
+
+            <p class="deadline">Consegna: Homework 4 entro il 19/04/2026</p>
+        </section>
+
+        <hr class="lab-divider">
+
+        <section aria-labelledby="lab3" class="lab-active">
+            <h2 id="lab3">Lab 3 &mdash; Explorer 🌎</h2>
+            <p class="lab-meta">Obiettivo settimanale</p>
+            <p>Analizzare se stessi e l&rsquo;ambiente esterno per chiarire il proprio vantaggio competitivo.</p>
+
+            <p class="lab-section-label">Classwork</p>
+            <p>&ldquo;Conosci te stesso&rdquo;: ogni team compila una analisi SWOT della propria impresa, prestando particolare attenzione a quali debolezze dei concorrenti possono essere trasformate in un vantaggio competitivo.</p>
+
+            <p class="lab-section-label">Homework</p>
+            <p>&ldquo;Conosci il mondo&rdquo;: ogni team dovrà raccontare il contesto in cui la propria impresa si sta muovendo, analizzando in modo narrativo e visivo i seguenti due livelli:</p>
+            <p>1. Microambiente (interno e vicino all&rsquo;azienda):</p>
+            <ul>
+                <li>Clienti: Che tipo di cliente servite? Cosa si aspettano da voi?</li>
+                <li>Concorrenti: In che modo i vostri concorrenti condizionano le vostre scelte?</li>
+                <li>Fornitori: Che tipo di materie prime/partner vi servono e dove li trovate?</li>
+                <li>Collaborazioni/partner: Avete ipotizzato sinergie con altre realtà?</li>
+            </ul>
+            <p>2. Macroambiente (trend esterni che vi influenzano):</p>
+            <ul>
+                <li>Tendenze sociali, tecnologiche, ambientali, culturali o economiche che influenzano la vostra idea.</li>
+                <li>Opportunità o minacce legate a questi cambiamenti.</li>
+            </ul>
+            <p><strong>I team possono usare immagini, screenshot di articoli, post social, dati (es. Google Trends), foto di prodotti o luoghi: l&rsquo;obiettivo è rappresentare visivamente il contesto, non scrivere un testo lungo.</strong></p>
+
+            <p class="lab-section-label">Bonus e malus settimanali</p>
+            <ul class="bonus-list">
+                <li>🌏 Marco Polo (miglior report) &mdash; <span class="xp">+100 XP</span></li>
+                <li>🗞️ Fact Checker (report ben documentato e supportato dai dati) &mdash; <span class="xp">+50 XP</span></li>
+                <li>🎨 Graphic Designer (estetica del report gradevole E funzionale) &mdash; <span class="xp">+30 XP</span></li>
+                <li>🐌 Lumachina (ultimi a consegnare il report) &mdash; <span class="xp-neg">&minus;5 XP</span></li>
+                <li>🃏 &ldquo;Viviamo in una società&rdquo; (troppe frasi fatte, generiche, non supportate dai dati) &mdash; <span class="xp-neg">&minus;10 XP</span></li>
+            </ul>
+
+            <p class="deadline">Consegna: <a href="https://docs.google.com/forms/d/e/1FAIpQLScMJCd62h-GyLug8Rfz9EdgpaYTx5gFKbUbRxdQ5jiE4K0h7w/viewform?usp=header">Homework 3</a> entro il 12/04/2026</p>
+        </section>
+
+        -->
+
+        <hr class="lab-divider">
+
+        <section aria-labelledby="lab2" class="lab-active">
+            <h2 id="lab2">Lab 2 &mdash; Totally Spies 🥷</h2>
+            <p class="lab-meta">Obiettivo settimanale</p>
+            <p>Identificare i concorrenti del proprio settore e analizzarli per affinare la propria strategia.</p>
+
+            <p class="lab-section-label">Classwork</p>
+            <ul>
+                <li>&ldquo;Chi sono i nostri rivali?&rdquo;: ogni team individua almeno 2 concorrenti reali nel proprio mercato</li>
+                <li>Ogni team compila una tabella con: Nome del concorrente; Cosa offre; Perché è un competitor</li>
+                <li>Discussione e confronto tra gruppi</li>
+            </ul>
+
+            <p class="lab-section-label">Homework</p>
+            <p>Scegliere due concorrenti principali e analizzarne:</p>
+            <ul>
+                <li>Punti di forza (cosa fanno bene, perché i clienti li scelgono)</li>
+                <li>Punti di debolezza (cosa non funziona o viene criticato nelle recensioni)</li>
+                <li>Opportunità (cosa potrebbero migliorare, trend emergenti nel settore)</li>
+                <li>Minacce (cosa potrebbe danneggiarli, nuove tendenze che li penalizzano)</li>
+            </ul>
+            <p>Basarsi su:</p>
+            <ul>
+                <li>Recensioni online (es. Google Maps, Tripadvisor, TheFork)</li>
+                <li>Siti web, social media, menù/listini prezzi, contenuti promozionali</li>
+            </ul>
+
+            <p class="lab-section-label">Bonus e malus settimanali</p>
+            <ul class="bonus-list">
+                <li>⛏️ In miniera (miglior report sulla concorrenza) &mdash; <span class="xp">+100 XP</span></li>
+                <li>🤓 Nerd (alle prime tre imprese che consegnano l&rsquo;Homework 2) &mdash; <span class="xp">+15 XP</span></li>
+                <li>🔃 Ctrl+C, Ctrl+V (solo recensioni, niente riflessioni) &mdash; <span class="xp-neg">&minus;15 XP</span></li>
+            </ul>
+
+            <p class="deadline">Consegna: <a href="https://docs.google.com/forms/d/e/1FAIpQLScgYW_XY5PBENQLBCDTR79ikHHVAT4oWttkymmsJVwHzFdFFA/viewform">Homework 2</a> entro il 27/03/2026</p>
+        </section>
+
+        <hr class="lab-divider">
+
+        <section aria-labelledby="lab1" class="lab-expired">
             <h2 id="lab1">Lab 1 &mdash; Startup 🚀</h2>
             <p class="lab-meta">Obiettivo settimanale</p>
             <p>Creazione dei team e selezione dell&rsquo;idea d&rsquo;impresa.</p>
