@@ -1,0 +1,3 @@
+\babel@toc {english}{}\relax 
+\beamer@sectionintoc {2}{The Questionnaire}{3}{0}{1}
+\beamer@sectionintoc {3}{What Attitudes Are and How to Measure Them}{18}{0}{2}

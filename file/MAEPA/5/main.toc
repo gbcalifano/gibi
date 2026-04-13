@@ -1,0 +1,5 @@
+\babel@toc {italian}{}\relax 
+\babel@toc {italian}{}\relax 
+\beamer@sectionintoc {1}{Un po' di terminologia}{7}{0}{1}
+\beamer@sectionintoc {2}{Un po' di storia}{15}{0}{2}
+\beamer@sectionintoc {3}{Un po' di teoria}{18}{0}{3}

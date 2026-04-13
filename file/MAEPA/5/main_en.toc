@@ -1,0 +1,4 @@
+\babel@toc {english}{}\relax 
+\beamer@sectionintoc {2}{A Bit of Terminology}{7}{0}{1}
+\beamer@sectionintoc {3}{A Bit of History}{15}{0}{2}
+\beamer@sectionintoc {4}{A Bit of Theory}{18}{0}{3}

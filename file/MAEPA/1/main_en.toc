@@ -1,0 +1,4 @@
+\babel@toc {english}{}\relax 
+\beamer@sectionintoc {2}{Brief Introduction to Measurement Theory}{7}{0}{1}
+\beamer@sectionintoc {3}{Constructs: Conceptual and Operational Definitions}{12}{0}{2}
+\beamer@sectionintoc {4}{Levels of Measurement}{25}{0}{3}

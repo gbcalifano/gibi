@@ -1,0 +1,6 @@
+\babel@toc {italian}{}\relax 
+\babel@toc {italian}{}\relax 
+\beamer@sectionintoc {1}{Breve recap}{3}{0}{1}
+\beamer@sectionintoc {2}{Le variabili latenti}{8}{0}{2}
+\beamer@sectionintoc {3}{I costrutti riflessivi}{14}{0}{3}
+\beamer@sectionintoc {4}{I costrutti formativi}{21}{0}{4}
