@@ -1,5 +1,5 @@
 clear all
-webuse set data.califano.xyz
+webuse set "https://califano.xyz/data"
 webuse masteristi
 
 * ES 1
