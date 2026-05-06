@@ -19,13 +19,25 @@ restore
 sem (ATT -> att_*), standardized
 estat gof, stats(all)
 
+/*
+
+Indice di fit										Valore Desiderato
+
+χ2		(Chi-quadro) 								Prossimo allo 0
+CFI		(Comparative Fit Index)						>0.95 (buono), >0.90 (accettabile)
+TLI		(Tucker-Lewis Index)						>0.95 (buono), >0.90 (accettabile)
+RMSEA	(Root Mean Square Error of Approximation)	<0.05 (buono), <0.08 (accettabile)
+SRMR	(Standardized Root Mean Square Residual)	<0.08
+
+*/
+
 // Passiamo a dei dati reali
 webuse mamme, clear
 sem (ATT -> att_*), standardized
 estat gof, stats(all)
 
 // Modello di misurazione per una TPB
-sem (INT -> int_*) (ATT -> att_*) (SN -> sn_*) (PBC -> pbc_*), standardized 
+sem (INT -> int_*) (ATT -> att_*) (SN -> sn_*) (PBC -> pbc_*), standardized
 
 // Valutiamo unidimensionalità e validità discriminante con CONDISC
 * findit condisc
@@ -42,3 +54,4 @@ estat eqgof
 estat mindices
 
 sem (INT -> int_*) (ATT -> att_*) (SN -> sn_*) (PBC -> pbc_*) (ATT SN PBC -> INT), standardized cov(e.pbc_3*e.pbc_4)
+estat gof, stats(all)
