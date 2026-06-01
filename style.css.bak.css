@@ -6,13 +6,6 @@
     --accent-color: #00e;
     --font-main: Arial, Helvetica, sans-serif;
     --max-width: 750px;
-    --fg-soft: #555;
-    --fg-faint: #8a8a8a;
-    --rule: #000;
-    --rule-soft: #cfcfcf;
-    --rule-faint: #e7e7e7;
-    --panel-2: #f4f4f2;
-    --mono: "Menlo", "Courier New", Courier, monospace;
     --pub-icon: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAYCAMAAAArvOYAAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAlQTFRFAAAA////////c3ilYwAAAAN0Uk5T//8A18oNQQAAADlJREFUeNpiYEACTCAApcBMJgYMEbAQSASqgwEqiqIGrBVNhIkBWReKlQhAtAiKq4eRLnQRdAAQYADPTQIdKuL1zAAAAABJRU5ErkJggg==');
 }
 
@@ -23,12 +16,6 @@
         --link-color: #fff;
         --border-color: #fff;
         --accent-color: #fff;
-        --fg-soft: #a8a8a8;
-        --fg-faint: #777;
-        --rule: #f0f0f0;
-        --rule-soft: #3a3a3a;
-        --rule-faint: #2a2a2a;
-        --panel-2: #1f1f1f;
         --pub-icon: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAYCAMAAAArvOYAAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAlQTFRF////AAAA////fu+PTwAAAAN0Uk5T//8A18oNQQAAADlJREFUeNpiYEACTCAApcBMJgYMEbAQSASqgwEqiqIGrBVNhIkBWReKlQhAtAiKq4eRLnQRdAAQYADPTQIdKuL1zAAAAABJRU5ErkJggg==');
     }
 }
@@ -408,7 +395,7 @@ pre code { background: none; padding: 0; font-size: 15px; }
   position: absolute; top: 8px; right: 8px;
   font-family: var(--font-main); font-size: 12px; line-height: 14px;
   padding: 3px 9px; margin: 0;
-  background: var(--bg-color); border: 1px solid #bbb; color: #888; cursor: pointer;
+  background: none; border: 1px solid #bbb; color: #888; cursor: pointer;
 }
 .copy-btn:hover { background: var(--text-color); color: var(--bg-color); border-color: var(--text-color); }
 .copy-btn:focus { outline: 2px solid var(--accent-color); outline-offset: 2px; }
@@ -465,102 +452,6 @@ svg .cell-hi { fill: var(--text-color); opacity: .07; }
              padding-top: 20px; border-top: 1px solid var(--border-color); }
 .footnotes ol { padding-left: 22px; }
 .footnotes li { margin-bottom: 10px; }
-.eq { font-size: 20px; line-height: 28px; text-align: center; margin: 28px 0; letter-spacing: 0.01em; }
-.stata-fig img { display: block; max-width: 100%; background: #fff; padding: 8px; box-sizing: border-box; }
-
-/* ============================================================
-   Site-wide brutalist refinement
-   Brings the tracker's editorial language — hard rules, mono
-   metadata, uppercase labels, bordered metric panels — to every
-   content page. Scoped to #main so the tracker (#wpt) is untouched.
-   ============================================================ */
-
-#main ::selection { background: var(--text-color); color: var(--bg-color); }
-
-/* masthead: hard rule under the page title */
-#main .h1 {
-  letter-spacing: -0.02em;
-  margin: 40px 0 28px -4px;
-  padding-bottom: 20px;
-  border-bottom: 3px solid var(--rule);
-}
-#main h2 { letter-spacing: -0.01em; }
-
-/* breadcrumb → uppercase, spaced, muted */
-#main .breadcrumb {
-  font-size: 12px; line-height: 1.4; letter-spacing: 0.14em;
-  text-transform: uppercase; margin: 28px 0 0;
-}
-#main .breadcrumb li { font-size: 12px; color: var(--fg-soft); }
-#main .breadcrumb li + li::before { color: var(--fg-faint); padding: 0 8px; }
-#main .breadcrumb a { color: var(--fg-soft); }
-#main .breadcrumb a:hover { color: var(--text-color); }
-/* 404's inline “Home / 404” crumb */
-#main header > p:first-child {
-  font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-soft);
-}
-
-/* metadata → monospace, editorial */
-#main .byline, #main .post-meta, #main .lab-meta {
-  font-family: var(--mono); letter-spacing: 0;
-}
-#main .byline, #main .post-meta { font-size: 13px; }
-
-/* buttons → harder border, bolder (size left to each page) */
-#main button, #main .btn {
-  border: 2px solid var(--text-color); font-weight: 700; letter-spacing: 0.02em;
-  transition: background 0.1s, color 0.1s;
-}
-
-/* data tables → label headers, hairline rows, hover */
-#main table { margin: 28px 0; }
-#main thead th {
-  font-size: 12px; font-weight: 700; line-height: 1.4; letter-spacing: 0.1em;
-  text-transform: uppercase; color: var(--fg-soft);
-  border-bottom: 2px solid var(--rule); padding-bottom: 10px;
-}
-#main tbody tr { border-bottom: 1px solid var(--rule-faint); transition: background 0.06s; }
-#main tbody tr:hover { background: var(--panel-2); }
-#main tbody tr:last-child { border-bottom: none; }
-
-/* homepage metrics → bordered panel like the tracker overview */
-#main .stats { border: 2px solid var(--rule); margin: 36px 0; text-align: center; }
-#main .stat-item { padding: 16px 18px; border-right: 1px solid var(--rule-soft); }
-#main .stat-item:last-child { border-right: none; }
-#main .stat-number { font-family: var(--mono); letter-spacing: -0.01em; }
-#main .stat-label {
-  font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--fg-soft); margin-top: 8px;
-}
-
-/* code blocks → hard editorial border */
-#main pre { border: 1.5px solid var(--text-color); }
-
-/* footer → hard top rule */
-#main footer { border-top: 2px solid var(--rule); }
-
-/* status badges (used in notes) — restored after tracker refactor */
-#main .badge {
-  display: inline-block; font-size: 11px; line-height: 13px; padding: 3px 7px;
-  font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
-  white-space: nowrap; border: 1.5px solid currentColor;
-}
-#main .badge-submitted { color: #0050cc; }
-#main .badge-revision  { color: #884400; }
-#main .badge-accepted  { color: #006622; }
-#main .badge-rejected  { color: #880000; }
-#main .badge-none      { color: #999; }
-@media (prefers-color-scheme: dark) {
-  #main .badge-submitted { color: #6699ff; }
-  #main .badge-revision  { color: #ffcc44; }
-  #main .badge-accepted  { color: #44dd77; }
-  #main .badge-rejected  { color: #ff6655; }
-  #main .badge-none      { color: #888; }
-}
-
-@media (max-width: 767px) {
-  #main .stat-item { padding: 12px 8px; }
-}
 
 
 /* ============================================================

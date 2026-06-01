@@ -16,6 +16,16 @@
     <priority>0.80</priority>
   </url>
   <url>
+    <loc>https://califano.xyz/notes/index.html</loc>
+    <lastmod>2026-06-01</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://califano.xyz/notes/note_1.html</loc>
+    <lastmod>2026-06-01</lastmod>
+    <priority>0.80</priority>
+  </url>
+  <url>
     <loc>https://califano.xyz/mondaylab/mondaylab.html</loc>
     <lastmod>2026-03-10</lastmod>
     <priority>0.70</priority>
