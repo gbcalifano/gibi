@@ -16,7 +16,7 @@
   <meta property="og:url" content="https://califano.xyz/working-papers.html" />
   <meta property="og:image" content="https://califano.xyz/img/giovanbattista-califano.webp" />
 
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%23fff'/%3E%3Crect x='1' y='1' width='14' height='14' fill='none' stroke='%23000' stroke-width='2'/%3E%3Cline x1='4' y1='6' x2='12' y2='6' stroke='%23000' stroke-width='1.5'/%3E%3Cline x1='4' y1='9' x2='12' y2='9' stroke='%23000' stroke-width='1.5'/%3E%3Cline x1='4' y1='12' x2='9' y2='12' stroke='%23000' stroke-width='1.5'/%3E%3C/svg%3E" />
+  <link rel="icon" href="img/favicon.png" type="image/png" />
 </head>
 
 <body>
@@ -86,14 +86,14 @@
       </div>
     </footer>
   </div>
+
+  <!-- DRAWER EDITOR -->
+  <div class="scrim" id="scrim"></div>
+  <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Edit paper"></aside>
+
+  <!-- TOASTS -->
+  <div class="toast-wrap" id="toastWrap"></div>
 </div>
-
-<!-- DRAWER EDITOR -->
-<div class="scrim" id="scrim"></div>
-<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Edit paper"></aside>
-
-<!-- TOASTS -->
-<div class="toast-wrap" id="toastWrap"></div>
 
 <script>
 (function () {
@@ -855,8 +855,8 @@
   // ---- static wiring ----
   function init() {
     $("searchIc").innerHTML = icon("search");
-    $("refresh").innerHTML = icon("refresh");
-    $("export").innerHTML = icon("download");
+    $("refresh").innerHTML = icon("refresh", 18);
+    $("export").innerHTML = icon("download", 18);
     $("newPaper").innerHTML = icon("plus", 13) + ' New <span class="kx">N</span>';
 
     var views = [
