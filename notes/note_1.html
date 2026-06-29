@@ -6,13 +6,18 @@
 <title>[1] The latent bias in latent class analysis</title>
 
 <link rel="stylesheet" href="../style.css">
-<link rel="icon" href="../img/favicon.png" type="image/png">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍎</text></svg>">
+
+<!-- KaTeX (equations) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 
 <meta property="og:title" content="[1] The latent bias in latent class analysis">
 <meta property="og:description" content="Linking latent classes to outcomes and predictors without quietly biasing your results.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://califano.xyz/notes/note_1.html">
-<meta property="og:image" content="https://califano.xyz/img/a.png">
+<meta property="og:image" content="https://califano.xyz/img/giovanbattista-califano.webp">
 <link rel="canonical" href="https://califano.xyz/notes/note_1.html">
 <meta name="description" content="Linking latent classes to outcomes and predictors without quietly biasing your results. Explains the three-step problem, classification error, and BCH/ML corrections via Stata's step3 command.">
 <meta name="author" content="Giovanbattista Califano">
@@ -20,7 +25,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="The latent bias in latent class analysis">
 <meta name="twitter:description" content="Linking latent classes to outcomes without quietly biasing your results. The three-step problem, BCH and ML corrections, Stata step3.">
-<meta name="twitter:image" content="https://califano.xyz/img/a.png">
+<meta name="twitter:image" content="https://califano.xyz/img/giovanbattista-califano.webp">
 
 <script type="application/ld+json">
 {
@@ -31,8 +36,19 @@
   "datePublished": "2026-06-01",
   "dateModified": "2026-06-01",
   "inLanguage": "en",
+  "image": "https://califano.xyz/img/giovanbattista-califano.webp",
+  "mainEntityOfPage": "https://califano.xyz/notes/note_1.html",
+  "articleSection": "Methods",
   "author": [
-    { "@type": "Person", "name": "Giovanbattista Califano", "url": "https://califano.xyz" }
+    {
+      "@type": "Person",
+      "name": "Giovanbattista Califano",
+      "url": "https://califano.xyz",
+      "sameAs": [
+        "https://orcid.org/0000-0003-2088-2023",
+        "https://scholar.google.com/citations?user=9_K3YpQAAAAJ&hl=en"
+      ]
+    }
   ],
   "publisher": { "@type": "Person", "name": "Giovanbattista Califano", "url": "https://califano.xyz" },
   "url": "https://califano.xyz/notes/note_1.html",
@@ -41,14 +57,71 @@
     "@type": "ScholarlyArticle",
     "name": "Relating latent class membership to covariates and outcomes: Two bias-adjusted methods in Stata",
     "url": "https://doi.org/10.1177/1536867X261449931"
+  },
+  "citation": {
+    "@type": "ScholarlyArticle",
+    "name": "Relating latent class membership to covariates and outcomes: Two bias-adjusted methods in Stata",
+    "author": [
+      { "@type": "Person", "name": "Giovanbattista Califano" },
+      { "@type": "Person", "name": "Rosa Fabbricatore" }
+    ],
+    "isPartOf": { "@type": "Periodical", "name": "Stata Journal" },
+    "datePublished": "2026",
+    "url": "https://doi.org/10.1177/1536867X261449931"
   }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is the three-step problem in latent class analysis?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The three-step approach fits a latent class model, assigns each observation to a class, then relates those classes to outcomes or predictors. The problem arises between the second and third steps: the assigned class labels are treated as if they were observed without error, when they are actually estimates. Ignoring this classification error biases the Step-3 estimates toward zero, diluting real differences between classes."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How much bias does the naive three-step approach introduce?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "With moderate entropy, the attenuation typically falls in the 20–45% range, meaning genuine class differences can be understated by up to nearly half. The bias shrinks as entropy (classification certainty) approaches 1 and grows as classes become harder to separate."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do you correct the bias — BCH or ML?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Two bias-adjusted methods fix it by carrying the classification error into Step 3. Use BCH for continuous distal outcomes when normality is uncertain or when you need stable class definitions at low entropy; use the ML (maximum-likelihood) correction for categorical outcomes and covariates, or for continuous outcomes when classes are well separated. In Stata, both are available through the step3 command."
+      }
+    }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://califano.xyz/" },
+    { "@type": "ListItem", "position": 2, "name": "Notes", "item": "https://califano.xyz/notes/" },
+    { "@type": "ListItem", "position": 3, "name": "The latent bias in latent class analysis", "item": "https://califano.xyz/notes/note_1.html" }
+  ]
 }
 </script>
 
 <script data-goatcounter="https://califano.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
-<div id="main">
+<a class="skip" href="#main">Skip to main content</a>
+<div id="main" role="main">
 
 <nav class="breadcrumb" aria-label="breadcrumb">
   <ol>
@@ -72,6 +145,7 @@
     <li><a href="#fix">The fix: two bias-corrected methods</a></li>
     <li><a href="#stata">Using <code>step3</code> in Stata</a></li>
     <li><a href="#choosing">Choosing between methods</a></li>
+    <li><a href="#faq">Frequently asked questions</a></li>
   </ol>
 </nav>
 
@@ -94,7 +168,7 @@
 <p>The problem is between Steps 2 and 3, wherein we treat the <em>latent</em> class variable as if it were <em>observed</em>.</p>
 
 <div class="fig">
-<svg width="100%" viewBox="0 0 720 170" aria-label="Diagram of the three-step procedure">
+<svg width="100%" viewBox="0 0 720 170" role="img" aria-label="Diagram of the three-step procedure">
 <defs>
   <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
     <path d="M2 1L8 5L2 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -146,7 +220,7 @@
 <p><strong>A glass of intuition.</strong> Suppose we want to measure how much more alcohol there is in <em>red wine</em> than in <em>water</em>. If we could sort the glasses perfectly, the comparison is stark: a deep-red glass of wine beside a clear glass of water. But modal assignment never hands us the true glasses: it hands us two <em>buckets</em>, each contaminated by the misclassified members of the other. The wine bucket gets a splash of water; the water bucket gets a splash of wine. Both come out more or less <em>pink</em>. Of course the gap between two pinks is narrower than the gap between red and clear, and the more the classes overlap (the lower the entropy), the more alike those two pinks become, until the measured difference all but disappears.</p>
 
 <div class="fig">
-<svg width="100%" viewBox="0 0 720 212" aria-label="Wine and water glasses: as class overlap grows, the two estimated buckets both turn pink and the measured alcohol gap shrinks">
+<svg width="100%" viewBox="0 0 720 212" role="img" aria-label="Wine and water glasses: as class overlap grows, the two estimated buckets both turn pink and the measured alcohol gap shrinks">
 <defs>
   <marker id="arrw" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
     <path d="M2 1L8 5L2 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -221,7 +295,7 @@
 <p>Formally, D is an S × S matrix — for two classes, a 2 × 2 table. When classes are well separated, the diagonals approach 1 and the off-diagonals approach 0. When classes overlap, the off-diagonals grow, and so does the bias. The key point: you do not need to guess D. It can be computed directly from the posterior probabilities saved in Step 1, by averaging across observations within each true-class group.</p>
 
 <div class="fig">
-<svg width="100%" viewBox="0 0 720 210" aria-label="Classification error matrix comparison">
+<svg width="100%" viewBox="0 0 720 210" role="img" aria-label="Classification error matrix comparison">
 <text x="200" y="22" text-anchor="middle" font-size="16" font-weight="700">Well-separated classes</text>
 <text x="72" y="88" text-anchor="end" font-size="13" class="t-muted">True 1</text>
 <text x="72" y="148" text-anchor="end" font-size="13" class="t-muted">True 2</text>
@@ -279,7 +353,7 @@
 <pre><code>. net install st0801</code></pre>
 
 <p>We can now <code>sysuse height</code>, which contains fictional data on 4,071 American high school seniors. Our variables are: person ID (pid), student height (cm), sex (1 = female, 2 = male).</p>
-<p>We also have a variable y, generated to follow a normal distribution with µ = 0, σ = 1 for male students (48% of the sample), and µ = 0.5, σ = 1 for female students (52% of the sample). Assume that the nature of y is unknown, and our goal is to test whether female students have higher values of y than male students. Further, suppose that our funny colleague dropped the sex variable from our dataset while you were in the toilet, making it our latent categorical variable in this example.<sup><a href="#fn3" id="ref3" class="fn-ref">3</a></sup></p>
+<p>We also have a variable y, generated to follow a normal distribution with \(\mu = 0\), \(\sigma = 1\) for male students (48% of the sample), and \(\mu = 0.5\), \(\sigma = 1\) for female students (52% of the sample). Assume that the nature of y is unknown, and our goal is to test whether female students have higher values of y than male students. Further, suppose that our funny colleague dropped the sex variable from our dataset while you were in the toilet, making it our latent categorical variable in this example.<sup><a href="#fn3" id="ref3" class="fn-ref">3</a></sup></p>
 <p>Fortunately for us, we still observe student height, which can serve as a useful proxy for sex. Heights may be represented as a mixture of two Gaussian components, corresponding
 to female and male students, with males expected to be, on average, about 5%–10%
 taller.</p>
@@ -294,9 +368,9 @@ taller.</p>
 
 <p>More formally, we aim to fit the following model:</p>
 <div class="eq">
-  f(height) = π<sub>1</sub> N(µ<sub>1</sub>, σ<sub>1</sub><sup>2</sup>) + π<sub>2</sub> N(µ<sub>2</sub>, σ<sub>2</sub><sup>2</sup>)
+  \[ f(\text{height}) = \pi_1\,\mathcal{N}(\mu_1, \sigma_1^2) + \pi_2\,\mathcal{N}(\mu_2, \sigma_2^2) \]
 </div>
-<p>where f(height) is the overall probability density of height, π<sub>1</sub> and π<sub>2</sub> are the mixing proportions (π<sub>1</sub> + π<sub>2</sub> = 1), and N(µ<sub>j</sub>, σ<sub>j</sub><sup>2</sup>) are Gaussian distributions with mean µ<sub>j</sub> and variance σ<sub>j</sub><sup>2</sup>, representing the two subpopulations of female and male students. In Stata, we can fit this model with <code>fmm</code> or <code>gsem</code>, and predict the posterior class membership probabilities for each observation as follows:</p>
+<p>where \(f(\text{height})\) is the overall probability density of height, \(\pi_1\) and \(\pi_2\) are the mixing proportions (\(\pi_1 + \pi_2 = 1\)), and \(\mathcal{N}(\mu_j, \sigma_j^2)\) are Gaussian distributions with mean \(\mu_j\) and variance \(\sigma_j^2\), representing the two subpopulations of female and male students. In Stata, we can fit this model with <code>fmm</code> or <code>gsem</code>, and predict the posterior class membership probabilities for each observation as follows:</p>
 
 <pre><code>. fmm 2: regress height
 . predict cpost*, classposteriorpr</code></pre>
@@ -341,7 +415,7 @@ height        |
 -------------------------------------------------------------------------------
  </code></pre>
 
-<p>The first component has an estimated mean height of µ̂<sub>1</sub> = 163.07 cm (about 5’4" for the metrically resistant) with variance σ̂<sub>1</sub><sup>2</sup> = 42.44, while the second has µ̂<sub>2</sub> = 177.26 cm (about 5’10") with variance σ̂<sub>2</sub><sup>2</sup> = 51.79. Since the second component corresponds to taller students, we label it "Male" and the first "Female". To plot the fitted model, we also need the mixing-proportion estimates π̂<sub>1</sub> and π̂<sub>2</sub>. We will overlay the true sex-specific height distributions to assess how well the model has recovered them.</p>
+<p>The first component has an estimated mean height of \(\hat\mu_1 = 163.07\) cm (about 5’4" for the metrically resistant) with variance \(\hat\sigma_1^2 = 42.44\), while the second has \(\hat\mu_2 = 177.26\) cm (about 5’10") with variance \(\hat\sigma_2^2 = 51.79\). Since the second component corresponds to taller students, we label it "Male" and the first "Female". To plot the fitted model, we also need the mixing-proportion estimates \(\hat\pi_1\) and \(\hat\pi_2\). We will overlay the true sex-specific height distributions to assess how well the model has recovered them.</p>
 
 <pre><code>. estat lcprob, nose</code></pre>
 <pre class="stata-log"><code>
@@ -504,6 +578,21 @@ Note: results might be inconsistent for % > 20
 </tbody>
 </table>
 
+<hr>
+
+<h2 id="faq">Frequently asked questions</h2>
+
+<div class="faq">
+  <h3>What is the three-step problem in latent class analysis?</h3>
+  <p>The three-step approach fits a latent class model, assigns each observation to a class, then relates those classes to outcomes or predictors. The problem arises between the second and third steps: the assigned class labels are treated as if they were observed without error, when they are actually estimates. Ignoring this classification error biases the Step-3 estimates toward zero, diluting real differences between classes.</p>
+
+  <h3>How much bias does the naive three-step approach introduce?</h3>
+  <p>With moderate entropy, the attenuation typically falls in the 20–45% range, meaning genuine class differences can be understated by up to nearly half. The bias shrinks as entropy (classification certainty) approaches 1 and grows as classes become harder to separate.</p>
+
+  <h3>How do you correct the bias — BCH or ML?</h3>
+  <p>Two bias-adjusted methods fix it by carrying the classification error into Step 3. Use BCH for continuous distal outcomes when normality is uncertain or when you need stable class definitions at low entropy; use the ML (maximum-likelihood) correction for categorical outcomes and covariates, or for continuous outcomes when classes are well separated. In Stata, both are available through the <code>step3</code> command.</p>
+</div>
+
 <div class="footnotes">
   <ol>
     <li id="fn1">This is biased as well [<a href="https://doi.org/10.1093/pan/mpq025">link</a>].<a href="#ref1" aria-label="Back to text">↩</a></li>
@@ -512,9 +601,31 @@ Note: results might be inconsistent for % > 20
   </ol>
 </div>
 
+<hr>
+
+<section class="comments" aria-label="Comments">
+  <h2>Comments</h2>
+  <script src="https://giscus.app/client.js"
+          data-repo="gbcalifano/gibi"
+          data-repo-id="R_kgDOPSgRvA"
+          data-category="Announcements"
+          data-category-id="DIC_kwDOPSgRvM4DAFRb"
+          data-mapping="pathname"
+          data-strict="0"
+          data-reactions-enabled="1"
+          data-emit-metadata="0"
+          data-input-position="bottom"
+          data-theme="preferred_color_scheme"
+          data-lang="en"
+          data-loading="lazy"
+          crossorigin="anonymous"
+          async></script>
+</section>
+
 <footer>
   <p>Read the full article:</p>
   <p>Califano, G. &amp; Fabbricatore, R. (2026). Relating latent class membership to covariates and outcomes: Two bias-adjusted methods in Stata. <em>Stata Journal, 26</em>(2),153-176. <a href = "https://doi.org/10.1177/1536867X261449931">https://doi.org/10.1177/1536867X261449931</a>.</p>
+  <p><a href="../notes/index.html">More notes →</a></p>
   <p>Questions? Feel free to reach out: <a href="mailto:info@califano.xyz" data-goatcounter-click="ext_contact" data-goatcounter-title="Email contact">info@califano.xyz</a></p>
 </footer>
 
@@ -537,6 +648,20 @@ document.querySelectorAll('pre:not(.stata-log)').forEach(function(pre) {
         });
     });
     pre.appendChild(btn);
+});
+
+// Render math on DOMContentLoaded (after the deferred KaTeX scripts load).
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.renderMathInElement) {
+        renderMathInElement(document.body, {
+            delimiters: [
+                { left: '\\[', right: '\\]', display: true },
+                { left: '$$', right: '$$', display: true },
+                { left: '\\(', right: '\\)', display: false }
+            ],
+            throwOnError: false
+        });
+    }
 });
 </script>
 </body>

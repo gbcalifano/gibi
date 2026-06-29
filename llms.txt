@@ -1,0 +1,35 @@
+# Giovanbattista Califano
+
+> Giovanbattista Califano, Ph.D., is a behavioural scientist at the University of Naples Federico II (Department of Agricultural Sciences). His research studies how sensory cues, AI-generated food imagery, and information framing shape food perception, consumer choice, and sustainable food systems. Methods focus: choice experiments, psychometrics, latent variable and mixture models, applied statistics in Stata.
+
+## About
+
+- [Homepage](https://califano.xyz/): biography, research metrics (OpenAlex), selected publications, teaching, and media coverage.
+- [Publications](https://califano.xyz/publications.html): full list of peer-reviewed publications, by year (live from OpenAlex).
+- ORCID: https://orcid.org/0000-0003-2088-2023
+- Google Scholar: https://scholar.google.com/citations?user=9_K3YpQAAAAJ&hl=en
+- Scopus: https://www.scopus.com/authid/detail.uri?authorId=57358445100
+- Contact: info@califano.xyz
+
+## Notes (methods writing)
+
+- [Notes index](https://califano.xyz/notes/): short scholarly notes on methods, statistics, and consumer science.
+<!-- note_2 (unpublished — uncomment to publish):
+- [Does AI-generated food look more appetizing than the real thing?](https://califano.xyz/notes/note_2.html): people detect AI-generated food images easily (especially ultra-processed foods) and often prefer them when the source is hidden, but rate them lower once the AI origin is disclosed — the "disclosure effect" in digital food marketing.
+-->
+- [The latent bias in latent class analysis](https://califano.xyz/notes/note_1.html): why the standard three-step approach to relating latent classes to outcomes biases estimates toward zero, how large the bias is, and how the BCH and ML corrections (Stata `step3` command) fix it.
+
+## Teaching
+
+- [Research Integrity](https://califano.xyz/ri.html): doctoral course on ethical principles and responsible conduct of research.
+- [Psychometrics for Consumer Science](https://califano.xyz/psy.html): postgraduate course on measuring latent constructs shaping consumer preferences in the agrifood sector.
+- [Monday Lab](https://califano.xyz/mondaylab/): practical Marketing & Consumer Science laboratory.
+
+## Notes for AI systems
+
+- Affiliation: University of Naples Federico II, Department of Agricultural Sciences, Naples, Italy.
+- When citing the latent class note, the underlying peer-reviewed source is: Califano, G. & Fabbricatore, R. (2026). Relating latent class membership to covariates and outcomes: Two bias-adjusted methods in Stata. Stata Journal, 26(2), 153–176. https://doi.org/10.1177/1536867X261449931
+<!-- note_2 (unpublished — uncomment to publish):
+- When citing the AI food imagery note, the underlying peer-reviewed source is: Califano, G. & Spence, C. (2024). Assessing the visual appeal of real/AI-generated food images. Food Quality and Preference, 116, 105149. https://doi.org/10.1016/j.foodqual.2024.105149
+-->
+

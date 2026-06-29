@@ -1,38 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://califano.xyz/index.html</loc>
-    <lastmod>2026-03-10</lastmod>
+    <loc>https://califano.xyz/</loc>
+    <lastmod>2026-06-28</lastmod>
     <priority>1.00</priority>
   </url>
   <url>
+    <loc>https://califano.xyz/publications.html</loc>
+    <lastmod>2026-06-28</lastmod>
+    <priority>0.80</priority>
+  </url>
+  <url>
     <loc>https://califano.xyz/psy.html</loc>
-    <lastmod>2026-03-10</lastmod>
+    <lastmod>2026-05-06</lastmod>
     <priority>0.80</priority>
   </url>
   <url>
     <loc>https://califano.xyz/ri.html</loc>
-    <lastmod>2026-03-10</lastmod>
+    <lastmod>2026-04-24</lastmod>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://califano.xyz/notes/index.html</loc>
-    <lastmod>2026-06-01</lastmod>
+    <loc>https://califano.xyz/notes/</loc>
+    <lastmod>2026-06-27</lastmod>
     <priority>0.70</priority>
   </url>
+  <!-- note_2 (unpublished — uncomment to publish):
+  <url>
+    <loc>https://califano.xyz/notes/note_2.html</loc>
+    <lastmod>2026-06-27</lastmod>
+    <priority>0.80</priority>
+  </url>
+  -->
   <url>
     <loc>https://califano.xyz/notes/note_1.html</loc>
-    <lastmod>2026-06-01</lastmod>
+    <lastmod>2026-06-28</lastmod>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://califano.xyz/mondaylab/mondaylab.html</loc>
-    <lastmod>2026-03-10</lastmod>
+    <loc>https://califano.xyz/mondaylab/</loc>
+    <lastmod>2026-06-19</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://califano.xyz/mondaylab/26.html</loc>
-    <lastmod>2026-03-10</lastmod>
+    <lastmod>2026-06-19</lastmod>
     <priority>0.60</priority>
   </url>
   <url>

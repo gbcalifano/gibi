@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publications | Califano, G.</title>
+    <meta name="description" content="Full list of peer-reviewed publications by Giovanbattista Califano, Ph.D., in consumer behaviour, AI and food imagery, and sustainable food systems.">
+    <meta name="author" content="Giovanbattista Califano">
+    <meta name="keywords" content="Giovanbattista Califano, publications, consumer behaviour, food science, AI-generated food, sustainable food systems">
+    <link rel="canonical" href="https://califano.xyz/publications.html">
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Publications | Giovanbattista Califano">
+    <meta property="og:description" content="Full list of peer-reviewed publications by Giovanbattista Califano, Ph.D.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://califano.xyz/publications.html">
+    <meta property="og:image" content="https://califano.xyz/img/giovanbattista-califano.webp">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "Publications",
+      "description": "Full list of peer-reviewed publications by Giovanbattista Califano, Ph.D.",
+      "url": "https://califano.xyz/publications.html",
+      "about": {
+        "@type": "Person",
+        "name": "Giovanbattista Califano",
+        "sameAs": "https://orcid.org/0000-0003-2088-2023"
+      }
+    }
+    </script>
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍎</text></svg>">
+
+    <!-- GoatCounter Analytics -->
+    <script data-goatcounter="https://califano.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+</head>
+<body>
+    <a class="skip" href="#main">Skip to main content</a>
+
+    <div id="main" role="main">
+        <header>
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <ol>
+                    <li><a href="index.html">Home</a></li>
+                    <li>Publications</li>
+                </ol>
+            </nav>
+            <h1 class="h1">Publications</h1>
+        </header>
+
+        <section aria-labelledby="about">
+            <h2 id="about" class="visually-hidden">About</h2>
+            <p>Data is fetched live from <a href="https://openalex.org/A5073519625" rel="me">OpenAlex</a>.</p>
+        </section>
+
+        <section aria-labelledby="publications">
+            <div class="sketch" aria-hidden="true">
+              <img src="img/world.png" alt="">
+            </div>
+            <div id="publications-list" aria-live="polite"></div>
+        </section>
+
+        <footer role="contentinfo">
+            <p><small>© Giovanbattista Califano 2026</small></p>
+            <p><small><a href="mailto:info@califano.xyz" data-goatcounter-click="ext_contact" data-goatcounter-title="Email contact">info@califano.xyz</a></small></p>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            const publicationsList = document.getElementById('publications-list');
+
+            function escapeHtml(s) {
+                return String(s).replace(/[&<>"]/g, function(c) {
+                    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+                });
+            }
+
+            function formatAuthors(work) {
+                const names = (work.authorships || [])
+                    .map(function(a) { return a.author && a.author.display_name; })
+                    .filter(Boolean);
+                if (!names.length) return '';
+                if (names.length > 10) return escapeHtml(names.slice(0, 10).join(', ')) + ', et al.';
+                return escapeHtml(names.join(', '));
+            }
+
+            let works = [];
+            let sortKey = 'year';   // 'title' | 'year' | 'citations'
+            let sortDir = 'desc';   // 'asc' | 'desc'
+
+            function sortValue(work, key) {
+                if (key === 'title') return (work.title || '').toLowerCase();
+                if (key === 'citations') return work.cited_by_count || 0;
+                // year: keep "In Press" (no year) at the most-recent end
+                return work.publication_year || Infinity;
+            }
+
+            function loadAltmetric() {
+                if (!document.getElementById('altmetric-script')) {
+                    const s = document.createElement('script');
+                    s.id = 'altmetric-script';
+                    s.src = 'https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js';
+                    document.body.appendChild(s);
+                } else if (window._altmetric_embed_init) {
+                    window._altmetric_embed_init();
+                }
+            }
+
+            function renderTable() {
+                const sorted = works.slice().sort(function(a, b) {
+                    const va = sortValue(a, sortKey);
+                    const vb = sortValue(b, sortKey);
+                    let cmp;
+                    if (typeof va === 'string') cmp = va.localeCompare(vb);
+                    else cmp = va < vb ? -1 : (va > vb ? 1 : 0);
+                    return sortDir === 'asc' ? cmp : -cmp;
+                });
+
+                function indicator(key) {
+                    if (sortKey !== key) return '';
+                    return sortDir === 'asc' ? ' ▲' : ' ▼';
+                }
+                function ariaSort(key) {
+                    if (sortKey !== key) return 'none';
+                    return sortDir === 'asc' ? 'ascending' : 'descending';
+                }
+
+                let html = '<table class="pub-table"><caption class="visually-hidden">List of publications — use the column headers to sort</caption><thead><tr>'
+                    + '<th colspan="2" scope="col" aria-sort="' + ariaSort('title') + '"><button type="button" class="sort-btn" data-key="title">Publication' + indicator('title') + '</button></th>'
+                    + '<th scope="col" aria-sort="' + ariaSort('year') + '"><button type="button" class="sort-btn" data-key="year">Year' + indicator('year') + '</button></th>'
+                    + '<th scope="col" aria-sort="' + ariaSort('citations') + '"><button type="button" class="sort-btn" data-key="citations">Cited' + indicator('citations') + '</button></th>'
+                    + '<th scope="col">Altmetric</th></tr></thead><tbody>';
+
+                sorted.forEach(function(work) {
+                    const title = escapeHtml(work.title || 'Untitled');
+                    const journal = escapeHtml(work.host_venue?.display_name || work.primary_location?.source?.display_name || 'Preprint');
+                    const doi = work.doi || work.id;
+                    const citations = work.cited_by_count || 0;
+                    const year = work.publication_year || 'In Press';
+                    const authors = formatAuthors(work);
+                    const doiClean = work.doi ? work.doi.replace('https://doi.org/', '') : '';
+                    const altmetricBadge = doiClean
+                      ? '<div class="altmetric-embed altmetric-donut" data-badge-type="donut" data-hide-no-mentions="true" data-doi="' + doiClean + '"></div>'
+                        + '<div class="altmetric-embed altmetric-bar" data-badge-type="bar" data-hide-no-mentions="true" data-doi="' + doiClean + '"></div>'
+                      : '';
+
+                    html += '<tr><td class="pub-icon" aria-hidden="true"></td><td><a href="' + doi + '" target="_blank" rel="noopener">' + title + '</a>'
+                        + (authors ? '<br><small class="pub-authors">' + authors + '</small>' : '')
+                        + '<br><small>' + journal + '</small></td><td>' + year + '</td><td>' + citations + '</td><td>' + altmetricBadge + '</td></tr>';
+                });
+
+                html += '</tbody></table>';
+                publicationsList.innerHTML = html;
+
+                publicationsList.querySelectorAll('.sort-btn').forEach(function(btn) {
+                    btn.addEventListener('click', function() {
+                        const key = btn.getAttribute('data-key');
+                        if (sortKey === key) {
+                            sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+                        } else {
+                            sortKey = key;
+                            sortDir = key === 'title' ? 'asc' : 'desc';
+                        }
+                        renderTable();
+                    });
+                });
+
+                loadAltmetric();
+            }
+
+            async function fetchPublications() {
+                try {
+                    publicationsList.innerHTML = '<p>...</p>';
+                    const response = await fetch('https://api.openalex.org/works?filter=authorships.author.id:A5073519625&sort=publication_year:desc&per_page=100');
+                    if (!response.ok) throw new Error('Failed to fetch publications');
+                    const data = await response.json();
+                    works = data.results || [];
+                    renderTable();
+                } catch (error) {
+                    console.error('Error fetching publications:', error);
+                    publicationsList.innerHTML = '<p>Error loading publications.</p>';
+                }
+            }
+
+            fetchPublications();
+        })();
+    </script>
+</body>
+</html>

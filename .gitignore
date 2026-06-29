@@ -1,0 +1,11 @@
+# macOS
+.DS_Store
+
+# Editor / tool history
+.Rhistory
+.Rapp.history
+
+# Manual backups (not served)
+*.bak
+*.bak.css
+*.bak.html
