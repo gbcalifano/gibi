@@ -357,6 +357,13 @@ button:focus {
     -webkit-tap-highlight-color: transparent;
 }
 
+/* Don't inherit the global filled button:hover — on touch devices the hover
+   state sticks after a tap and turns the burger into a solid black square. */
+.nav-toggle:hover {
+    background: none;
+    color: var(--text-color);
+}
+
 .nav-toggle:active {
     background: none;
 }

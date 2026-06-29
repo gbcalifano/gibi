@@ -9,3 +9,7 @@
 *.bak
 *.bak.css
 *.bak.html
+
+# Other
+.claude
+CLAUDE.md
