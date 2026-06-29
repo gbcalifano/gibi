@@ -296,6 +296,7 @@
                 navToggle.addEventListener('click', function() {
                     const open = nav.classList.toggle('open');
                     navToggle.setAttribute('aria-expanded', String(open));
+                    navToggle.blur();
                 });
                 // Collapse after picking a destination on mobile
                 nav.querySelectorAll('#nav-menu a').forEach(function(a) {
