@@ -1,878 +1,92 @@
-:root {
-    --bg-color: #fff;
-    --text-color: #000;
-    --link-color: #00e;
-    --border-color: silver;
-    --accent-color: #00e;
-    --font-main: Arial, Helvetica, sans-serif;
-    --max-width: 750px;
-    --fg-soft: #555;
-    --fg-faint: #8a8a8a;
-    --rule: #000;
-    --rule-soft: #cfcfcf;
-    --rule-faint: #e7e7e7;
-    --panel-2: #f4f4f2;
-    --mono: "Menlo", "Courier New", Courier, monospace;
-    --pub-icon: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAYCAMAAAArvOYAAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAlQTFRFAAAA////////c3ilYwAAAAN0Uk5T//8A18oNQQAAADlJREFUeNpiYEACTCAApcBMJgYMEbAQSASqgwEqiqIGrBVNhIkBWReKlQhAtAiKq4eRLnQRdAAQYADPTQIdKuL1zAAAAABJRU5ErkJggg==');
-}
+/* ============================================================
+   css/tracker.css — Working Papers Tracker (owner-only page)
+   Structural CSS unchanged from the tracker build; tokens
+   re-aligned to the site's retro paper palette (css/site.css).
+   Self-contained: working-papers.html loads ONLY this file.
+   ============================================================ */
 
-@media (prefers-color-scheme: dark) {
-    :root {
-        --bg-color: #1e1e1e;
-        --text-color: #dedede;
-        --link-color: #fff;
-        --border-color: #fff;
-        --accent-color: #fff;
-        --fg-soft: #a8a8a8;
-        --fg-faint: #777;
-        --rule: #f0f0f0;
-        --rule-soft: #3a3a3a;
-        --rule-faint: #2a2a2a;
-        --panel-2: #1f1f1f;
-        --pub-icon: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAYCAMAAAArvOYAAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAlQTFRF////AAAA////fu+PTwAAAAN0Uk5T//8A18oNQQAAADlJREFUeNpiYEACTCAApcBMJgYMEbAQSASqgwEqiqIGrBVNhIkBWReKlQhAtAiKq4eRLnQRdAAQYADPTQIdKuL1zAAAAABJRU5ErkJggg==');
-    }
-}
-
-@font-face {
-    font-family: Arial;
-    src: local('Arial');
-    font-weight: 400;
-    font-style: normal;
-    font-display: block;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
-    margin: 0 19px;
-    font-family: var(--font-main);
-    -webkit-font-smoothing: none;
-    text-rendering: optimizeSpeed;
-    background: var(--bg-color);
-    color: var(--text-color);
+  margin: 0;
+  font-family: var(--sans);
+  font-size: 15px;
+  background: var(--bg);
+  color: var(--fg);
 }
 
-#main {
-    max-width: var(--max-width);
-    margin: 0 auto;
-}
-
+/* skip link */
 .skip {
-    position: absolute;
-    left: -9999px;
-    top: auto;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
+  position: absolute; left: -9999px; top: auto;
+  width: 1px; height: 1px; overflow: hidden;
 }
+.skip:focus { position: static; width: auto; height: auto; }
 
-.skip:focus {
-    position: static;
-    width: auto;
-    height: auto;
-}
-
-/* Accessibility: visually hide elements while keeping them accessible to screen readers */
-.visually-hidden {
-    position: absolute !important;
-    width: 1px !important;
-    height: 1px !important;
-    padding: 0 !important;
-    margin: -1px !important;
-    overflow: hidden !important;
-    clip: rect(0, 0, 0, 0) !important;
-    white-space: nowrap !important;
-    border: 0 !important;
-}
-
-.h1 {
-    font-size: 72px;
-    line-height: 72px;
-    margin: 40px 0 20px -4px;
-    font-weight: 700;
-}
-
-h2 {
-    font-size: 36px;
-    line-height: 40px;
-    margin: 40px 0 20px 0;
-    font-weight: 700;
-}
-
-h3 {
-    font-size: 16px;
-    line-height: 18px;
-    margin: 18px 0 0 0;
-    font-weight: 400;
-}
-
-p, ul, ol {
-    font-size: 23px;
-    line-height: 26px;
-    margin: 18px 0;
-    hyphens: auto;
-}
-
-a {
-    color: var(--link-color);
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-a:focus {
-    outline: 2px solid var(--accent-color);
-    outline-offset: 2px;
-}
-
-@media (prefers-color-scheme: dark) {
-    a {
-        text-decoration: underline;
-        text-decoration-thickness: 1px;
-        text-underline-offset: 2px;
-    }
-}
-
-ul {
-    list-style: none;
-    padding: 0;
-}
-
-ul li::before {
-    content: "› ";
-    margin-right: 7px;
-}
-
-/* Breadcrumb styling */
-.breadcrumb {
-    margin: 20px 0;
-    font-size: 18px;
-}
-
-.breadcrumb ol {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    margin: 0;
-}
-
-.breadcrumb li {
-    display: inline;
-    font-size: 18px;
-}
-
-.breadcrumb li::before {
-    content: "";
-    margin-right: 0;
-}
-
-.breadcrumb li + li::before {
-    content: "/";
-    padding: 0 8px;
-    color: var(--text-color);
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 40px 0;
-    font-size: 23px;
-    line-height: 26px;
-}
-
-th {
-    border-bottom: 1px solid var(--border-color);
-    text-align: left;
-    line-height: 32px;
-    font-weight: 400;
-}
-
-td {
-    padding: 6px 6px 6px 0;
-    vertical-align: top;
-}
-
-td:first-of-type {
-    width: 30px;
-    padding: 6px 6px 6px 0;
-    background-position: left center;
-    background-repeat: no-repeat;
-    background-size: 17px 24px;
-    image-rendering: pixelated;
-}
-
-.pub-icon {
-    background-image: var(--pub-icon);
-}
-
-td:nth-of-type(3) { min-width: 100px; }
-td:nth-of-type(4) { min-width: 80px; }
-td:nth-of-type(5) { min-width: 120px; }
-
-.stats {
-    display: flex;
-    justify-content: space-between;
-    margin: 40px 0;
-    text-align: center;
-}
-
-.stat-item {
-    flex: 1;
-}
-
-.stat-number {
-    font-size: 48px;
-    line-height: 48px;
-    font-weight: 700;
-}
-
-.stat-label {
-    font-size: 16px;
-    line-height: 18px;
-    margin-top: 6px;
-}
-
-footer {
-    margin: 80px 0 40px 0;
-    font-size: 16px;
-    line-height: 18px;
-    border-top: 1px solid var(--border-color);
-    padding-top: 20px;
-}
-
-.hide {
-    display: none;
-}
-
-button {
-    background: none;
-    border: 1px solid var(--text-color);
-    color: var(--text-color);
-    padding: 8px 16px;
-    font-family: var(--font-main);
-    font-size: 16px;
-    cursor: pointer;
-    margin: 20px 0;
-}
-
-button:hover {
-    background: var(--text-color);
-    color: var(--bg-color);
-}
-
-button:focus {
-    outline: 2px solid var(--accent-color);
-    outline-offset: 2px;
-}
-
-.sketch img {
-    width: 15%;
-    height: auto;
-    display: block;
-}
-
-/* Link styled as button */
-.btn {
-    display: inline-block;
-    background: none;
-    border: 1px solid var(--text-color);
-    color: var(--text-color);
-    padding: 8px 16px;
-    font-family: var(--font-main);
-    font-size: 16px;
-    cursor: pointer;
-    margin: 20px 0;
-    text-decoration: none;
-}
-
-.btn:hover {
-    background: var(--text-color);
-    color: var(--bg-color);
-    text-decoration: none;
-}
-
-.btn:focus {
-    outline: 2px solid var(--accent-color);
-    outline-offset: 2px;
-}
-
-/* Header holds the nav, aligned to the top right (above the wordmark) */
-.site-header {
-    display: flex;
-    justify-content: flex-end;
-}
-
-/* Primary site navigation — small, quiet, breadcrumb-sized, top-right */
-.site-nav {
-    margin-top: 8px;
-}
-
-.site-nav ul {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    gap: 4px 18px;
-    margin: 0;
-    padding: 0;
-}
-
-.site-nav li::before {
-    content: none;
-    margin: 0;
-}
-
-.site-nav a {
-    font-size: 12px;
-    line-height: 1.4;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--fg-soft);
-    text-decoration: none;
-}
-
-.site-nav a:hover,
-.site-nav a:focus {
-    color: var(--text-color);
-    text-decoration: none;
-}
-
-/* Burger button — hidden on desktop, shown on mobile */
-.nav-toggle {
-    display: none;
-    background: none;
-    border: 1px solid var(--text-color);
-    padding: 8px 10px;
-    margin: 0;
-    cursor: pointer;
-    line-height: 0;
-    color: var(--text-color);
-    -webkit-appearance: none;
-    -webkit-tap-highlight-color: transparent;
-}
-
-/* Don't inherit the global filled button:hover — on touch devices the hover
-   state sticks after a tap and turns the burger into a solid black square. */
-.nav-toggle:hover {
-    background: none;
-    color: var(--text-color);
-}
-
-.nav-toggle:active {
-    background: none;
-}
-
-.nav-toggle:focus {
-    outline: none;
-    background: none;
-}
-
-.nav-toggle:focus-visible {
-    outline: 2px solid var(--text-color);
-    outline-offset: 2px;
-}
-
-.nav-burger,
-.nav-burger::before,
-.nav-burger::after {
-    display: block;
-    width: 20px;
-    height: 2px;
-    background: var(--text-color);
-    content: "";
-}
-
-.nav-burger::before { transform: translateY(-6px); }
-.nav-burger::after  { transform: translateY(4px); }
-
-@media (max-width: 600px) {
-    .nav-toggle {
-        display: block;
-    }
-    .site-nav ul {
-        display: none;
-        flex-direction: column;
-        align-items: flex-end;
-        gap: 10px;
-        margin-top: 12px;
-    }
-    .site-nav.open ul {
-        display: flex;
-    }
-    .site-nav a {
-        font-size: 14px;
-    }
-
-    /* Profile links: keep on one line, icons already set globally */
-    .profile-links {
-        flex-wrap: nowrap;
-        gap: 6px;
-    }
-}
-
-/* About — affiliation byline */
-.affiliation {
-    font-size: 17px;
-    line-height: 23px;
-    color: var(--fg-soft);
-    margin: 18px 0;
-    padding-left: 14px;
-    border-left: 2px solid var(--rule-soft);
-}
-.affiliation a {
-    color: var(--fg-soft);
-    text-decoration: underline;
-    text-underline-offset: 2px;
-}
-.affiliation a:hover {
-    color: var(--text-color);
-}
-
-/* About — affiliation rows: institutional logo beside the byline */
-.affil-row {
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-    margin: 18px 0;
-}
-.affil-logo {
-    flex: none;
-    height: clamp(44px, 11vw, 72px);
-    width: clamp(44px, 11vw, 72px);
-    object-fit: contain;
-    object-position: left center;
-    display: block;
-    margin-top: 2px;
-}
-.affil-body {
-    min-width: 0;
-}
-.affil-row .affiliation {
-    margin: 0;
-}
-.affil-body address {
-    font-style: normal;
-    font-size: 15px;
-    line-height: 21px;
-    color: var(--fg-faint);
-    margin-top: 6px;
-    padding-left: 14px;
-}
-
-/* About — profile links as a tidy chip row */
-.profile-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px 10px;
-    margin: 20px 0;
-    padding: 0;
-    list-style: none;
-}
-.profile-links li::before {
-    content: none;
-    margin: 0;
-}
-.profile-links a {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid var(--text-color);
-    color: var(--text-color);
-    padding: 7px 11px;
-    text-decoration: none;
-}
-.profile-links a:hover,
-.profile-links a:focus {
-    background: var(--text-color);
-    color: var(--bg-color);
-    text-decoration: none;
-}
-.profile-links .ai {
-    display: inline-block;
-    font-size: 20px;
-    line-height: 1;
-}
-.profile-links .link-text {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-}
-
-/* Selected-publications heading on homepage */
-.featured-pubs-heading {
-    margin-top: 30px;
-}
-
-/* Selected-publications table on homepage (title/authors/journal/abstract · year) */
-.selected-pubs td:first-of-type {
-    width: auto;
-    padding-left: 0;
-    background-image: none;
-}
-.selected-pubs td + td {
-    width: 1%;
-    white-space: nowrap;
-    vertical-align: top;
-    padding-left: 16px;
-}
-.pub-authors {
-    color: var(--fg-soft);
-}
-.pub-abstract {
-    color: var(--fg-faint);
-}
-
-/* Teaching list spacing */
-.teaching-list li + li {
-    margin-top: 20px;
-}
-
-.altmetric-bar { display: none; }
-
-@media (prefers-color-scheme: dark) {
-    .altmetric-donut { display: none; }
-    .altmetric-bar { display: inline-block; }
-}
-
-@media (max-width: 767px) {
-    .h1 {
-        font-size: 48px;
-        line-height: 48px;
-    }
-    h2 {
-        font-size: 28px;
-        line-height: 32px;
-    }
-    p, ul, ol, table {
-        font-size: 20px;
-        line-height: 24px;
-    }
-    .stat-number {
-        font-size: 32px;
-        line-height: 32px;
-    }
-    .stat-label {
-        font-size: 14px;
-    }
-    td:nth-of-type(3),
-    td:nth-of-type(4),
-    td:nth-of-type(5),
-    th:nth-of-type(3),
-    th:nth-of-type(4),
-    th:nth-of-type(5),
-    th[scope="col"]:nth-of-type(2) {
-        display: none !important;
-    }
-    .ranking td,
-    .ranking th[scope="col"] {
-        display: table-cell !important;
-    }
-}
-
-@media print {
-    body {
-        background: #fff !important;
-        color: #000 !important;
-        margin: 0;
-        padding: 0;
-    }
-    #main {
-        max-width: 100% !important;
-    }
-    .sketch, button, .skip, .breadcrumb, .pub-icon {
-        display: none !important;
-    }
-    a {
-        color: #000 !important;
-        text-decoration: underline !important;
-    }
-    a::after {
-        content: " (" attr(href) ")";
-        font-size: 0.8em;
-        font-weight: 400;
-    }
-    .h1 {
-        font-size: 36pt !important;
-        margin-top: 0;
-    }
-    h2 {
-        font-size: 24pt !important;
-        break-after: avoid;
-    }
-    p, ul, table {
-        font-size: 12pt !important;
-    }
-    table {
-        page-break-inside: auto;
-    }
-    tr {
-        page-break-inside: avoid;
-        page-break-after: auto;
-    }
-}
-
+:focus-visible { outline: 2px dotted var(--focus); outline-offset: 2px; }
 
 /* ============================================================
-   Notes
-   ============================================================ */
-.notes-date { width: auto; white-space: nowrap; }
-hr { border: none; border-top: 1px solid var(--border-color); margin: 40px 0; }
-/* Inline code: hairline border, no fill — echoes the bordered code panels */
-code { font-family: Menlo, "Courier New", Courier, monospace; font-size: 0.85em; line-height: inherit;
-       background: none; border: 1px solid var(--rule-soft); padding: 0 4px; }
-/* Command blocks: hard-bordered light panel */
-pre { position: relative; background: #f0f0f0; border: 1px solid var(--border-color);
-      padding: 16px 18px; margin: 18px 0; overflow-x: auto;
-      font-family: Menlo, "Courier New", Courier, monospace; font-size: 15px; line-height: 22px; }
-pre code { background: none; border: none; padding: 0; font-size: 15px; }
-/* giscus comments */
-.comments { margin-top: 48px; }
-.comments h2 { margin-bottom: 12px; }
-
-/* Sortable publication-table headers (override the editorial #main button chrome) */
-#main .sort-btn {
-    background: none;
-    border: none;
-    margin: 0;
-    padding: 0;
-    font: inherit;
-    color: inherit;
-    cursor: pointer;
-    text-transform: inherit;
-    letter-spacing: inherit;
-    transition: none;
-}
-#main .sort-btn:hover { text-decoration: underline; }
-#main .pub-table th[aria-sort="ascending"] .sort-btn,
-#main .pub-table th[aria-sort="descending"] .sort-btn { text-decoration: underline; }
-.copy-btn {
-  position: absolute; top: 8px; right: 8px;
-  font-family: var(--font-main); font-size: 12px; line-height: 14px;
-  padding: 3px 9px; margin: 0;
-  background: var(--bg-color); border: 1px solid #bbb; color: #888; cursor: pointer;
-}
-.copy-btn:hover { background: var(--text-color); color: var(--bg-color); border-color: var(--text-color); }
-.copy-btn:focus { outline: 2px solid var(--accent-color); outline-offset: 2px; }
-/* Output blocks: recessed & muted — same mono family, left rule instead of a box */
-.stata-log {
-  background: none;
-  border-left: 3px solid var(--rule-soft);
-  padding: 4px 0 4px 16px;
-  margin: 18px 0;
-  overflow-x: auto;
-  font-family: Menlo, "Courier New", Courier, monospace;
-  font-size: 14px;
-  line-height: 21px;
-  color: var(--fg-soft);
-}
-@media (prefers-color-scheme: dark) {
-  pre  { background: #252525; }
-  .copy-btn { border-color: #555; color: #777; }
-}
-.post-meta { font-size: 16px; line-height: 18px; margin: 40px 0 10px; opacity: .6; }
-.deck { font-size: 23px; line-height: 28px; margin: 0 0 6px; }
-.byline { font-size: 16px; line-height: 18px; margin: 10px 0 0; opacity: .6; }
-.outline { margin: 28px 0 0; }
-.outline ol { padding-left: 22px; }
-.outline li { font-size: 18px; line-height: 26px; }
-.fig { margin: 40px 0; border-top: 2px solid var(--text-color); padding: 20px 0 0; }
-.fig-cap { font-size: 16px; line-height: 18px; margin: 14px 0 0; opacity: .65; }
-.callout { border-left: 3px solid var(--text-color); padding: 0 0 0 18px; margin: 28px 0; }
-.callout p { margin: 8px 0; font-size: 20px; line-height: 24px; }
-.callout strong { display: block; font-size: 16px; line-height: 18px; text-transform: uppercase;
-                  letter-spacing: .05em; margin-bottom: 6px; opacity: .6; }
-.chart-wrap { position: relative; width: 100%; }
-.leg { display: flex; flex-wrap: wrap; gap: 18px; font-size: 16px; line-height: 18px; margin-bottom: 12px; }
-.litem { display: flex; align-items: center; gap: 6px; }
-.lsw { width: 12px; height: 12px; flex-shrink: 0; }
-.methods-table td:first-of-type { width: auto; }
-.methods-table td { padding: 10px 8px 10px 0; font-size: 20px; line-height: 24px;
-                    border-bottom: 1px solid var(--border-color); }
-.methods-table th { font-size: 16px; }
-@media (max-width: 767px) {
-  .methods-table td, .methods-table th { font-size: 17px; line-height: 22px; }
-}
-svg { font-family: var(--font-main); }
-svg text { font-family: var(--font-main); fill: var(--text-color); }
-svg .t-muted { fill: var(--text-color); opacity: .55; }
-svg .cell-hi { fill: var(--text-color); opacity: .07; }
-@media (prefers-color-scheme: dark) {
-  svg .t-muted { opacity: .72; }
-  svg .cell-hi { opacity: .28; }
-  .post-meta, .byline, .fig-cap, .callout strong { opacity: 1; }
-}
-.fn-ref { font-size: 0.75em; vertical-align: super; line-height: 1; }
-.footnotes { font-size: 15px; line-height: 22px; margin-top: 48px;
-             padding-top: 20px; border-top: 1px solid var(--border-color); }
-.footnotes ol { padding-left: 22px; }
-.footnotes li { margin-bottom: 10px; }
-.eq { font-size: 20px; line-height: 28px; text-align: center; margin: 28px 0; letter-spacing: 0.01em; }
-.stata-fig img { display: block; max-width: 100%; background: #fff; padding: 8px; box-sizing: border-box; }
-.faq h3 { font-size: 21px; line-height: 26px; font-weight: 700; margin: 28px 0 0; }
-.faq p { margin: 8px 0 0; }
-
-/* ============================================================
-   Site-wide brutalist refinement
-   Brings the tracker's editorial language — hard rules, mono
-   metadata, uppercase labels, bordered metric panels — to every
-   content page. Scoped to #main so the tracker (#wpt) is untouched.
-   ============================================================ */
-
-#main ::selection { background: var(--text-color); color: var(--bg-color); }
-
-/* masthead: hard rule under the page title */
-#main .h1 {
-  letter-spacing: -0.02em;
-  margin: 40px 0 28px -4px;
-  padding-bottom: 20px;
-  border-bottom: 3px solid var(--rule);
-}
-#main h2 { letter-spacing: -0.01em; }
-
-/* breadcrumb → uppercase, spaced, muted */
-#main .breadcrumb {
-  font-size: 12px; line-height: 1.4; letter-spacing: 0.14em;
-  text-transform: uppercase; margin: 28px 0 0;
-}
-#main .breadcrumb li { font-size: 12px; color: var(--fg-soft); }
-#main .breadcrumb li + li::before { color: var(--fg-faint); padding: 0 8px; }
-#main .breadcrumb a { color: var(--fg-soft); }
-#main .breadcrumb a:hover { color: var(--text-color); }
-/* 404's inline “Home / 404” crumb */
-#main header > p:first-child {
-  font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-soft);
-}
-
-/* metadata → monospace, editorial */
-#main .byline, #main .post-meta, #main .lab-meta {
-  font-family: var(--mono); letter-spacing: 0;
-}
-#main .byline, #main .post-meta { font-size: 13px; }
-
-/* buttons → harder border, bolder (size left to each page) */
-#main button, #main .btn {
-  border: 2px solid var(--text-color); font-weight: 700; letter-spacing: 0.02em;
-  transition: background 0.1s, color 0.1s;
-}
-
-/* data tables → label headers, hairline rows, hover */
-#main table { margin: 28px 0; }
-#main thead th {
-  font-size: 12px; font-weight: 700; line-height: 1.4; letter-spacing: 0.1em;
-  text-transform: uppercase; color: var(--fg-soft);
-  border-bottom: 2px solid var(--rule); padding-bottom: 10px;
-}
-#main tbody tr { border-bottom: 1px solid var(--rule-faint); transition: background 0.06s; }
-#main tbody tr:hover { background: var(--panel-2); }
-#main tbody tr:last-child { border-bottom: none; }
-
-/* homepage metrics → bordered panel like the tracker overview */
-#main .stats { border: 2px solid var(--rule); margin: 36px 0; text-align: center; }
-#main .stat-item { padding: 16px 18px; border-right: 1px solid var(--rule-soft); }
-#main .stat-item:last-child { border-right: none; }
-#main .stat-number { font-family: var(--mono); letter-spacing: -0.01em; }
-#main .stat-label {
-  font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--fg-soft); margin-top: 8px;
-}
-
-/* command blocks → hard editorial border; output blocks → left rule only */
-#main pre { border: 1.5px solid var(--text-color); }
-#main .stata-log { border: none; border-left: 3px solid var(--rule-soft); }
-
-/* footer → hard top rule */
-#main footer { border-top: 2px solid var(--rule); }
-
-/* status badges (used in notes) — restored after tracker refactor */
-#main .badge {
-  display: inline-block; font-size: 11px; line-height: 13px; padding: 3px 7px;
-  font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
-  white-space: nowrap; border: 1.5px solid currentColor;
-}
-#main .badge-submitted { color: #0050cc; }
-#main .badge-revision  { color: #884400; }
-#main .badge-accepted  { color: #006622; }
-#main .badge-rejected  { color: #880000; }
-#main .badge-none      { color: #999; }
-@media (prefers-color-scheme: dark) {
-  #main .badge-submitted { color: #6699ff; }
-  #main .badge-revision  { color: #ffcc44; }
-  #main .badge-accepted  { color: #44dd77; }
-  #main .badge-rejected  { color: #ff6655; }
-  #main .badge-none      { color: #888; }
-}
-
-@media (max-width: 767px) {
-  #main .stat-item { padding: 12px 8px; }
-}
-
-
-/* ============================================================
-   Working Papers Tracker — brutalist redesign (scoped to #wpt)
-   Ported from the React prototype · no demo mode · GitHub-backed
-   All rules below are confined to #wpt so the rest of the site
-   is unaffected.
+   Working Papers Tracker (scoped to #wpt)
+   Structural CSS unchanged from the tracker build; tokens below
+   re-aligned to the classic-web palette.
    ============================================================ */
 
 /* ---- #wpt resets: neutralize inherited global element rules ---- */
 #wpt { color: var(--fg); background: var(--bg); line-height: 1.4; }
 #wpt table { margin: 0; font-size: inherit; line-height: inherit; width: 100%; }
-#wpt th, #wpt td { padding: 0; line-height: inherit; vertical-align: initial; background: none; }
+#wpt th, #wpt td { padding: 0; line-height: inherit; vertical-align: initial; background: none; border-bottom: none; }
 #wpt button { margin: 0; }
 #wpt input, #wpt select, #wpt textarea { width: auto; max-width: none; }
 #wpt input[type="text"], #wpt input[type="password"], #wpt input[type="date"], #wpt input[type="url"], #wpt select, #wpt textarea { line-height: 1.4; }
 #wpt p { font-size: inherit; line-height: inherit; margin: 0; hyphens: none; }
-#wpt ul { list-style: none; padding: 0; }
-#wpt ul li::before { content: none; margin: 0; }
+#wpt ul { list-style: none; padding: 0; margin: 0; }
 #wpt h1, #wpt h2, #wpt h3 { margin: 0; line-height: inherit; }
-/* ============================================================
-   Working Papers Tracker — brutalist design system
-   Monochrome · Arial · hard borders · no radius · bold display
-   Tracker-only tokens (used by #wpt). The neutral palette
-   (--fg-soft/--fg-faint/--rule*/--panel-2/--mono) is inherited
-   from the global :root at the top of this file.
-   ============================================================ */
+#wpt a { text-decoration: none; }
 
+/* Tracker tokens — aligned to the site's "professor's homepage" palette.
+   This file is self-contained: it also defines the neutral tokens
+   (--fg-soft, --rule*, --panel-2, --mono) that the structural CSS uses. */
 :root{
-  --bg: #ffffff;
-  --fg: #000000;
-  --panel: #ffffff;
-  --link: #0000ee;
-  --focus: #0000ee;
-  --sans: Arial, Helvetica, sans-serif;
+  --bg: #f6f1e5;
+  --fg: #211b12;
+  --panel: #f6f1e5;
+  --link: #0000d6;
+  --focus: #a02c20;
+  --sans: Georgia, 'Iowan Old Style', 'Times New Roman', serif; /* tracker follows the site's serif */
+  --mono: 'Courier New', Courier, 'Nimbus Mono PS', monospace;
+  --fg-soft: #5c5344;
+  --fg-faint: #8d8371;
+  --rule: #6b5f4b;
+  --rule-soft: #cfc4ab;
+  --rule-faint: #e6dcc6;
+  --panel-2: #eee7d3;
 
   /* status hues — kept muted + always paired with border/uppercase */
-  --st-draft: #8a8a8a;
-  --st-submitted: #0050cc;
+  --st-draft: #8d8371;
+  --st-submitted: #234a8f;
   --st-revision: #9a5b00;
-  --st-accepted: #0a7a33;
-  --st-rejected: #b00020;
+  --st-accepted: #2c6e3f;
+  --st-rejected: #a02c20;
 }
 
 @media (prefers-color-scheme: dark) {:root{
-    --bg: #161616;
-    --fg: #e8e8e8;
-    --panel: #161616;
-    --link: #ffffff;
-    --focus: #6699ff;
+    --bg: #211c15;
+    --fg: #e7ddc9;
+    --panel: #211c15;
+    --link: #92b3f5;
+    --focus: #e08273;
+    --fg-soft: #b3a78f;
+    --fg-faint: #857a64;
+    --rule: #a3977d;
+    --rule-soft: #453d30;
+    --rule-faint: #322b22;
+    --panel-2: #2a241b;
+    --st-draft: #857a64;
     --st-submitted: #6fa3ff;
     --st-revision: #f0b13a;
     --st-accepted: #4fd07e;
     --st-rejected: #ff6f63;
   }
-}#wpt ::selection{ background: var(--fg); color: var(--bg); }#wpt a{ color: var(--link); text-decoration: none; }#wpt a:hover{ text-decoration: underline; }#wpt button, #wpt input, #wpt select, #wpt textarea{ font-family: var(--sans); }
+}#wpt ::selection{ background: var(--fg); color: var(--bg); }#wpt a{ color: var(--link); }#wpt a:hover{ text-decoration: underline; }#wpt button, #wpt input, #wpt select, #wpt textarea{ font-family: var(--sans); }
 
 /* ---------- layout shell ---------- */
 #wpt{ max-width: 1180px; margin: 0 auto; padding: 0 24px 96px; }
@@ -1064,7 +278,7 @@ svg .cell-hi { fill: var(--text-color); opacity: .07; }
   background-repeat: no-repeat; background-position: right 10px center;
   padding-right: 28px;
 }
-@media (prefers-color-scheme: dark) {#wpt .tool-sel{ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23e8e8e8'/%3E%3C/svg%3E"); }
+@media (prefers-color-scheme: dark) {#wpt .tool-sel{ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23dedede'/%3E%3C/svg%3E"); }
 }#wpt .tool-spacer{ flex: 1 1 auto; }#wpt .tool-meta{ font-size: 12px; color: var(--fg-soft); font-family: var(--mono); white-space: nowrap; }
 
 @media (max-width: 720px) {#wpt .toolbar{ gap: 8px; }#wpt .tool-spacer{ display: none; }#wpt .tool-lbl{ display: none; }
@@ -1235,3 +449,14 @@ svg .cell-hi { fill: var(--text-color); opacity: .07; }
 /* footer */
 #wpt .foot{ margin-top: 64px; border-top: 2px solid var(--rule); padding-top: 18px; font-size: 12px; color: var(--fg-soft); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }#wpt .foot .kbd-help{ display: flex; gap: 14px; flex-wrap: wrap; }#wpt .foot kbd{ font-family: var(--mono); border: 1px solid var(--rule-soft); padding: 1px 5px; font-size: 11px; }#wpt .sr-only{ position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }#wpt .hide{ display: none !important; }
 
+/* ============================================================
+   Reduced motion — covers everything above, tracker included
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+    }
+}
