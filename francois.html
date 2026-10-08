@@ -44,27 +44,26 @@
 <body>
     <div id="main" role="main">
         <div class="container">
-            <h1 class="h1">Ciao <span role="img" aria-label="wave">👋</span>, grazie per la tua partecipazione!</h1>
-            <p>Clicca sul pulsante qui sotto per iniziare a compilare il questionario.</p>
-            <button id="startButton">Inizia</button>
+            <h1 class="h1"><span role="img" aria-label="wave">👋</span></h1>
+            <button id="startButton">Start</button>
         </div>
     </div>
 
     <script>
         (function() {
             const urls = [
-                ['https://forms.gle/A1', 8],
-                ['https://forms.gle/A2', 8],
-                ['https://forms.gle/B1', 3],
-                ['https://forms.gle/B2', 3],
-                ['https://forms.gle/B3', 3],
-                ['https://forms.gle/B4', 3],
-                ['https://forms.gle/B5', 3],
-                ['https://forms.gle/B6', 3],
-                ['https://forms.gle/B7', 3],
-                ['https://forms.gle/B8', 3],
-                ['https://forms.gle/B9', 3],
-                ['https://forms.gle/B10', 3]
+                ['https://docs.google.com/forms/d/e/1FAIpQLSepdiOSMacfCHqeBxaD72Sg-WVmOhVn0aAde098rVYtarBsEA/viewform', 8],
+                ['https://docs.google.com/forms/d/e/1FAIpQLSeDfN5GGbSYmNTMc9vGSboUFV44mNWtlnn6bA8HyWCX4OWkbg/viewform', 8],
+                ['https://docs.google.com/forms/d/e/1FAIpQLSddsEusJoRu07HcbxLyNuoqL9CV25ocSbNbSubrYycgKQsokw/viewform', 3],
+                ['https://docs.google.com/forms/d/e/1FAIpQLSfMx6Tvb1z4c5m9pUcl3NieO5Dpte8kAzoYE5q7bnnKvS-cGQ/viewform', 3],
+                ['https://docs.google.com/forms/d/e/1FAIpQLScz2nfhh61i1bxOOP9voGTk25MrDzW-UpCtqmRW13yYnxeq9Q/viewform', 3],
+                ['https://docs.google.com/forms/d/e/1FAIpQLSfrqE9eWdE98HYhHM3tJv1Smxbr3l7dXUsSTeVw04HpanbXXw/viewform', 3],
+                ['https://docs.google.com/forms/d/e/1FAIpQLScT6rHve5PvKxjLub4ylf6TqKwyXXF4yD6JQfeDcsjFRADb8Q/viewform', 3],
+                ['https://docs.google.com/forms/d/e/1FAIpQLSfR_m5IlQ2r_1IW9Nnaz-FkRGdEcDi8TAZ2AdIv5BUnLMptZg/viewform', 3],
+                ['https://docs.google.com/forms/d/e/1FAIpQLScCzpfJgpHft9qWjrKo0wacEMWtg5dnQQLWeM1alNQfO729nA/viewform', 3],
+                ['https://docs.google.com/forms/d/e/1FAIpQLScqNewPkOWnhDEqDt2dTijmLjrUKAL9eWLSs1KoTSDeS1EC6Q/viewform', 3],
+                ['https://docs.google.com/forms/d/e/1FAIpQLSfv_TtD9dwMRxqo32uxiR0CVtnl8aU91xdueERvFnFXSsM1jA/viewform', 3],
+                ['https://docs.google.com/forms/d/e/1FAIpQLSfNG9ZwzgoTUzCrh5ESumDruaX90lKZTI2wK-hnJhJ3BGJdew/viewform', 3]
             ].flatMap(([url, copie]) => Array(copie).fill(url));
 
             const startButton = document.getElementById('startButton');
